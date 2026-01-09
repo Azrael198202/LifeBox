@@ -40,7 +40,9 @@ class _LifeInboxAppState extends ConsumerState<LifeInboxApp>
 
     return MaterialApp.router(
       title: 'Life Inbox',
-      theme: buildAppTheme(),
+      theme: buildLightTheme(),
+      darkTheme: buildDarkTheme(),
+      themeMode: ThemeMode.system,
       routerConfig: router,
       debugShowCheckedModeBanner: false,
     );

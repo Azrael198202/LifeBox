@@ -46,7 +46,7 @@ class ImportController extends ChangeNotifier {
     notifyListeners();
 
     final ps = await PhotoManager.requestPermissionExtend();
-    permissionGranted = ps.isAuth;
+    permissionGranted = ps.isAuth || ps.isLimited;
 
     if (!permissionGranted) {
       loading = false;
@@ -83,10 +83,7 @@ class ImportController extends ChangeNotifier {
       hasAll: true,
     );
 
-    allPhotosPath = allList.firstWhere(
-      (p) => p.isAll,
-      orElse: () => allList.isNotEmpty ? allList.first : null as AssetPathEntity,
-    );
+    allPhotosPath = _firstWhereOrNull(allList, (p) => p.isAll) ?? (allList.isNotEmpty ? allList.first : null);
 
     // Search screenshots album by name keywords
     final allPaths = await PhotoManager.getAssetPathList(
@@ -183,10 +180,7 @@ class ImportController extends ChangeNotifier {
           hasAll: true,
         );
 
-        final allPath = allWithFilter.firstWhere(
-          (p) => p.isAll,
-          orElse: () => allWithFilter.isNotEmpty ? allWithFilter.first : null as AssetPathEntity,
-        );
+        final allPath = _firstWhereOrNull(allWithFilter, (p) => p.isAll) ?? (allWithFilter.isNotEmpty ? allWithFilter.first : null);
 
         if (allPath == null) {
           hasMore = false;
@@ -240,4 +234,11 @@ class ImportController extends ChangeNotifier {
 
   // 可选：让 ImportPage 使用一个只读的截图ID集合（调试用）
   UnmodifiableSetView<String> get screenshotAssetIds => UnmodifiableSetView(_screenshotAssetIds);
+}
+
+T? _firstWhereOrNull<T>(List<T> list, bool Function(T) test) {
+  for (final x in list) {
+    if (test(x)) return x;
+  }
+  return null;
 }

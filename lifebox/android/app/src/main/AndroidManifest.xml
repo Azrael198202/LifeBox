@@ -31,6 +31,7 @@
             android:name="flutterEmbedding"
             android:value="2" />
     </application>
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <!-- Android 13+ 读取图片 -->
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <!-- Android 12 及以下 读取外部存储 -->

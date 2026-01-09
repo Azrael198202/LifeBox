@@ -49,5 +49,9 @@
 		<string>需要访问相册以导入照片并进行OCR处理</string>
 		<key>NSPhotoLibraryAddUsageDescription</key>
 		<string>需要保存处理后的内容到相册（如有）</string>
+		<key>NSMicrophoneUsageDescription</key>
+		<string>用于语音输入</string>
+		<key>NSSpeechRecognitionUsageDescription</key>
+		<string>用于将语音转换为文字</string>
 	</dict>
 </plist>

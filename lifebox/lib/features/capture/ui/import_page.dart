@@ -1,36 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:photo_manager_image_provider/photo_manager_image_provider.dart';
-import 'package:provider/provider.dart';
 
-import '../../../core/services/ocr_queue_manager.dart';
 import '../../../core/widgets/app_scaffold.dart';
 import '../../../core/widgets/empty_state.dart';
 import '../../../core/widgets/primary_button.dart';
 import '../../../core/widgets/risk_badge.dart';
-import '../state/import_controller.dart';
+import '../../capture/state/import_controller.dart';
+import '../../capture/state/import_providers.dart';
 
-class ImportPage extends StatefulWidget {
+class ImportPage extends ConsumerStatefulWidget {
   const ImportPage({super.key});
 
   @override
-  State<ImportPage> createState() => _ImportPageState();
+  ConsumerState<ImportPage> createState() => _ImportPageState();
 }
 
-class _ImportPageState extends State<ImportPage> {
+class _ImportPageState extends ConsumerState<ImportPage> {
   final ScrollController _scroll = ScrollController();
   bool _queuePanelOpen = true;
 
   @override
   void initState() {
     super.initState();
+
+    // 首次进入时请求权限并初始化
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final c = context.read<ImportController>();
+      final c = ref.read(importControllerProvider);
       if (!c.permissionGranted && !c.loading) {
         await c.init();
       }
     });
+
     _scroll.addListener(_onScroll);
   }
 
@@ -41,12 +44,18 @@ class _ImportPageState extends State<ImportPage> {
   }
 
   void _onScroll() {
-    final c = context.read<ImportController>();
+    final c = ref.read(importControllerProvider);
     if (!_scroll.hasClients) return;
     final pos = _scroll.position;
     if (pos.pixels > pos.maxScrollExtent - 600) {
       c.loadMore();
     }
+  }
+
+  String _rangeText(DateTimeRange? r) {
+    if (r == null) return '不限时间';
+    final fmt = DateFormat('yyyy/MM/dd');
+    return '${fmt.format(r.start)} - ${fmt.format(r.end)}';
   }
 
   Future<void> _pickDateRange(ImportController c) async {
@@ -73,87 +82,75 @@ class _ImportPageState extends State<ImportPage> {
     }
   }
 
-  String _rangeText(DateTimeRange? r) {
-    if (r == null) return '不限时间';
-    final fmt = DateFormat('yyyy/MM/dd');
-    return '${fmt.format(r.start)} - ${fmt.format(r.end)}';
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Consumer2<ImportController, OcrQueueManager>(
-      builder: (context, c, q, _) {
-        if (!c.permissionGranted && !c.loading) {
-          return AppScaffold(
-            title: '导入',
-            body: EmptyState(
-              title: '未获得相册权限',
-              subtitle: '请到 iOS 设置 → 隐私与安全性 → 照片 中允许访问。',
-              action: PrimaryButton(
-                label: '重新请求权限',
-                onPressed: () => c.init(),
-                icon: Icons.lock_open,
-              ),
-            ),
-          );
-        }
+    final c = ref.watch(importControllerProvider);
+    final q = ref.watch(ocrQueueManagerProvider);
 
-        return AppScaffold(
-          title: 'Import（筛选 + 队列）',
-          actions: [
-            IconButton(
-              onPressed: () => c.reloadAssets(),
-              icon: const Icon(Icons.refresh),
-              tooltip: '刷新',
-            ),
-            IconButton(
-              onPressed: () => Navigator.pushNamed(context, '/inbox'),
-              icon: const Icon(Icons.inbox_outlined),
-              tooltip: 'Inbox',
-            ),
-          ],
-          body: Column(
-            children: [
-              _FilterBar(
-                type: c.type,
-                rangeText: _rangeText(c.range),
-                onPickRange: () => _pickDateRange(c),
-                onClearRange: c.range == null ? null : () => c.setRange(null),
-                screenshotsAlbumName: c.screenshotsAlbumName,
-                onTypeChanged: (t) => c.setType(t),
-              ),
-              _SelectionBar(
-                selectedCount: c.selectedAssetIds.length,
-                onSelectAllVisible: c.assets.isEmpty ? null : () => c.selectAllVisible(),
-                onClear: c.selectedAssetIds.isEmpty ? null : () => c.clearSelection(),
-                queueCount: q.queuedCount + (q.current == null ? 0 : 1),
-                onToggleQueuePanel: () => setState(() => _queuePanelOpen = !_queuePanelOpen),
-                queuePanelOpen: _queuePanelOpen,
-              ),
-              const Divider(height: 1),
-              Expanded(
-                child: _Grid(
-                  controller: _scroll,
-                  assets: c.assets,
-                  isSelected: c.isSelected,
-                  onTap: (id) => c.toggleSelect(id),
-                  loading: c.loading,
-                ),
-              ),
-              _BottomActions(
-                enabled: c.selectedAssetIds.isNotEmpty,
-                selectedCount: c.selectedAssetIds.length,
-                onEnqueue: () {
-                  q.enqueueMany(c.selectedAssetIds.toList());
-                  c.clearSelection();
-                  setState(() => _queuePanelOpen = true);
-                },
-              ),
-              if (_queuePanelOpen) _QueuePanel(queue: q),
-            ],
+    if (!c.permissionGranted && !c.loading) {
+      return AppScaffold(
+        title: '导入',
+        body: EmptyState(
+          title: '未获得相册权限',
+          subtitle: '请到 iOS 设置 → 隐私与安全性 → 照片 中允许访问。',
+          action: PrimaryButton(
+            label: '重新请求权限',
+            icon: Icons.lock_open,
+            onPressed: () => c.init(),
           ),
-        );
-      },
+        ),
+      );
+    }
+
+    return AppScaffold(
+      title: 'Import（筛选 + 队列）',
+      actions: [
+        IconButton(
+          onPressed: () => c.reloadAssets(),
+          icon: const Icon(Icons.refresh),
+          tooltip: '刷新',
+        ),
+      ],
+      body: Column(
+        children: [
+          _FilterBar(
+            type: c.type,
+            rangeText: _rangeText(c.range),
+            screenshotsAlbumName: c.screenshotsAlbumName,
+            onPickRange: () => _pickDateRange(c),
+            onClearRange: c.range == null ? null : () => c.setRange(null),
+            onTypeChanged: (t) => c.setType(t),
+          ),
+          _SelectionBar(
+            selectedCount: c.selectedAssetIds.length,
+            onSelectAllVisible: c.assets.isEmpty ? null : () => c.selectAllVisible(),
+            onClear: c.selectedAssetIds.isEmpty ? null : () => c.clearSelection(),
+            queueCount: q.queuedCount + (q.current == null ? 0 : 1),
+            queuePanelOpen: _queuePanelOpen,
+            onToggleQueuePanel: () => setState(() => _queuePanelOpen = !_queuePanelOpen),
+          ),
+          const Divider(height: 1),
+          Expanded(
+            child: _Grid(
+              controller: _scroll,
+              assets: c.assets,
+              loading: c.loading,
+              isSelected: c.isSelected,
+              onTap: (id) => c.toggleSelect(id),
+            ),
+          ),
+          _BottomActions(
+            enabled: c.selectedAssetIds.isNotEmpty,
+            selectedCount: c.selectedAssetIds.length,
+            onEnqueue: () {
+              q.enqueueMany(c.selectedAssetIds.toList());
+              c.clearSelection();
+              setState(() => _queuePanelOpen = true);
+            },
+          ),
+          if (_queuePanelOpen) _QueuePanel(queue: q),
+        ],
+      ),
     );
   }
 }
@@ -162,17 +159,17 @@ class _FilterBar extends StatelessWidget {
   const _FilterBar({
     required this.type,
     required this.rangeText,
+    required this.screenshotsAlbumName,
     required this.onPickRange,
     required this.onClearRange,
-    required this.screenshotsAlbumName,
     required this.onTypeChanged,
   });
 
   final ImportPhotoType type;
   final String rangeText;
+  final String? screenshotsAlbumName;
   final VoidCallback onPickRange;
   final VoidCallback? onClearRange;
-  final String? screenshotsAlbumName;
   final ValueChanged<ImportPhotoType> onTypeChanged;
 
   @override
@@ -224,10 +221,23 @@ class _FilterBar extends StatelessWidget {
           Row(
             children: [
               if (screenshotsAlbumName == null)
-                RiskBadge.text('未检测到截图相册，将自动降级筛选', tone: BadgeTone.warning)
+                // 你现有 RiskBadge 是“高/中/低”，这里用 low 当提示（不改文件也能用）
+                const RiskBadge(risk: RiskLevel.low)
               else
-                RiskBadge.text('截图相册：$screenshotsAlbumName', tone: BadgeTone.success),
-              const Spacer(),
+                const RiskBadge(risk: RiskLevel.low),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  screenshotsAlbumName == null
+                      ? '未检测到“截图相册”，截图筛选将自动降级为全部照片。'
+                      : '截图相册：$screenshotsAlbumName',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: screenshotsAlbumName == null ? Colors.orange[800] : Colors.green[700],
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
               TextButton(
                 onPressed: onClearRange,
                 child: const Text('清除时间'),
@@ -246,16 +256,16 @@ class _SelectionBar extends StatelessWidget {
     required this.onSelectAllVisible,
     required this.onClear,
     required this.queueCount,
-    required this.onToggleQueuePanel,
     required this.queuePanelOpen,
+    required this.onToggleQueuePanel,
   });
 
   final int selectedCount;
   final VoidCallback? onSelectAllVisible;
   final VoidCallback? onClear;
   final int queueCount;
-  final VoidCallback onToggleQueuePanel;
   final bool queuePanelOpen;
+  final VoidCallback onToggleQueuePanel;
 
   @override
   Widget build(BuildContext context) {
@@ -289,16 +299,16 @@ class _Grid extends StatelessWidget {
   const _Grid({
     required this.controller,
     required this.assets,
+    required this.loading,
     required this.isSelected,
     required this.onTap,
-    required this.loading,
   });
 
   final ScrollController controller;
   final List<AssetEntity> assets;
+  final bool loading;
   final bool Function(String id) isSelected;
   final void Function(String id) onTap;
-  final bool loading;
 
   @override
   Widget build(BuildContext context) {
@@ -431,9 +441,9 @@ class _BottomActions extends StatelessWidget {
             Expanded(
               child: PrimaryButton(
                 label: enabled ? '加入待处理队列（$selectedCount）' : '加入待处理队列',
-                onPressed: enabled ? onEnqueue : null,
                 icon: Icons.queue,
                 enabled: enabled,
+                onPressed: enabled ? onEnqueue : null,
               ),
             ),
           ],
@@ -446,7 +456,7 @@ class _BottomActions extends StatelessWidget {
 class _QueuePanel extends StatelessWidget {
   const _QueuePanel({required this.queue});
 
-  final OcrQueueManager queue;
+  final dynamic queue; // 这里不强绑类型，避免你文件路径调整时泛型报错
 
   @override
   Widget build(BuildContext context) {

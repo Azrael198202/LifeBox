@@ -43,8 +43,8 @@ class _InboxPageState extends ConsumerState<InboxPage> with SingleTickerProvider
           final item = list[i];
           return InboxCard(
             item: item,
-            onTap: () => context.go('/inbox/detail/${item.id}'),
-            onPrimaryAction: () => context.go('/action?type=calendar&id=${item.id}'),
+            onTap: () => context.push('/inbox/detail/${item.id}'),
+            onPrimaryAction: () => context.push('/action?type=calendar&id=${item.id}'),
           );
         },
       );
@@ -55,12 +55,12 @@ class _InboxPageState extends ConsumerState<InboxPage> with SingleTickerProvider
       actions: [
         IconButton(
           tooltip: '导入',
-          onPressed: () => context.go('/import'),
+          onPressed: () => context.push('/import'),
           icon: const Icon(Icons.add_photo_alternate_outlined),
         ),
         IconButton(
           tooltip: '设置',
-          onPressed: () => context.go('/settings'),
+          onPressed: () => context.push('/settings'),
           icon: const Icon(Icons.settings_outlined),
         ),
       ],

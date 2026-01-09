@@ -48,7 +48,7 @@ class InboxDetailPage extends ConsumerWidget {
                   const Text('电话/URL：TODO'),
                   const SizedBox(height: 12),
                   FilledButton(
-                    onPressed: () => context.go('/action?type=calendar&id=$id'),
+                    onPressed: () => context.push('/action?type=calendar&id=$id'),
                     child: const Text('主动作：加入日历'),
                   ),
                   const SizedBox(height: 8),

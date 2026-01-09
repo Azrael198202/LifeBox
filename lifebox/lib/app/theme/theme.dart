@@ -6,9 +6,7 @@ ThemeData buildAppTheme() {
   final base = ThemeData.light();
   return base.copyWith(
     scaffoldBackgroundColor: AppColors.bg,
-    colorScheme: base.colorScheme.copyWith(
-      primary: AppColors.brand,
-    ),
+    colorScheme: base.colorScheme.copyWith(primary: AppColors.brand),
     textTheme: AppTypography.textTheme(),
     appBarTheme: const AppBarTheme(
       backgroundColor: Colors.white,
@@ -19,9 +17,11 @@ ThemeData buildAppTheme() {
     cardTheme: CardThemeData(
       color: AppColors.card,
       elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+    ),
+    inputDecorationTheme: const InputDecorationTheme(
+      labelStyle: TextStyle(color: Colors.black54),
+      hintStyle: TextStyle(color: Colors.black45),
     ),
   );
 }

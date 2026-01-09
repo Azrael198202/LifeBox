@@ -3,8 +3,18 @@ import 'package:flutter/material.dart';
 class AuthLayout extends StatelessWidget {
   final String title;
   final String subtitle;
+
+  /// 表单内容（输入框 + 按钮）
   final Widget child;
+
+  /// 底部额外区域（例如：去注册 / 返回登录）
   final List<Widget> footer;
+
+  /// 是否显示 Terms
+  final bool showTerms;
+
+  /// Logo：默认是文字 Logo，也可以传入 Image.asset(...)
+  final Widget? logo;
 
   const AuthLayout({
     super.key,
@@ -12,6 +22,8 @@ class AuthLayout extends StatelessWidget {
     required this.subtitle,
     required this.child,
     this.footer = const [],
+    this.showTerms = true,
+    this.logo,
   });
 
   @override
@@ -19,42 +31,53 @@ class AuthLayout extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFFF7F8FA),
       body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.fromLTRB(16, 24, 16, 16),
+        child: Stack(
           children: [
-            const SizedBox(height: 8),
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 26,
-                fontWeight: FontWeight.w800,
-                color: Color(0xFF111827),
-              ),
+            // 背景渐变“光晕”
+            Positioned(
+              top: -120,
+              left: -80,
+              child: _GlowBlob(size: 260),
             ),
-            const SizedBox(height: 6),
-            Text(
-              subtitle,
-              style: const TextStyle(
-                fontSize: 13,
-                height: 1.35,
-                color: Color(0xFF6B7280),
-              ),
-            ),
-            const SizedBox(height: 18),
-
-            Card(
-              elevation: 0,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-              child: Padding(
-                padding: const EdgeInsets.all(14),
-                child: child,
-              ),
+            Positioned(
+              top: 40,
+              right: -90,
+              child: _GlowBlob(size: 220),
             ),
 
-            if (footer.isNotEmpty) ...[
-              const SizedBox(height: 14),
-              ...footer,
-            ],
+            ListView(
+              padding: const EdgeInsets.fromLTRB(16, 18, 16, 16),
+              children: [
+                _Header(
+                  title: title,
+                  subtitle: subtitle,
+                  logo: logo,
+                ),
+                const SizedBox(height: 14),
+
+                Card(
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18),
+                    side: BorderSide(color: Colors.black.withOpacity(0.06)),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: child,
+                  ),
+                ),
+
+                if (footer.isNotEmpty) ...[
+                  const SizedBox(height: 14),
+                  ...footer,
+                ],
+
+                if (showTerms) ...[
+                  const SizedBox(height: 18),
+                  const _TermsText(),
+                ],
+              ],
+            ),
           ],
         ),
       ),
@@ -62,6 +85,140 @@ class AuthLayout extends StatelessWidget {
   }
 }
 
+class _Header extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final Widget? logo;
+
+  const _Header({
+    required this.title,
+    required this.subtitle,
+    this.logo,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final logoWidget = logo ??
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: const [
+            _LogoMark(),
+            SizedBox(width: 10),
+            Text(
+              'Life Inbox',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w800,
+                color: Color(0xFF111827),
+                letterSpacing: 0.3,
+              ),
+            ),
+          ],
+        );
+
+    return Container(
+      padding: const EdgeInsets.fromLTRB(14, 14, 14, 16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(18),
+        gradient: LinearGradient(
+          colors: [
+            const Color(0xFF111827).withOpacity(0.06),
+            const Color(0xFF111827).withOpacity(0.02),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        border: Border.all(color: Colors.black.withOpacity(0.05)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          logoWidget,
+          const SizedBox(height: 12),
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 26,
+              fontWeight: FontWeight.w900,
+              color: Color(0xFF111827),
+              height: 1.1,
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            subtitle,
+            style: const TextStyle(
+              fontSize: 13,
+              height: 1.35,
+              color: Color(0xFF6B7280),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _LogoMark extends StatelessWidget {
+  const _LogoMark();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 34,
+      height: 34,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        gradient: const LinearGradient(
+          colors: [Color(0xFF111827), Color(0xFF374151)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        boxShadow: [
+          BoxShadow(
+            blurRadius: 18,
+            offset: const Offset(0, 8),
+            color: Colors.black.withOpacity(0.12),
+          ),
+        ],
+      ),
+      child: const Center(
+        child: Text(
+          'L',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w900,
+            fontSize: 16,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _GlowBlob extends StatelessWidget {
+  final double size;
+  const _GlowBlob({required this.size});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        gradient: RadialGradient(
+          colors: [
+            const Color(0xFF111827).withOpacity(0.10),
+            const Color(0xFF111827).withOpacity(0.00),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// —— 输入框（统一样式：黑字 + 圆角 + 柔和边框）——
 class AuthTextField extends StatelessWidget {
   final TextEditingController controller;
   final String label;
@@ -99,20 +256,24 @@ class AuthTextField extends StatelessWidget {
         hintStyle: const TextStyle(color: hintColor),
         prefixIcon: Icon(icon, color: hintColor),
         suffixIcon: suffix,
-        border: const OutlineInputBorder(),
+        filled: true,
+        fillColor: const Color(0xFFF9FAFB),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
         enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.black.withOpacity(0.12)),
-          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.black.withOpacity(0.10)),
+          borderRadius: BorderRadius.circular(14),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.black.withOpacity(0.35)),
-          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.black.withOpacity(0.28)),
+          borderRadius: BorderRadius.circular(14),
         ),
       ),
     );
   }
 }
 
+/// —— 主按钮 ——
+/// 如果你想用品牌色，可在 ThemeData 里设置 colorScheme.primary
 class AuthPrimaryButton extends StatelessWidget {
   final String label;
   final VoidCallback? onPressed;
@@ -125,6 +286,9 @@ class AuthPrimaryButton extends StatelessWidget {
       height: 48,
       width: double.infinity,
       child: FilledButton(
+        style: FilledButton.styleFrom(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+        ),
         onPressed: onPressed,
         child: Text(label),
       ),
@@ -132,12 +296,18 @@ class AuthPrimaryButton extends StatelessWidget {
   }
 }
 
+/// —— 次按钮（例如 Google / 返回登录）——
 class AuthSecondaryButton extends StatelessWidget {
   final String label;
   final VoidCallback? onPressed;
   final IconData? icon;
 
-  const AuthSecondaryButton({super.key, required this.label, this.onPressed, this.icon});
+  const AuthSecondaryButton({
+    super.key,
+    required this.label,
+    this.onPressed,
+    this.icon,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -145,6 +315,10 @@ class AuthSecondaryButton extends StatelessWidget {
       height: 48,
       width: double.infinity,
       child: OutlinedButton.icon(
+        style: OutlinedButton.styleFrom(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+          side: BorderSide(color: Colors.black.withOpacity(0.12)),
+        ),
         onPressed: onPressed,
         icon: Icon(icon ?? Icons.login, color: const Color(0xFF111827)),
         label: Text(label, style: const TextStyle(color: Color(0xFF111827))),
@@ -153,6 +327,30 @@ class AuthSecondaryButton extends StatelessWidget {
   }
 }
 
+/// —— 分割线（“或”）——
+class AuthDivider extends StatelessWidget {
+  final String text;
+  const AuthDivider({super.key, this.text = '或'});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(child: Divider(color: Colors.black.withOpacity(0.10), height: 1)),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Text(
+            text,
+            style: const TextStyle(color: Color(0xFF6B7280), fontSize: 12),
+          ),
+        ),
+        Expanded(child: Divider(color: Colors.black.withOpacity(0.10), height: 1)),
+      ],
+    );
+  }
+}
+
+/// —— 小提示文字 ——
 class AuthHintText extends StatelessWidget {
   final String text;
   const AuthHintText(this.text, {super.key});
@@ -161,7 +359,49 @@ class AuthHintText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: const TextStyle(color: Color(0xFF6B7280), fontSize: 12, height: 1.35),
+      style: const TextStyle(
+        color: Color(0xFF6B7280),
+        fontSize: 12,
+        height: 1.35,
+      ),
+    );
+  }
+}
+
+/// —— Terms / Privacy 文案 ——
+class _TermsText extends StatelessWidget {
+  const _TermsText();
+
+  @override
+  Widget build(BuildContext context) {
+    final style = const TextStyle(color: Color(0xFF6B7280), fontSize: 11, height: 1.35);
+    final linkStyle = style.copyWith(color: const Color(0xFF111827), fontWeight: FontWeight.w700);
+
+    return Center(
+      child: Wrap(
+        alignment: WrapAlignment.center,
+        children: [
+          Text('继续即表示同意 ', style: style),
+          GestureDetector(
+            onTap: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('TODO：打开服务条款')),
+              );
+            },
+            child: Text('服务条款', style: linkStyle),
+          ),
+          Text(' 与 ', style: style),
+          GestureDetector(
+            onTap: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('TODO：打开隐私政策')),
+              );
+            },
+            child: Text('隐私政策', style: linkStyle),
+          ),
+          Text('。', style: style),
+        ],
+      ),
     );
   }
 }

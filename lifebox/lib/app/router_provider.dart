@@ -17,17 +17,17 @@ import '../features/actions/ui/action_page.dart';
 import '../features/settings/ui/settings_page.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
-  // ✅ 这里拿“状态”
+  // ✅ 状态
   final authState = ref.watch(authControllerProvider);
   final lockState = ref.watch(appLockProvider);
 
-  // ✅ 这里拿“notifier”，用它的 stream 来触发 router refresh
+  // ✅ notifier（用于 router refresh）
   final authController = ref.read(authControllerProvider.notifier);
 
   return GoRouter(
     initialLocation: '/inbox',
 
-    /// ✅ 关键：GoRouter 需要一个 Listenable，当 auth stream 有变化就 notify
+    /// ✅ auth stream 有变化就刷新 router（保持你原来的）
     refreshListenable: GoRouterRefreshStream(authController.stream),
 
     redirect: (context, state) {
@@ -43,12 +43,22 @@ final routerProvider = Provider<GoRouter>((ref) {
       // 2) 已登录：不允许回到 login/register
       if (isAuthed && isOnAuthPage) return '/inbox';
 
-      // 3) App 锁：已登录但锁住 => 去 /lock
-      if (isAuthed && lockState.enabled && lockState.isLocked && loc != '/lock') {
-        return '/lock';
+      // 3) App 锁：已登录但锁住 => 去 /lock（带 from）
+      if (isAuthed && lockState.enabled && lockState.isLocked) {
+        if (loc != '/lock') {
+          // 把当前目标路径完整保存下来（包含 query / pathParams）
+          final from = Uri.encodeComponent(state.uri.toString());
+          return '/lock?from=$from';
+        }
+        return null;
       }
-      if (isAuthed && (!lockState.enabled || !lockState.isLocked) && loc == '/lock') {
-        return '/inbox';
+
+      // 4) 已解锁但还停在 /lock => 回到 from 或默认页
+      if (isAuthed &&
+          (!lockState.enabled || !lockState.isLocked) &&
+          loc == '/lock') {
+        final from = state.uri.queryParameters['from'];
+        return from != null ? Uri.decodeComponent(from) : '/inbox';
       }
 
       return null;
@@ -57,7 +67,15 @@ final routerProvider = Provider<GoRouter>((ref) {
     routes: [
       GoRoute(path: '/login', builder: (_, __) => const LoginPage()),
       GoRoute(path: '/register', builder: (_, __) => const RegisterPage()),
-      GoRoute(path: '/lock', builder: (_, __) => const LockPage()),
+
+      // ✅ Lock route：接收 from
+      GoRoute(
+        path: '/lock',
+        builder: (context, state) {
+          final from = state.uri.queryParameters['from'];
+          return LockPage(from: from);
+        },
+      ),
 
       GoRoute(path: '/import', builder: (_, __) => const ImportPage()),
 

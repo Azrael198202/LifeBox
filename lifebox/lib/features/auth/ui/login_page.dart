@@ -12,18 +12,26 @@ class LoginPage extends ConsumerStatefulWidget {
   ConsumerState<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends ConsumerState<LoginPage>  {
+class _LoginPageState extends ConsumerState<LoginPage> {
   final _email = TextEditingController();
   final _pwd = TextEditingController();
   bool _obscure = true;
+
+  @override
+  void dispose() {
+    _email.dispose();
+    _pwd.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final auth = ref.watch(authControllerProvider);
 
     return AuthLayout(
-      title: 'Life Inbox',
+      title: '欢迎回来',
       subtitle: '登录后开始导入截图，自动识别待办与风险，并用应用锁保护隐私。',
+      logo: Image.asset('assets/images/logo-b.png', height: 34),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -65,18 +73,29 @@ class _LoginPageState extends ConsumerState<LoginPage>  {
                       _pwd.text,
                     ),
           ),
+
           const SizedBox(height: 10),
+          const AuthDivider(),
+          const SizedBox(height: 10),
+
           AuthSecondaryButton(
             label: '使用 Google 登录（占位）',
             icon: Icons.g_mobiledata,
-            onPressed: auth.loading ? null : () => ref.read(authControllerProvider.notifier).loginWithGoogle(),
+            onPressed: auth.loading
+                ? null
+                : () => ref.read(authControllerProvider.notifier).loginWithGoogle(),
           ),
+
           const SizedBox(height: 10),
           TextButton(
             onPressed: () => context.push('/register'),
-            child: const Text('没有账号？去注册', style: TextStyle(color: Color(0xFF111827))),
+            child: const Text(
+              '没有账号？去注册',
+              style: TextStyle(color: Color(0xFF111827), fontWeight: FontWeight.w700),
+            ),
           ),
-          const AuthHintText('提示：后续可开启面容/指纹/系统认证的应用锁。'),
+
+          const AuthHintText('提示：登录后可在设置中开启应用锁（面容 / 指纹 / 系统认证）。'),
         ],
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:lifebox/features/capture/ui/ocr_results_page.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:photo_manager_image_provider/photo_manager_image_provider.dart';
 
@@ -62,7 +63,8 @@ class _ImportPageState extends ConsumerState<ImportPage> {
     final now = DateTime.now();
     final initial = c.range ??
         DateTimeRange(
-          start: DateTime(now.year, now.month, now.day).subtract(const Duration(days: 7)),
+          start: DateTime(now.year, now.month, now.day)
+              .subtract(const Duration(days: 7)),
           end: DateTime(now.year, now.month, now.day, 23, 59, 59),
         );
 
@@ -75,8 +77,10 @@ class _ImportPageState extends ConsumerState<ImportPage> {
 
     if (picked != null) {
       final normalized = DateTimeRange(
-        start: DateTime(picked.start.year, picked.start.month, picked.start.day),
-        end: DateTime(picked.end.year, picked.end.month, picked.end.day, 23, 59, 59),
+        start:
+            DateTime(picked.start.year, picked.start.month, picked.start.day),
+        end: DateTime(
+            picked.end.year, picked.end.month, picked.end.day, 23, 59, 59),
       );
       await c.setRange(normalized);
     }
@@ -123,11 +127,14 @@ class _ImportPageState extends ConsumerState<ImportPage> {
           ),
           _SelectionBar(
             selectedCount: c.selectedAssetIds.length,
-            onSelectAllVisible: c.assets.isEmpty ? null : () => c.selectAllVisible(),
-            onClear: c.selectedAssetIds.isEmpty ? null : () => c.clearSelection(),
+            onSelectAllVisible:
+                c.assets.isEmpty ? null : () => c.selectAllVisible(),
+            onClear:
+                c.selectedAssetIds.isEmpty ? null : () => c.clearSelection(),
             queueCount: q.queuedCount + (q.current == null ? 0 : 1),
             queuePanelOpen: _queuePanelOpen,
-            onToggleQueuePanel: () => setState(() => _queuePanelOpen = !_queuePanelOpen),
+            onToggleQueuePanel: () =>
+                setState(() => _queuePanelOpen = !_queuePanelOpen),
           ),
           const Divider(height: 1),
           Expanded(
@@ -182,14 +189,15 @@ class _FilterBar extends StatelessWidget {
             children: [
               Expanded(
                 child: DropdownButtonFormField<ImportPhotoType>(
-                  value: type,
+                  initialValue: type,
                   decoration: const InputDecoration(
                     labelText: '类型',
                     border: OutlineInputBorder(),
                     isDense: true,
                   ),
                   items: ImportPhotoType.values
-                      .map((t) => DropdownMenuItem(value: t, child: Text(t.label)))
+                      .map((t) =>
+                          DropdownMenuItem(value: t, child: Text(t.label)))
                       .toList(),
                   onChanged: (v) => v == null ? null : onTypeChanged(v),
                 ),
@@ -207,7 +215,8 @@ class _FilterBar extends StatelessWidget {
                     child: Row(
                       children: [
                         Expanded(
-                          child: Text(rangeText, overflow: TextOverflow.ellipsis),
+                          child:
+                              Text(rangeText, overflow: TextOverflow.ellipsis),
                         ),
                         const Icon(Icons.date_range, size: 18),
                       ],
@@ -233,7 +242,9 @@ class _FilterBar extends StatelessWidget {
                       : '截图相册：$screenshotsAlbumName',
                   style: TextStyle(
                     fontSize: 12,
-                    color: screenshotsAlbumName == null ? Colors.orange[800] : Colors.green[700],
+                    color: screenshotsAlbumName == null
+                        ? Colors.orange[800]
+                        : Colors.green[700],
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -351,7 +362,8 @@ class _Grid extends StatelessWidget {
             bottom: 10,
             child: Center(
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
                   color: Colors.black.withOpacity(0.65),
                   borderRadius: BorderRadius.circular(999),
@@ -465,7 +477,10 @@ class _QueuePanel extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceContainerHighest.withOpacity(0.65),
+        color: Theme.of(context)
+            .colorScheme
+            .surfaceContainerHighest
+            .withOpacity(0.65),
         border: Border(top: BorderSide(color: Colors.black.withOpacity(0.06))),
       ),
       child: Padding(
@@ -475,11 +490,29 @@ class _QueuePanel extends StatelessWidget {
           children: [
             Row(
               children: [
-                const Text('OCR 队列', style: TextStyle(fontWeight: FontWeight.w600)),
+                const Text('OCR 队列',
+                    style: TextStyle(fontWeight: FontWeight.w600)),
                 const Spacer(),
                 TextButton(
-                  onPressed: queue.queuedJobs.isEmpty ? null : queue.clearQueued,
+                  onPressed:
+                      queue.queuedJobs.isEmpty ? null : queue.clearQueued,
                   child: const Text('清空排队'),
+                ),
+                TextButton(
+                  onPressed: queue.completedJobs.isEmpty
+                      ? null
+                      : () async {
+                          final selected = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => const OcrResultsPage()),
+                          );
+
+                          // selected 是 List<String>（assetId 列表）
+                          // 你下一步操作可以在这里接住
+                          debugPrint('Selected OCR cards: $selected');
+                        },
+                  child: Text('结果（${queue.completedJobs.length}）'),
                 ),
               ],
             ),
@@ -521,11 +554,13 @@ class _QueuePanel extends StatelessWidget {
                     final j = queue.queuedJobs[i];
                     return Container(
                       margin: const EdgeInsets.only(right: 8),
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 8),
                       decoration: BoxDecoration(
                         color: Colors.white.withOpacity(0.75),
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.black.withOpacity(0.06)),
+                        border:
+                            Border.all(color: Colors.black.withOpacity(0.06)),
                       ),
                       child: Center(
                         child: Text(

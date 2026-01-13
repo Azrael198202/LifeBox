@@ -56,6 +56,7 @@ class AuthController extends StateNotifier<AuthState> {
 
   /// 🔑 给 GoRouter 用的刷新流
   final _stream = StreamController<AuthState>.broadcast();
+  @override
   Stream<AuthState> get stream => _stream.stream;
 
   void _emit(AuthState s) {

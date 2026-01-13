@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 class HoldToTalkButton extends StatefulWidget {
   const HoldToTalkButton({
     super.key,
     required this.onFinalText,
-    this.localeId, // 例如 'zh_CN' / 'ja_JP'
+    this.localeId,
   });
 
   final void Function(String text) onFinalText;
@@ -20,7 +21,12 @@ class _HoldToTalkButtonState extends State<HoldToTalkButton> {
 
   bool _available = false;
   bool _listening = false;
+
   String _partial = '';
+  String? _finalText; // ✅ 关键：补上
+  SpeechRecognitionResult? _lastResult;
+
+  DateTime _lastLevelLog = DateTime.fromMillisecondsSinceEpoch(0);
 
   @override
   void initState() {
@@ -28,33 +34,68 @@ class _HoldToTalkButtonState extends State<HoldToTalkButton> {
     _init();
   }
 
+  String? _lastStatus;
+  String? _lastError;
   Future<void> _init() async {
-    _available = await _stt.initialize(
+    final ok = await _stt.initialize(
       onStatus: (s) {
-        // debugPrint('stt status=$s');
+        _lastStatus = s;
+        debugPrint('STT status=$s');
       },
       onError: (e) {
-        // debugPrint('stt error=$e');
+        _lastError = '${e.errorMsg} (${e.permanent})';
+        debugPrint('STT error=$e');
       },
     );
-    if (mounted) setState(() {});
+    if (!mounted) return;
+    setState(() => _available = ok);
+    debugPrint('STT available=$ok');
   }
 
   Future<void> _start() async {
-    if (!_available || _listening) return;
+    if (!_available || _listening) {
+      debugPrint('START blocked: available=$_available listening=$_listening');
+      return;
+    }
 
     setState(() {
       _listening = true;
       _partial = '';
+      _finalText = null;
+      _lastResult = null;
     });
 
     await _stt.listen(
       localeId: widget.localeId,
       listenMode: stt.ListenMode.confirmation,
       partialResults: true,
+      listenFor: const Duration(seconds: 20),
+      pauseFor: const Duration(milliseconds: 700),
+      onSoundLevelChange: (level) {
+        // ✅ 节流，避免 skipped frames
+        final now = DateTime.now();
+        if (now.difference(_lastLevelLog).inMilliseconds < 120) return;
+        _lastLevelLog = now;
+        debugPrint('soundLevel=$level');
+      },
       onResult: (r) {
+        _lastResult = r;
+        debugPrint(
+            'RESULT final=${r.finalResult} words="${r.recognizedWords}" conf=${r.confidence}');
         if (!mounted) return;
+
         setState(() => _partial = r.recognizedWords);
+
+        // ✅ 最终结果只在 finalResult=true 时写入
+        if (r.finalResult) {
+          final t = r.recognizedWords.trim();
+          if (t.isNotEmpty) {
+            _finalText = t;
+            debugPrint('FINAL SET: $_finalText');
+          } else {
+            debugPrint('FINAL but empty words');
+          }
+        }
       },
     );
   }
@@ -62,14 +103,20 @@ class _HoldToTalkButtonState extends State<HoldToTalkButton> {
   Future<void> _stop() async {
     if (!_listening) return;
 
+    await Future.delayed(const Duration(milliseconds: 250));
     await _stt.stop();
-    final finalText = _partial.trim();
+
+    final hasPerm = await _stt.hasPermission;
+    final isListening = _stt.isListening;
+
+    debugPrint('STOP: status=$_lastStatus error=$_lastError '
+        'available=$_available hasPerm=$hasPerm isListening=$isListening '
+        'final="$_finalText" partial="$_partial"');
 
     setState(() => _listening = false);
 
-    if (finalText.isNotEmpty) {
-      widget.onFinalText(finalText);
-    }
+    final text = (_finalText ?? _partial).trim();
+    if (text.isNotEmpty) widget.onFinalText(text);
   }
 
   @override
@@ -80,7 +127,8 @@ class _HoldToTalkButtonState extends State<HoldToTalkButton> {
 
   @override
   Widget build(BuildContext context) {
-    final color = _listening ? Colors.red : Theme.of(context).colorScheme.primary;
+    final color =
+        _listening ? Colors.red : Theme.of(context).colorScheme.primary;
 
     return GestureDetector(
       onLongPressStart: (_) => _start(),
@@ -98,7 +146,7 @@ class _HoldToTalkButtonState extends State<HoldToTalkButton> {
             Icon(_listening ? Icons.mic : Icons.mic_none, color: color),
             const SizedBox(width: 8),
             Text(
-              _listening ? '松开结束' : '按住说话',
+              _listening ? '松开结束' : (_available ? '按住说话' : '语音不可用'),
               style: TextStyle(color: color, fontWeight: FontWeight.w600),
             ),
           ],

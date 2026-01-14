@@ -233,5 +233,29 @@
 
   "importTypeAll": "All",
   "importTypeScreenshots": "Screenshots",
-  "importTypePhotos": "Photos"
+  "importTypePhotos": "Photos",
+
+  "actionPageTitle": "Action: {actionType}",
+  "@actionPageTitle": {
+    "placeholders": {
+      "actionType": { "type": "String" }
+    }
+  },
+
+  "actionTypeLabel": "Action type: {actionType}",
+  "@actionTypeLabel": {
+    "placeholders": {
+      "actionType": { "type": "String" }
+    }
+  },
+
+  "actionItemIdLabel": "Item ID: {itemId}",
+  "@actionItemIdLabel": {
+    "placeholders": {
+      "itemId": { "type": "String" }
+    }
+  },
+
+  "actionTodoDynamicRender": "TODO: Render dynamically based on actionType",
+  "actionConfirmTodo": "Confirm (TODO: open native calendar / copy template / open external link)"
 }

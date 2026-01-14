@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lifebox/l10n/app_localizations.dart';
 import '../../../../core/widgets/app_scaffold.dart';
 
 class ActionPage extends StatelessWidget {
@@ -9,8 +10,10 @@ class ActionPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return AppScaffold(
-      title: '动作：$actionType',
+      title: l10n.actionPageTitle(actionType),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Card(
@@ -19,15 +22,15 @@ class ActionPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('ActionType: $actionType', style: Theme.of(context).textTheme.titleMedium),
+                Text(l10n.actionTypeLabel(actionType), style: Theme.of(context).textTheme.titleMedium),
                 const SizedBox(height: 8),
-                Text('ItemId: $itemId'),
+                Text(l10n.actionItemIdLabel(itemId)),
                 const SizedBox(height: 16),
-                const Text('TODO：这里按 actionType 动态渲染'),
+                Text(l10n.actionTodoDynamicRender),
                 const SizedBox(height: 12),
                 FilledButton(
                   onPressed: () {},
-                  child: const Text('确认（TODO：调用原生日历/复制模板/外链跳转）'),
+                  child: Text(l10n.actionConfirmTodo),
                 ),
               ],
             ),

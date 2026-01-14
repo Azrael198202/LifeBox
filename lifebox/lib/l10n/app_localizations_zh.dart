@@ -511,4 +511,25 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get importTypePhotos => '相册照片';
+
+  @override
+  String actionPageTitle(String actionType) {
+    return '动作：$actionType';
+  }
+
+  @override
+  String actionTypeLabel(String actionType) {
+    return '动作类型：$actionType';
+  }
+
+  @override
+  String actionItemIdLabel(String itemId) {
+    return '事项ID：$itemId';
+  }
+
+  @override
+  String get actionTodoDynamicRender => 'TODO：这里按 actionType 动态渲染';
+
+  @override
+  String get actionConfirmTodo => '确认（TODO：调用原生日历/复制模板/外链跳转）';
 }

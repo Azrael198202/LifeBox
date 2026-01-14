@@ -1035,6 +1035,36 @@ abstract class AppLocalizations {
   /// In ja, this message translates to:
   /// **'写真'**
   String get importTypePhotos;
+
+  /// No description provided for @actionPageTitle.
+  ///
+  /// In ja, this message translates to:
+  /// **'アクション：{actionType}'**
+  String actionPageTitle(String actionType);
+
+  /// No description provided for @actionTypeLabel.
+  ///
+  /// In ja, this message translates to:
+  /// **'アクション種別：{actionType}'**
+  String actionTypeLabel(String actionType);
+
+  /// No description provided for @actionItemIdLabel.
+  ///
+  /// In ja, this message translates to:
+  /// **'項目ID：{itemId}'**
+  String actionItemIdLabel(String itemId);
+
+  /// No description provided for @actionTodoDynamicRender.
+  ///
+  /// In ja, this message translates to:
+  /// **'TODO：ここは actionType に応じて動的に描画'**
+  String get actionTodoDynamicRender;
+
+  /// No description provided for @actionConfirmTodo.
+  ///
+  /// In ja, this message translates to:
+  /// **'確認（TODO：端末のカレンダー呼び出し／テンプレ複製／外部リンク遷移）'**
+  String get actionConfirmTodo;
 }
 
 class _AppLocalizationsDelegate

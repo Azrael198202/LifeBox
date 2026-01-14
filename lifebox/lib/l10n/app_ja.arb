@@ -233,5 +233,29 @@
 
   "importTypeAll": "すべて",
   "importTypeScreenshots": "スクショ",
-  "importTypePhotos": "写真"
+  "importTypePhotos": "写真",
+
+  "actionPageTitle": "アクション：{actionType}",
+  "@actionPageTitle": {
+    "placeholders": {
+      "actionType": { "type": "String" }
+    }
+  },
+
+  "actionTypeLabel": "アクション種別：{actionType}",
+  "@actionTypeLabel": {
+    "placeholders": {
+      "actionType": { "type": "String" }
+    }
+  },
+
+  "actionItemIdLabel": "項目ID：{itemId}",
+  "@actionItemIdLabel": {
+    "placeholders": {
+      "itemId": { "type": "String" }
+    }
+  },
+
+  "actionTodoDynamicRender": "TODO：ここは actionType に応じて動的に描画",
+  "actionConfirmTodo": "確認（TODO：端末のカレンダー呼び出し／テンプレ複製／外部リンク遷移）"
 }

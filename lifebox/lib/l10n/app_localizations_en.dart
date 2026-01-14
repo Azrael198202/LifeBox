@@ -530,4 +530,27 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get importTypePhotos => 'Photos';
+
+  @override
+  String actionPageTitle(String actionType) {
+    return 'Action: $actionType';
+  }
+
+  @override
+  String actionTypeLabel(String actionType) {
+    return 'Action type: $actionType';
+  }
+
+  @override
+  String actionItemIdLabel(String itemId) {
+    return 'Item ID: $itemId';
+  }
+
+  @override
+  String get actionTodoDynamicRender =>
+      'TODO: Render dynamically based on actionType';
+
+  @override
+  String get actionConfirmTodo =>
+      'Confirm (TODO: open native calendar / copy template / open external link)';
 }

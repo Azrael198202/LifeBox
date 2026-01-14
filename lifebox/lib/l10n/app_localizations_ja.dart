@@ -515,4 +515,25 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get importTypePhotos => '写真';
+
+  @override
+  String actionPageTitle(String actionType) {
+    return 'アクション：$actionType';
+  }
+
+  @override
+  String actionTypeLabel(String actionType) {
+    return 'アクション種別：$actionType';
+  }
+
+  @override
+  String actionItemIdLabel(String itemId) {
+    return '項目ID：$itemId';
+  }
+
+  @override
+  String get actionTodoDynamicRender => 'TODO：ここは actionType に応じて動的に描画';
+
+  @override
+  String get actionConfirmTodo => '確認（TODO：端末のカレンダー呼び出し／テンプレ複製／外部リンク遷移）';
 }

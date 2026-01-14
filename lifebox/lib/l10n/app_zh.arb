@@ -231,5 +231,29 @@
 
   "importTypeAll": "全部",
   "importTypeScreenshots": "截图",
-  "importTypePhotos": "相册照片"
+  "importTypePhotos": "相册照片",
+
+  "actionPageTitle": "动作：{actionType}",
+  "@actionPageTitle": {
+    "placeholders": {
+      "actionType": { "type": "String" }
+    }
+  },
+
+  "actionTypeLabel": "动作类型：{actionType}",
+  "@actionTypeLabel": {
+    "placeholders": {
+      "actionType": { "type": "String" }
+    }
+  },
+
+  "actionItemIdLabel": "事项ID：{itemId}",
+  "@actionItemIdLabel": {
+    "placeholders": {
+      "itemId": { "type": "String" }
+    }
+  },
+
+  "actionTodoDynamicRender": "TODO：这里按 actionType 动态渲染",
+  "actionConfirmTodo": "确认（TODO：调用原生日历/复制模板/外链跳转）"
 }

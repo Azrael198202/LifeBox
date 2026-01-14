@@ -44,13 +44,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get clear_data_subtitle => 'Clear local / clear cloud (API reserved)';
 
   @override
-  String get clear_QA => 'ローカル削除 / クラウド削除（API予約）';
+  String get clear_QA => 'Confirm clearing?';
 
   @override
-  String get clear_content => 'ローカル削除 / クラウド削除（API予約）';
+  String get clear_content =>
+      'This will clear locally cached data (sample placeholder).';
 
   @override
-  String get clear_OK => '削除';
+  String get clear_OK => 'Clear';
 
   @override
   String get logout_title => 'Log out';
@@ -105,6 +106,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get common_password_hit => 'Please enter your password';
+
+  @override
+  String get type_label => 'Type';
 
   @override
   String get login_title => 'Welcome back';
@@ -168,4 +172,157 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get register_error_password_too_short =>
       'Password must be at least 8 characters';
+
+  @override
+  String get all_Time => 'Any time';
+
+  @override
+  String get import_title => 'Import';
+
+  @override
+  String get import_title_full => 'Import (Filters + Queue)';
+
+  @override
+  String get import_perm_title => 'Photo permission not granted';
+
+  @override
+  String get import_perm_subtitle_ios =>
+      'Go to iOS Settings → Privacy & Security → Photos and allow access.';
+
+  @override
+  String get import_perm_retry => 'Request permission again';
+
+  @override
+  String get import_action_refresh => 'Refresh';
+
+  @override
+  String get import_range_unlimited => 'Any time';
+
+  @override
+  String get import_filter_range_label => 'Date range';
+
+  @override
+  String get import_filter_clear_range => 'Clear range';
+
+  @override
+  String get import_screenshots_not_found =>
+      'No “Screenshots” album detected. Screenshot filtering will fall back to all photos.';
+
+  @override
+  String import_screenshots_album_prefix(Object count) {
+    return 'Screenshots album:  $count';
+  }
+
+  @override
+  String import_selected_count(Object count) {
+    return '$count selected';
+  }
+
+  @override
+  String get import_select_all_visible => 'Select all (visible)';
+
+  @override
+  String get import_clear_selection => 'Clear selection';
+
+  @override
+  String import_queue_label(Object count) {
+    return 'Queue $count';
+  }
+
+  @override
+  String get import_empty_title => 'No photos match your filters';
+
+  @override
+  String get import_empty_subtitle =>
+      'Try changing the date range or type filter.';
+
+  @override
+  String get import_loading_more => 'Loading…';
+
+  @override
+  String get import_enqueue_button => 'Add to processing queue';
+
+  @override
+  String import_enqueue_button_with_count(Object count) {
+    return 'Add to processing queue ($count)';
+  }
+
+  @override
+  String get ocr_queue_title => 'OCR Queue';
+
+  @override
+  String get ocr_queue_clear => 'Clear queue';
+
+  @override
+  String ocr_results_button(Object count) {
+    return 'Results ($count)';
+  }
+
+  @override
+  String ocr_processing_prefix(Object count) {
+    return 'Processing: ';
+  }
+
+  @override
+  String get ocr_no_current => 'No task is currently running';
+
+  @override
+  String ocr_queued_prefix(Object count) {
+    return 'Queued: $count';
+  }
+
+  @override
+  String get ocr_queue_empty => 'Queue is empty';
+
+  @override
+  String ocrResultsTitle(int count) {
+    return 'OCR Results ($count)';
+  }
+
+  @override
+  String get selectAll => 'Select all';
+
+  @override
+  String get clearSelection => 'Clear';
+
+  @override
+  String get clearResultsTooltip => 'Clear results';
+
+  @override
+  String get confirmButtonPleaseSelect => 'Please select a card';
+
+  @override
+  String confirmButtonSelectedCount(int count) {
+    return 'Confirm ($count)';
+  }
+
+  @override
+  String get emptyOcrResults => 'No OCR results yet';
+
+  @override
+  String get ocrStatusSuccess => 'Success';
+
+  @override
+  String get ocrStatusFailed => 'Failed';
+
+  @override
+  String get ocrStatusRunning => 'Processing';
+
+  @override
+  String get ocrStatusQueued => 'Queued';
+
+  @override
+  String get ocrFailedDefaultError => 'Recognition failed';
+
+  @override
+  String get noTextPlaceholder => '(No text)';
+
+  @override
+  String get ocrFullTextTitle => 'Full OCR Text';
+
+  @override
+  String get close => 'Close';
+
+  @override
+  String get viewFullText => 'View full text';
 }

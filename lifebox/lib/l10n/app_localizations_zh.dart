@@ -105,6 +105,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get common_password_hit => '请输入密码';
 
   @override
+  String get type_label => '类型';
+
+  @override
   String get login_title => '欢迎回来';
 
   @override
@@ -160,4 +163,154 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get register_error_password_too_short => '密码至少 8 位';
+
+  @override
+  String get all_Time => '不限时间';
+
+  @override
+  String get import_title => '导入';
+
+  @override
+  String get import_title_full => '导入（筛选 + 队列）';
+
+  @override
+  String get import_perm_title => '未获得相册权限';
+
+  @override
+  String get import_perm_subtitle_ios => '请到 iOS 设置 → 隐私与安全性 → 照片 中允许访问。';
+
+  @override
+  String get import_perm_retry => '重新请求权限';
+
+  @override
+  String get import_action_refresh => '刷新';
+
+  @override
+  String get import_range_unlimited => '不限时间';
+
+  @override
+  String get import_filter_range_label => '时间段';
+
+  @override
+  String get import_filter_clear_range => '清除时间';
+
+  @override
+  String get import_screenshots_not_found => '未检测到“截图相册”，截图筛选将自动降级为全部照片。';
+
+  @override
+  String import_screenshots_album_prefix(Object count) {
+    return '截图相册： $count';
+  }
+
+  @override
+  String import_selected_count(Object count) {
+    return '已选 $count 张';
+  }
+
+  @override
+  String get import_select_all_visible => '全选当前';
+
+  @override
+  String get import_clear_selection => '取消全选';
+
+  @override
+  String import_queue_label(Object count) {
+    return '队列 $count';
+  }
+
+  @override
+  String get import_empty_title => '没有符合条件的照片';
+
+  @override
+  String get import_empty_subtitle => '尝试更换时间范围或类型筛选。';
+
+  @override
+  String get import_loading_more => '加载中…';
+
+  @override
+  String get import_enqueue_button => '加入待处理队列';
+
+  @override
+  String import_enqueue_button_with_count(Object count) {
+    return '加入待处理队列（$count）';
+  }
+
+  @override
+  String get ocr_queue_title => 'OCR 队列';
+
+  @override
+  String get ocr_queue_clear => '清空排队';
+
+  @override
+  String ocr_results_button(Object count) {
+    return '结果（$count）';
+  }
+
+  @override
+  String ocr_processing_prefix(Object count) {
+    return '处理中：$count';
+  }
+
+  @override
+  String get ocr_no_current => '当前无处理中任务';
+
+  @override
+  String ocr_queued_prefix(Object count) {
+    return '排队：';
+  }
+
+  @override
+  String get ocr_queue_empty => '排队为空';
+
+  @override
+  String ocrResultsTitle(int count) {
+    return 'OCR 结果（$count）';
+  }
+
+  @override
+  String get selectAll => '全选';
+
+  @override
+  String get clearSelection => '清空';
+
+  @override
+  String get clearResultsTooltip => '清空结果';
+
+  @override
+  String get confirmButtonPleaseSelect => '请选择卡片';
+
+  @override
+  String confirmButtonSelectedCount(int count) {
+    return '确定（$count）';
+  }
+
+  @override
+  String get emptyOcrResults => '暂无 OCR 结果';
+
+  @override
+  String get ocrStatusSuccess => '成功';
+
+  @override
+  String get ocrStatusFailed => '失败';
+
+  @override
+  String get ocrStatusRunning => '处理中';
+
+  @override
+  String get ocrStatusQueued => '排队中';
+
+  @override
+  String get ocrFailedDefaultError => '识别失败';
+
+  @override
+  String get noTextPlaceholder => '（无文本）';
+
+  @override
+  String get ocrFullTextTitle => 'OCR 全文';
+
+  @override
+  String get close => '关闭';
+
+  @override
+  String get viewFullText => '查看全文';
 }

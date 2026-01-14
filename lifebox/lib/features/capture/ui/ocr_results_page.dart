@@ -3,8 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:photo_manager_image_provider/photo_manager_image_provider.dart';
 
-import '../../capture/state/import_providers.dart'; // 你的 provider 文件路径按实际调整
+import '../../capture/state/import_providers.dart';
 import '../../../core/services/ocr_queue_manager.dart';
+import 'package:lifebox/l10n/app_localizations.dart';
 
 class OcrResultsPage extends ConsumerStatefulWidget {
   const OcrResultsPage({super.key});
@@ -20,10 +21,11 @@ class _OcrResultsPageState extends ConsumerState<OcrResultsPage> {
   Widget build(BuildContext context) {
     final q = ref.watch(ocrQueueManagerProvider);
     final jobs = q.completedJobs;
+    final l10n = AppLocalizations.of(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('OCR 结果（${jobs.length}）'),
+        title: Text(l10n.ocrResultsTitle(jobs.length)),
         actions: [
           TextButton(
             onPressed: jobs.isEmpty
@@ -33,14 +35,14 @@ class _OcrResultsPageState extends ConsumerState<OcrResultsPage> {
                         ..clear()
                         ..addAll(jobs.map((e) => e.assetId));
                     }),
-            child: const Text('全选'),
+            child: Text(l10n.selectAll),
           ),
           TextButton(
             onPressed: _selected.isEmpty ? null : () => setState(_selected.clear),
-            child: const Text('清空'),
+            child: Text(l10n.clearSelection),
           ),
           IconButton(
-            tooltip: '清空结果',
+            tooltip: l10n.clearResultsTooltip,
             onPressed: jobs.isEmpty ? null : () => q.clearCompleted(),
             icon: const Icon(Icons.delete_outline),
           ),
@@ -58,12 +60,12 @@ class _OcrResultsPageState extends ConsumerState<OcrResultsPage> {
                     Navigator.pop(context, _selected.toList());
                   },
             icon: const Icon(Icons.check),
-            label: Text(_selected.isEmpty ? '请选择卡片' : '确定（${_selected.length}）'),
+            label: Text(_selected.isEmpty ? l10n.confirmButtonPleaseSelect : l10n.confirmButtonSelectedCount(_selected.length)),
           ),
         ),
       ),
       body: jobs.isEmpty
-          ? const Center(child: Text('暂无 OCR 结果'))
+          ? Center(child: Text(l10n.emptyOcrResults))
           : ListView.separated(
               padding: const EdgeInsets.all(12),
               itemCount: jobs.length,
@@ -101,15 +103,18 @@ class _OcrResultCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final l10n = AppLocalizations.of(context);
+
     final statusText = switch (job.status) {
-      OcrJobStatus.success => '成功',
-      OcrJobStatus.failed => '失败',
-      OcrJobStatus.running => '处理中',
-      OcrJobStatus.queued => '排队中',
-    };
+      OcrJobStatus.success => l10n.ocrStatusSuccess,
+      OcrJobStatus.failed => l10n.ocrStatusFailed,
+      OcrJobStatus.running => l10n.ocrStatusRunning,
+      OcrJobStatus.queued => l10n.ocrStatusQueued,
+    };    
 
     final subtitle = job.status == OcrJobStatus.failed
-        ? (job.error ?? '识别失败')
+        ? (job.error ?? l10n.ocrFailedDefaultError)
         : (job.resultText ?? '');
 
     return InkWell(
@@ -151,7 +156,7 @@ class _OcrResultCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    subtitle.isEmpty ? '（无文本）' : subtitle,
+                    subtitle.isEmpty ? l10n.noTextPlaceholder : subtitle,
                     maxLines: 4,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(fontSize: 13, height: 1.25),
@@ -166,19 +171,19 @@ class _OcrResultCard extends StatelessWidget {
                             showDialog(
                               context: context,
                               builder: (_) => AlertDialog(
-                                title: const Text('OCR 全文'),
+                                title: Text(l10n.ocrFullTextTitle),
                                 content: SingleChildScrollView(child: Text(text)),
                                 actions: [
                                   TextButton(
                                     onPressed: () => Navigator.pop(context),
-                                    child: const Text('关闭'),
+                                    child: Text(l10n.close),
                                   ),
                                 ],
                               ),
                             );
                           },
                           icon: const Icon(Icons.article_outlined, size: 18),
-                          label: const Text('查看全文'),
+                          label: Text(l10n.viewFullText),
                         ),
                       ],
                     ),
@@ -199,6 +204,7 @@ class _Thumb extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return FutureBuilder<AssetEntity?>(
       future: AssetEntity.fromId(assetId),
       builder: (context, snap) {

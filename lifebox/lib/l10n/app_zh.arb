@@ -31,6 +31,7 @@
   "common_password": "密码",
   "common_or": "或",
   "common_password_hit": "请输入密码",
+  "type_label": "类型",
   "version_text": "Life Inbox • v0.1.0 (MVP)",
   "login_title":"欢迎回来",
   "login_subtitle":"登录后开始导入截图，自动识别待办与风险，并用应用锁保护隐私。",
@@ -50,5 +51,69 @@
   "register_back_to_login": "返回登录",
   "register_hint_success": "注册成功后将自动进入收件箱。",
   "register_error_email_invalid": "请输入正确的邮箱",
-  "register_error_password_too_short": "密码至少 8 位"
+  "register_error_password_too_short": "密码至少 8 位",
+  "all_Time":"不限时间",
+  "import_title": "导入",
+  "import_title_full": "导入（筛选 + 队列）",
+  "import_perm_title": "未获得相册权限",
+  "import_perm_subtitle_ios": "请到 iOS 设置 → 隐私与安全性 → 照片 中允许访问。",
+  "import_perm_retry": "重新请求权限",
+  "import_action_refresh": "刷新",
+  "import_range_unlimited": "不限时间",
+  "type_label": "类型",
+  "import_filter_range_label": "时间段",
+  "import_filter_clear_range": "清除时间",
+  "import_screenshots_not_found": "未检测到“截图相册”，截图筛选将自动降级为全部照片。",
+  "import_screenshots_album_prefix": "截图相册： {count}",
+  "import_selected_count": "已选 {count} 张",
+  "import_select_all_visible": "全选当前",
+  "import_clear_selection": "取消全选",
+  "import_queue_label": "队列 {count}",
+  "import_empty_title": "没有符合条件的照片",
+  "import_empty_subtitle": "尝试更换时间范围或类型筛选。",
+  "import_loading_more": "加载中…",
+  "import_enqueue_button": "加入待处理队列",
+  "import_enqueue_button_with_count": "加入待处理队列（{count}）",
+  "ocr_queue_title": "OCR 队列",
+  "ocr_queue_clear": "清空排队",
+  "ocr_results_button": "结果（{count}）",
+  "ocr_processing_prefix": "处理中：{count}",
+  "ocr_no_current": "当前无处理中任务",
+  "ocr_queued_prefix": "排队：",
+  "ocr_queue_empty": "排队为空",
+
+  "ocrResultsTitle": "OCR 结果（{count}）",
+  "@ocrResultsTitle": {
+    "description": "Title of OCR results page with count",
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+
+  "selectAll": "全选",
+  "clearSelection": "清空",
+  "clearResultsTooltip": "清空结果",
+
+  "confirmButtonPleaseSelect": "请选择卡片",
+  "confirmButtonSelectedCount": "确定（{count}）",
+  "@confirmButtonSelectedCount": {
+    "description": "Confirm button label with selected count",
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+
+  "emptyOcrResults": "暂无 OCR 结果",
+
+  "ocrStatusSuccess": "成功",
+  "ocrStatusFailed": "失败",
+  "ocrStatusRunning": "处理中",
+  "ocrStatusQueued": "排队中",
+
+  "ocrFailedDefaultError": "识别失败",
+  "noTextPlaceholder": "（无文本）",
+
+  "ocrFullTextTitle": "OCR 全文",
+  "close": "关闭",
+  "viewFullText": "查看全文"
 }

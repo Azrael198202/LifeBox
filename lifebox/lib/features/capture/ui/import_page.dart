@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:lifebox/features/capture/ui/ocr_results_page.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:photo_manager_image_provider/photo_manager_image_provider.dart';
+import 'package:lifebox/l10n/app_localizations.dart';
 
 import '../../../core/widgets/app_scaffold.dart';
 import '../../../core/widgets/empty_state.dart';
@@ -53,8 +54,8 @@ class _ImportPageState extends ConsumerState<ImportPage> {
     }
   }
 
-  String _rangeText(DateTimeRange? r) {
-    if (r == null) return '不限时间';
+  String _rangeText(DateTimeRange? r, String allTimeText) {
+    if (r == null) return allTimeText;
     final fmt = DateFormat('yyyy/MM/dd');
     return '${fmt.format(r.start)} - ${fmt.format(r.end)}';
   }
@@ -90,15 +91,16 @@ class _ImportPageState extends ConsumerState<ImportPage> {
   Widget build(BuildContext context) {
     final c = ref.watch(importControllerProvider);
     final q = ref.watch(ocrQueueManagerProvider);
+    final l10n = AppLocalizations.of(context);
 
     if (!c.permissionGranted && !c.loading) {
       return AppScaffold(
-        title: '导入',
+        title: l10n.import_title,
         body: EmptyState(
-          title: '未获得相册权限',
-          subtitle: '请到 iOS 设置 → 隐私与安全性 → 照片 中允许访问。',
+          title: l10n.import_perm_title,
+          subtitle: l10n.import_perm_subtitle_ios,
           action: PrimaryButton(
-            label: '重新请求权限',
+            label: l10n.import_perm_retry,
             icon: Icons.lock_open,
             onPressed: () => c.init(),
           ),
@@ -107,19 +109,19 @@ class _ImportPageState extends ConsumerState<ImportPage> {
     }
 
     return AppScaffold(
-      title: 'Import（筛选 + 队列）',
+      title: l10n.import_title_full,
       actions: [
         IconButton(
           onPressed: () => c.reloadAssets(),
           icon: const Icon(Icons.refresh),
-          tooltip: '刷新',
+          tooltip: l10n.import_action_refresh,
         ),
       ],
       body: Column(
         children: [
           _FilterBar(
             type: c.type,
-            rangeText: _rangeText(c.range),
+            rangeText: _rangeText(c.range, l10n.all_Time),
             screenshotsAlbumName: c.screenshotsAlbumName,
             onPickRange: () => _pickDateRange(c),
             onClearRange: c.range == null ? null : () => c.setRange(null),
@@ -181,6 +183,8 @@ class _FilterBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(12, 10, 12, 8),
       child: Column(
@@ -190,8 +194,8 @@ class _FilterBar extends StatelessWidget {
               Expanded(
                 child: DropdownButtonFormField<ImportPhotoType>(
                   initialValue: type,
-                  decoration: const InputDecoration(
-                    labelText: '类型',
+                  decoration: InputDecoration(
+                    labelText: l10n.type_label,
                     border: OutlineInputBorder(),
                     isDense: true,
                   ),
@@ -207,8 +211,8 @@ class _FilterBar extends StatelessWidget {
                 child: InkWell(
                   onTap: onPickRange,
                   child: InputDecorator(
-                    decoration: const InputDecoration(
-                      labelText: '时间段',
+                    decoration: InputDecoration(
+                      labelText: l10n.import_filter_range_label,
                       border: OutlineInputBorder(),
                       isDense: true,
                     ),
@@ -238,8 +242,8 @@ class _FilterBar extends StatelessWidget {
               Expanded(
                 child: Text(
                   screenshotsAlbumName == null
-                      ? '未检测到“截图相册”，截图筛选将自动降级为全部照片。'
-                      : '截图相册：$screenshotsAlbumName',
+                      ? l10n.import_screenshots_not_found
+                      : l10n.import_screenshots_album_prefix(screenshotsAlbumName as String),
                   style: TextStyle(
                     fontSize: 12,
                     color: screenshotsAlbumName == null
@@ -251,7 +255,7 @@ class _FilterBar extends StatelessWidget {
               ),
               TextButton(
                 onPressed: onClearRange,
-                child: const Text('清除时间'),
+                child: Text(l10n.import_filter_clear_range),
               ),
             ],
           ),
@@ -277,28 +281,31 @@ class _SelectionBar extends StatelessWidget {
   final int queueCount;
   final bool queuePanelOpen;
   final VoidCallback onToggleQueuePanel;
+  
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(12, 6, 12, 6),
       child: Row(
         children: [
-          Text('已选 $selectedCount 张'),
+          Text(l10n.import_selected_count(selectedCount)),
           const SizedBox(width: 10),
           TextButton(
             onPressed: onSelectAllVisible,
-            child: const Text('全选当前'),
+            child: Text(l10n.import_select_all_visible),
           ),
           TextButton(
             onPressed: onClear,
-            child: const Text('取消全选'),
+            child: Text(l10n.import_clear_selection),
           ),
           const Spacer(),
           TextButton.icon(
             onPressed: onToggleQueuePanel,
             icon: Icon(queuePanelOpen ? Icons.expand_more : Icons.expand_less),
-            label: Text('队列 $queueCount'),
+            label: Text(l10n.import_queue_label(queueCount)),
           ),
         ],
       ),
@@ -323,14 +330,17 @@ class _Grid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final l10n = AppLocalizations.of(context);
+
     if (assets.isEmpty && loading) {
       return const Center(child: CircularProgressIndicator());
     }
 
     if (assets.isEmpty) {
-      return const EmptyState(
-        title: '没有符合条件的照片',
-        subtitle: '尝试更换时间范围或类型筛选。',
+      return EmptyState(
+        title: l10n.import_empty_title,
+        subtitle: l10n.import_empty_subtitle,
       );
     }
 
@@ -368,8 +378,8 @@ class _Grid extends StatelessWidget {
                   color: Colors.black.withOpacity(0.65),
                   borderRadius: BorderRadius.circular(999),
                 ),
-                child: const Text(
-                  '加载中…',
+                child: Text(
+                   l10n.import_loading_more,
                   style: TextStyle(color: Colors.white, fontSize: 12),
                 ),
               ),
@@ -444,6 +454,9 @@ class _BottomActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final l10n = AppLocalizations.of(context);
+
     return SafeArea(
       top: false,
       child: Padding(
@@ -452,7 +465,7 @@ class _BottomActions extends StatelessWidget {
           children: [
             Expanded(
               child: PrimaryButton(
-                label: enabled ? '加入待处理队列（$selectedCount）' : '加入待处理队列',
+                label: enabled ? l10n.import_enqueue_button_with_count(selectedCount) : l10n.import_enqueue_button,
                 icon: Icons.queue,
                 enabled: enabled,
                 onPressed: enabled ? onEnqueue : null,
@@ -473,6 +486,7 @@ class _QueuePanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cur = queue.current;
+    final l10n = AppLocalizations.of(context);
 
     return Container(
       width: double.infinity,
@@ -490,13 +504,13 @@ class _QueuePanel extends StatelessWidget {
           children: [
             Row(
               children: [
-                const Text('OCR 队列',
+                Text(l10n.ocr_queue_title,
                     style: TextStyle(fontWeight: FontWeight.w600)),
                 const Spacer(),
                 TextButton(
                   onPressed:
                       queue.queuedJobs.isEmpty ? null : queue.clearQueued,
-                  child: const Text('清空排队'),
+                  child: Text(l10n.ocr_queue_clear),
                 ),
                 TextButton(
                   onPressed: queue.completedJobs.isEmpty
@@ -512,7 +526,7 @@ class _QueuePanel extends StatelessWidget {
                           // 你下一步操作可以在这里接住
                           debugPrint('Selected OCR cards: $selected');
                         },
-                  child: Text('结果（${queue.completedJobs.length}）'),
+                  child: Text(l10n.ocr_results_button(queue.completedJobs.length)),
                 ),
               ],
             ),
@@ -523,7 +537,7 @@ class _QueuePanel extends StatelessWidget {
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      '处理中：${cur.assetId}',
+                      l10n.ocr_processing_prefix({cur.assetId}),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -535,11 +549,11 @@ class _QueuePanel extends StatelessWidget {
               LinearProgressIndicator(value: cur.progress),
               const SizedBox(height: 10),
             ] else ...[
-              const Row(
+              Row(
                 children: [
                   Icon(Icons.pause_circle, size: 18),
                   SizedBox(width: 8),
-                  Text('当前无处理中任务'),
+                  Text(l10n.ocr_no_current),
                 ],
               ),
               const SizedBox(height: 10),
@@ -564,7 +578,7 @@ class _QueuePanel extends StatelessWidget {
                       ),
                       child: Center(
                         child: Text(
-                          '排队：${j.assetId}',
+                          l10n.ocr_queued_prefix({j.assetId}),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -574,9 +588,9 @@ class _QueuePanel extends StatelessWidget {
                 ),
               )
             else
-              const Align(
+              Align(
                 alignment: Alignment.centerLeft,
-                child: Text('排队为空'),
+                child: Text(l10n.ocr_queue_empty),
               ),
           ],
         ),

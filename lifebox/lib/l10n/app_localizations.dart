@@ -292,6 +292,12 @@ abstract class AppLocalizations {
   /// **'パスワードを入力してください'**
   String get common_password_hit;
 
+  /// No description provided for @type_label.
+  ///
+  /// In ja, this message translates to:
+  /// **'種類'**
+  String get type_label;
+
   /// No description provided for @login_title.
   ///
   /// In ja, this message translates to:
@@ -405,6 +411,270 @@ abstract class AppLocalizations {
   /// In ja, this message translates to:
   /// **'パスワードは8文字以上にしてください'**
   String get register_error_password_too_short;
+
+  /// No description provided for @all_Time.
+  ///
+  /// In ja, this message translates to:
+  /// **'期間指定なし'**
+  String get all_Time;
+
+  /// No description provided for @import_title.
+  ///
+  /// In ja, this message translates to:
+  /// **'取り込み'**
+  String get import_title;
+
+  /// No description provided for @import_title_full.
+  ///
+  /// In ja, this message translates to:
+  /// **'取り込み（絞り込み + キュー）'**
+  String get import_title_full;
+
+  /// No description provided for @import_perm_title.
+  ///
+  /// In ja, this message translates to:
+  /// **'写真へのアクセス権がありません'**
+  String get import_perm_title;
+
+  /// No description provided for @import_perm_subtitle_ios.
+  ///
+  /// In ja, this message translates to:
+  /// **'iOS の「設定 → プライバシーとセキュリティ → 写真」からアクセスを許可してください。'**
+  String get import_perm_subtitle_ios;
+
+  /// No description provided for @import_perm_retry.
+  ///
+  /// In ja, this message translates to:
+  /// **'権限を再リクエスト'**
+  String get import_perm_retry;
+
+  /// No description provided for @import_action_refresh.
+  ///
+  /// In ja, this message translates to:
+  /// **'更新'**
+  String get import_action_refresh;
+
+  /// No description provided for @import_range_unlimited.
+  ///
+  /// In ja, this message translates to:
+  /// **'期間指定なし'**
+  String get import_range_unlimited;
+
+  /// No description provided for @import_filter_range_label.
+  ///
+  /// In ja, this message translates to:
+  /// **'期間'**
+  String get import_filter_range_label;
+
+  /// No description provided for @import_filter_clear_range.
+  ///
+  /// In ja, this message translates to:
+  /// **'期間をクリア'**
+  String get import_filter_clear_range;
+
+  /// No description provided for @import_screenshots_not_found.
+  ///
+  /// In ja, this message translates to:
+  /// **'「スクリーンショット」アルバムが見つかりません。スクリーンショット絞り込みは全ての写真に切り替わります。'**
+  String get import_screenshots_not_found;
+
+  /// No description provided for @import_screenshots_album_prefix.
+  ///
+  /// In ja, this message translates to:
+  /// **'スクリーンショット： {count}'**
+  String import_screenshots_album_prefix(Object count);
+
+  /// No description provided for @import_selected_count.
+  ///
+  /// In ja, this message translates to:
+  /// **'{count} 件選択中'**
+  String import_selected_count(Object count);
+
+  /// No description provided for @import_select_all_visible.
+  ///
+  /// In ja, this message translates to:
+  /// **'表示中を全選択'**
+  String get import_select_all_visible;
+
+  /// No description provided for @import_clear_selection.
+  ///
+  /// In ja, this message translates to:
+  /// **'選択解除'**
+  String get import_clear_selection;
+
+  /// No description provided for @import_queue_label.
+  ///
+  /// In ja, this message translates to:
+  /// **'キュー {count}'**
+  String import_queue_label(Object count);
+
+  /// No description provided for @import_empty_title.
+  ///
+  /// In ja, this message translates to:
+  /// **'条件に一致する写真がありません'**
+  String get import_empty_title;
+
+  /// No description provided for @import_empty_subtitle.
+  ///
+  /// In ja, this message translates to:
+  /// **'期間や種類の条件を変更してみてください。'**
+  String get import_empty_subtitle;
+
+  /// No description provided for @import_loading_more.
+  ///
+  /// In ja, this message translates to:
+  /// **'読み込み中…'**
+  String get import_loading_more;
+
+  /// No description provided for @import_enqueue_button.
+  ///
+  /// In ja, this message translates to:
+  /// **'処理キューに追加'**
+  String get import_enqueue_button;
+
+  /// No description provided for @import_enqueue_button_with_count.
+  ///
+  /// In ja, this message translates to:
+  /// **'処理キューに追加（{count}）'**
+  String import_enqueue_button_with_count(Object count);
+
+  /// No description provided for @ocr_queue_title.
+  ///
+  /// In ja, this message translates to:
+  /// **'OCR キュー'**
+  String get ocr_queue_title;
+
+  /// No description provided for @ocr_queue_clear.
+  ///
+  /// In ja, this message translates to:
+  /// **'キューを空にする'**
+  String get ocr_queue_clear;
+
+  /// No description provided for @ocr_results_button.
+  ///
+  /// In ja, this message translates to:
+  /// **'結果（{count}）'**
+  String ocr_results_button(Object count);
+
+  /// No description provided for @ocr_processing_prefix.
+  ///
+  /// In ja, this message translates to:
+  /// **'処理中：{count}'**
+  String ocr_processing_prefix(Object count);
+
+  /// No description provided for @ocr_no_current.
+  ///
+  /// In ja, this message translates to:
+  /// **'実行中のタスクはありません'**
+  String get ocr_no_current;
+
+  /// No description provided for @ocr_queued_prefix.
+  ///
+  /// In ja, this message translates to:
+  /// **'待機：'**
+  String ocr_queued_prefix(Object count);
+
+  /// No description provided for @ocr_queue_empty.
+  ///
+  /// In ja, this message translates to:
+  /// **'待機中なし'**
+  String get ocr_queue_empty;
+
+  /// Title of OCR results page with count
+  ///
+  /// In ja, this message translates to:
+  /// **'OCR結果（{count}）'**
+  String ocrResultsTitle(int count);
+
+  /// No description provided for @selectAll.
+  ///
+  /// In ja, this message translates to:
+  /// **'全選択'**
+  String get selectAll;
+
+  /// No description provided for @clearSelection.
+  ///
+  /// In ja, this message translates to:
+  /// **'クリア'**
+  String get clearSelection;
+
+  /// No description provided for @clearResultsTooltip.
+  ///
+  /// In ja, this message translates to:
+  /// **'結果をクリア'**
+  String get clearResultsTooltip;
+
+  /// No description provided for @confirmButtonPleaseSelect.
+  ///
+  /// In ja, this message translates to:
+  /// **'カードを選択してください'**
+  String get confirmButtonPleaseSelect;
+
+  /// Confirm button label with selected count
+  ///
+  /// In ja, this message translates to:
+  /// **'確定（{count}）'**
+  String confirmButtonSelectedCount(int count);
+
+  /// No description provided for @emptyOcrResults.
+  ///
+  /// In ja, this message translates to:
+  /// **'OCR結果がありません'**
+  String get emptyOcrResults;
+
+  /// No description provided for @ocrStatusSuccess.
+  ///
+  /// In ja, this message translates to:
+  /// **'成功'**
+  String get ocrStatusSuccess;
+
+  /// No description provided for @ocrStatusFailed.
+  ///
+  /// In ja, this message translates to:
+  /// **'失敗'**
+  String get ocrStatusFailed;
+
+  /// No description provided for @ocrStatusRunning.
+  ///
+  /// In ja, this message translates to:
+  /// **'処理中'**
+  String get ocrStatusRunning;
+
+  /// No description provided for @ocrStatusQueued.
+  ///
+  /// In ja, this message translates to:
+  /// **'待機中'**
+  String get ocrStatusQueued;
+
+  /// No description provided for @ocrFailedDefaultError.
+  ///
+  /// In ja, this message translates to:
+  /// **'認識に失敗しました'**
+  String get ocrFailedDefaultError;
+
+  /// No description provided for @noTextPlaceholder.
+  ///
+  /// In ja, this message translates to:
+  /// **'（テキストなし）'**
+  String get noTextPlaceholder;
+
+  /// No description provided for @ocrFullTextTitle.
+  ///
+  /// In ja, this message translates to:
+  /// **'OCR全文'**
+  String get ocrFullTextTitle;
+
+  /// No description provided for @close.
+  ///
+  /// In ja, this message translates to:
+  /// **'閉じる'**
+  String get close;
+
+  /// No description provided for @viewFullText.
+  ///
+  /// In ja, this message translates to:
+  /// **'全文を見る'**
+  String get viewFullText;
 }
 
 class _AppLocalizationsDelegate

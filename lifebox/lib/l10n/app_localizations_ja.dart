@@ -105,6 +105,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get common_password_hit => 'パスワードを入力してください';
 
   @override
+  String get type_label => '種類';
+
+  @override
   String get login_title => 'おかえりなさい';
 
   @override
@@ -162,4 +165,156 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get register_error_password_too_short => 'パスワードは8文字以上にしてください';
+
+  @override
+  String get all_Time => '期間指定なし';
+
+  @override
+  String get import_title => '取り込み';
+
+  @override
+  String get import_title_full => '取り込み（絞り込み + キュー）';
+
+  @override
+  String get import_perm_title => '写真へのアクセス権がありません';
+
+  @override
+  String get import_perm_subtitle_ios =>
+      'iOS の「設定 → プライバシーとセキュリティ → 写真」からアクセスを許可してください。';
+
+  @override
+  String get import_perm_retry => '権限を再リクエスト';
+
+  @override
+  String get import_action_refresh => '更新';
+
+  @override
+  String get import_range_unlimited => '期間指定なし';
+
+  @override
+  String get import_filter_range_label => '期間';
+
+  @override
+  String get import_filter_clear_range => '期間をクリア';
+
+  @override
+  String get import_screenshots_not_found =>
+      '「スクリーンショット」アルバムが見つかりません。スクリーンショット絞り込みは全ての写真に切り替わります。';
+
+  @override
+  String import_screenshots_album_prefix(Object count) {
+    return 'スクリーンショット： $count';
+  }
+
+  @override
+  String import_selected_count(Object count) {
+    return '$count 件選択中';
+  }
+
+  @override
+  String get import_select_all_visible => '表示中を全選択';
+
+  @override
+  String get import_clear_selection => '選択解除';
+
+  @override
+  String import_queue_label(Object count) {
+    return 'キュー $count';
+  }
+
+  @override
+  String get import_empty_title => '条件に一致する写真がありません';
+
+  @override
+  String get import_empty_subtitle => '期間や種類の条件を変更してみてください。';
+
+  @override
+  String get import_loading_more => '読み込み中…';
+
+  @override
+  String get import_enqueue_button => '処理キューに追加';
+
+  @override
+  String import_enqueue_button_with_count(Object count) {
+    return '処理キューに追加（$count）';
+  }
+
+  @override
+  String get ocr_queue_title => 'OCR キュー';
+
+  @override
+  String get ocr_queue_clear => 'キューを空にする';
+
+  @override
+  String ocr_results_button(Object count) {
+    return '結果（$count）';
+  }
+
+  @override
+  String ocr_processing_prefix(Object count) {
+    return '処理中：$count';
+  }
+
+  @override
+  String get ocr_no_current => '実行中のタスクはありません';
+
+  @override
+  String ocr_queued_prefix(Object count) {
+    return '待機：';
+  }
+
+  @override
+  String get ocr_queue_empty => '待機中なし';
+
+  @override
+  String ocrResultsTitle(int count) {
+    return 'OCR結果（$count）';
+  }
+
+  @override
+  String get selectAll => '全選択';
+
+  @override
+  String get clearSelection => 'クリア';
+
+  @override
+  String get clearResultsTooltip => '結果をクリア';
+
+  @override
+  String get confirmButtonPleaseSelect => 'カードを選択してください';
+
+  @override
+  String confirmButtonSelectedCount(int count) {
+    return '確定（$count）';
+  }
+
+  @override
+  String get emptyOcrResults => 'OCR結果がありません';
+
+  @override
+  String get ocrStatusSuccess => '成功';
+
+  @override
+  String get ocrStatusFailed => '失敗';
+
+  @override
+  String get ocrStatusRunning => '処理中';
+
+  @override
+  String get ocrStatusQueued => '待機中';
+
+  @override
+  String get ocrFailedDefaultError => '認識に失敗しました';
+
+  @override
+  String get noTextPlaceholder => '（テキストなし）';
+
+  @override
+  String get ocrFullTextTitle => 'OCR全文';
+
+  @override
+  String get close => '閉じる';
+
+  @override
+  String get viewFullText => '全文を見る';
 }

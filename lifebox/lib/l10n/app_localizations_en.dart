@@ -325,4 +325,165 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get viewFullText => 'View full text';
+
+  @override
+  String get calendarTitle => 'Calendar';
+
+  @override
+  String get pickYearMonthTitle => 'Select year & month';
+
+  @override
+  String get yearLabel => 'Year';
+
+  @override
+  String get monthLabel => 'Month';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get confirm => 'Confirm';
+
+  @override
+  String get speechSheetTitle => 'Speech recognition text';
+
+  @override
+  String get speechHintEditable =>
+      'The recognized text will appear here and can be edited.';
+
+  @override
+  String get goImport => 'Go to import';
+
+  @override
+  String receivedSnack(String text) {
+    return 'Received: $text';
+  }
+
+  @override
+  String get confirmAction => 'Confirm';
+
+  @override
+  String get weekdaySun => 'Sun';
+
+  @override
+  String get weekdayMon => 'Mon';
+
+  @override
+  String get weekdayTue => 'Tue';
+
+  @override
+  String get weekdayWed => 'Wed';
+
+  @override
+  String get weekdayThu => 'Thu';
+
+  @override
+  String get weekdayFri => 'Fri';
+
+  @override
+  String get weekdaySat => 'Sat';
+
+  @override
+  String dayItemsTitle(String date) {
+    return 'Items for the day: $date';
+  }
+
+  @override
+  String get noDueItemsForDay =>
+      'There are no items with a due date on this day.';
+
+  @override
+  String get setDueHint => 'Tip: Set a due date to show items on the calendar.';
+
+  @override
+  String get noDueDate => 'No due date';
+
+  @override
+  String duePrefix(String due) {
+    return 'Due: $due';
+  }
+
+  @override
+  String get nextStep => 'Next';
+
+  @override
+  String get inboxDetailTitle => 'Details';
+
+  @override
+  String inboxDetailSource(String source) {
+    return 'Source: $source';
+  }
+
+  @override
+  String get inboxDetailThumbnailPlaceholder =>
+      '(Thumbnail/source image will go here in the future)';
+
+  @override
+  String get inboxDetailStructuredFields => 'Structured fields';
+
+  @override
+  String get inboxDetailDueTodo => 'Due date: TODO';
+
+  @override
+  String get inboxDetailAmountTodo => 'Amount: TODO';
+
+  @override
+  String get inboxDetailPhoneUrlTodo => 'Phone/URL: TODO';
+
+  @override
+  String get inboxDetailPrimaryActionAddCalendar =>
+      'Primary action: Add to calendar';
+
+  @override
+  String get inboxDetailMarkDoneTodo => 'Mark as done (TODO)';
+
+  @override
+  String get inboxDetailEvidenceTitle => 'Evidence (OCR snippets)';
+
+  @override
+  String get inboxDetailOcrPlaceholder =>
+      'OCR: ... (Later, this will show local OCR cache content)';
+
+  @override
+  String get inboxTitle => 'Life Inbox';
+
+  @override
+  String get inboxEmptyTitle => 'Nothing here yet';
+
+  @override
+  String get inboxEmptySubtitle =>
+      'Import screenshots or hold the mic button to start';
+
+  @override
+  String get tooltipCalendarView => 'Calendar view';
+
+  @override
+  String get tooltipImport => 'Import';
+
+  @override
+  String get tooltipSettings => 'Settings';
+
+  @override
+  String tabHigh(int count) {
+    return 'High priority ($count)';
+  }
+
+  @override
+  String tabPending(int count) {
+    return 'To do ($count)';
+  }
+
+  @override
+  String tabDone(int count) {
+    return 'Done ($count)';
+  }
+
+  @override
+  String get speechBarHintHoldToTalk =>
+      'Hold to speak. Release when done to generate text.';
+
+  @override
+  String speechBarRecentPrefix(String text) {
+    return 'Recent: $text';
+  }
 }

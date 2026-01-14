@@ -1,5 +1,6 @@
 import '../../../core/widgets/hold_to_talk_button.dart';
 import 'package:flutter/material.dart';
+import 'package:lifebox/l10n/app_localizations.dart';
 
 /// ✅ 公开组件：抽走 InboxPage 里的 _SpeechFloatingBar
 class SpeechFloatingBar extends StatelessWidget {
@@ -16,6 +17,9 @@ class SpeechFloatingBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final l10n = AppLocalizations.of(context);
+
     return Material(
       elevation: 8,
       borderRadius: BorderRadius.circular(18),
@@ -35,7 +39,7 @@ class SpeechFloatingBar extends StatelessWidget {
             const SizedBox(width: 10),
             Expanded(
               child: Text(
-                lastText.isEmpty ? '按住语音，说完松开即可生成文字' : '最近：$lastText',
+                lastText.isEmpty ? l10n.speechBarHintHoldToTalk : l10n.speechBarRecentPrefix(lastText),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(

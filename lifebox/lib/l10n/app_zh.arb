@@ -115,5 +115,98 @@
 
   "ocrFullTextTitle": "OCR 全文",
   "close": "关闭",
-  "viewFullText": "查看全文"
+  "viewFullText": "查看全文",
+
+  "calendarTitle": "日历",
+
+  "pickYearMonthTitle": "选择年月",
+  "yearLabel": "年",
+  "monthLabel": "月",
+  "confirm": "确定",
+
+  "speechSheetTitle": "语音识别内容",
+  "speechHintEditable": "识别结果会显示在这里，可编辑",
+  "goImport": "去导入",
+  "receivedSnack": "已收到：{text}",
+  "@receivedSnack": {
+    "description": "SnackBar message after receiving final text",
+    "placeholders": {
+      "text": { "type": "String" }
+    }
+  },
+  "confirmAction": "确认",
+
+  "weekdaySun": "日",
+  "weekdayMon": "一",
+  "weekdayTue": "二",
+  "weekdayWed": "三",
+  "weekdayThu": "四",
+  "weekdayFri": "五",
+  "weekdaySat": "六",
+
+  "dayItemsTitle": "当天事项：{date}",
+  "@dayItemsTitle": {
+    "description": "Title for selected day section with date",
+    "placeholders": {
+      "date": { "type": "String" }
+    }
+  },
+  "noDueItemsForDay": "这一天没有设置截止日期的事项。",
+  "setDueHint": "提示：给事项设置截止日期后会显示在日历里。",
+
+  "noDueDate": "无截止",
+  "duePrefix": "截止：{due}",
+  "@duePrefix": {
+    "description": "Due date label prefix on inbox card",
+    "placeholders": {
+      "due": { "type": "String" }
+    }
+  },
+  "nextStep": "下一步",
+
+  "inboxDetailTitle": "详情",
+  "inboxDetailSource": "来源：{source}",
+  "@inboxDetailSource": {
+    "placeholders": {
+      "source": { "type": "String" }
+    }
+  },
+  "inboxDetailThumbnailPlaceholder": "（这里未来放缩略图/来源图）",
+
+  "inboxDetailStructuredFields": "结构化字段",
+  "inboxDetailDueTodo": "截止日期：TODO",
+  "inboxDetailAmountTodo": "金额：TODO",
+  "inboxDetailPhoneUrlTodo": "电话/URL：TODO",
+
+  "inboxDetailPrimaryActionAddCalendar": "主动作：加入日历",
+  "inboxDetailMarkDoneTodo": "标记完成（TODO）",
+
+  "inboxDetailEvidenceTitle": "解析依据（OCR 片段）",
+  "inboxDetailOcrPlaceholder": "OCR: ...（后续接入本地 OCR 缓存并展示）",
+
+  "inboxTitle": "Life Inbox",
+
+  "inboxEmptyTitle": "这里还没有内容",
+  "inboxEmptySubtitle": "去导入截图或按住语音开始吧",
+
+  "tooltipCalendarView": "日历视图",
+  "tooltipImport": "导入",
+  "tooltipSettings": "设置",
+
+  "tabHigh": "高优先（{count}）",
+  "@tabHigh": { "placeholders": { "count": { "type": "int" } } },
+
+  "tabPending": "待处理（{count}）",
+  "@tabPending": { "placeholders": { "count": { "type": "int" } } },
+
+  "tabDone": "已完成（{count}）",
+  "@tabDone": { "placeholders": { "count": { "type": "int" } } },
+
+  "speechBarHintHoldToTalk": "按住语音，说完松开即可生成文字",
+  "speechBarRecentPrefix": "最近：{text}",
+  "@speechBarRecentPrefix": {
+    "placeholders": {
+      "text": { "type": "String" }
+    }
+  }
 }

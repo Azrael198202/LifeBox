@@ -313,4 +313,158 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get viewFullText => '查看全文';
+
+  @override
+  String get calendarTitle => '日历';
+
+  @override
+  String get pickYearMonthTitle => '选择年月';
+
+  @override
+  String get yearLabel => '年';
+
+  @override
+  String get monthLabel => '月';
+
+  @override
+  String get cancel => 'キャンセル';
+
+  @override
+  String get confirm => '确定';
+
+  @override
+  String get speechSheetTitle => '语音识别内容';
+
+  @override
+  String get speechHintEditable => '识别结果会显示在这里，可编辑';
+
+  @override
+  String get goImport => '去导入';
+
+  @override
+  String receivedSnack(String text) {
+    return '已收到：$text';
+  }
+
+  @override
+  String get confirmAction => '确认';
+
+  @override
+  String get weekdaySun => '日';
+
+  @override
+  String get weekdayMon => '一';
+
+  @override
+  String get weekdayTue => '二';
+
+  @override
+  String get weekdayWed => '三';
+
+  @override
+  String get weekdayThu => '四';
+
+  @override
+  String get weekdayFri => '五';
+
+  @override
+  String get weekdaySat => '六';
+
+  @override
+  String dayItemsTitle(String date) {
+    return '当天事项：$date';
+  }
+
+  @override
+  String get noDueItemsForDay => '这一天没有设置截止日期的事项。';
+
+  @override
+  String get setDueHint => '提示：给事项设置截止日期后会显示在日历里。';
+
+  @override
+  String get noDueDate => '无截止';
+
+  @override
+  String duePrefix(String due) {
+    return '截止：$due';
+  }
+
+  @override
+  String get nextStep => '下一步';
+
+  @override
+  String get inboxDetailTitle => '详情';
+
+  @override
+  String inboxDetailSource(String source) {
+    return '来源：$source';
+  }
+
+  @override
+  String get inboxDetailThumbnailPlaceholder => '（这里未来放缩略图/来源图）';
+
+  @override
+  String get inboxDetailStructuredFields => '结构化字段';
+
+  @override
+  String get inboxDetailDueTodo => '截止日期：TODO';
+
+  @override
+  String get inboxDetailAmountTodo => '金额：TODO';
+
+  @override
+  String get inboxDetailPhoneUrlTodo => '电话/URL：TODO';
+
+  @override
+  String get inboxDetailPrimaryActionAddCalendar => '主动作：加入日历';
+
+  @override
+  String get inboxDetailMarkDoneTodo => '标记完成（TODO）';
+
+  @override
+  String get inboxDetailEvidenceTitle => '解析依据（OCR 片段）';
+
+  @override
+  String get inboxDetailOcrPlaceholder => 'OCR: ...（后续接入本地 OCR 缓存并展示）';
+
+  @override
+  String get inboxTitle => 'Life Inbox';
+
+  @override
+  String get inboxEmptyTitle => '这里还没有内容';
+
+  @override
+  String get inboxEmptySubtitle => '去导入截图或按住语音开始吧';
+
+  @override
+  String get tooltipCalendarView => '日历视图';
+
+  @override
+  String get tooltipImport => '导入';
+
+  @override
+  String get tooltipSettings => '设置';
+
+  @override
+  String tabHigh(int count) {
+    return '高优先（$count）';
+  }
+
+  @override
+  String tabPending(int count) {
+    return '待处理（$count）';
+  }
+
+  @override
+  String tabDone(int count) {
+    return '已完成（$count）';
+  }
+
+  @override
+  String get speechBarHintHoldToTalk => '按住语音，说完松开即可生成文字';
+
+  @override
+  String speechBarRecentPrefix(String text) {
+    return '最近：$text';
+  }
 }

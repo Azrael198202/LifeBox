@@ -675,6 +675,282 @@ abstract class AppLocalizations {
   /// In ja, this message translates to:
   /// **'全文を見る'**
   String get viewFullText;
+
+  /// No description provided for @calendarTitle.
+  ///
+  /// In ja, this message translates to:
+  /// **'カレンダー'**
+  String get calendarTitle;
+
+  /// No description provided for @pickYearMonthTitle.
+  ///
+  /// In ja, this message translates to:
+  /// **'年月を選択'**
+  String get pickYearMonthTitle;
+
+  /// No description provided for @yearLabel.
+  ///
+  /// In ja, this message translates to:
+  /// **'年'**
+  String get yearLabel;
+
+  /// No description provided for @monthLabel.
+  ///
+  /// In ja, this message translates to:
+  /// **'月'**
+  String get monthLabel;
+
+  /// No description provided for @cancel.
+  ///
+  /// In ja, this message translates to:
+  /// **'キャンセル'**
+  String get cancel;
+
+  /// No description provided for @confirm.
+  ///
+  /// In ja, this message translates to:
+  /// **'確定'**
+  String get confirm;
+
+  /// No description provided for @speechSheetTitle.
+  ///
+  /// In ja, this message translates to:
+  /// **'音声認識の内容'**
+  String get speechSheetTitle;
+
+  /// No description provided for @speechHintEditable.
+  ///
+  /// In ja, this message translates to:
+  /// **'認識結果がここに表示されます。編集できます。'**
+  String get speechHintEditable;
+
+  /// No description provided for @goImport.
+  ///
+  /// In ja, this message translates to:
+  /// **'インポートへ'**
+  String get goImport;
+
+  /// SnackBar message after receiving final text
+  ///
+  /// In ja, this message translates to:
+  /// **'受信しました：{text}'**
+  String receivedSnack(String text);
+
+  /// No description provided for @confirmAction.
+  ///
+  /// In ja, this message translates to:
+  /// **'確認'**
+  String get confirmAction;
+
+  /// No description provided for @weekdaySun.
+  ///
+  /// In ja, this message translates to:
+  /// **'日'**
+  String get weekdaySun;
+
+  /// No description provided for @weekdayMon.
+  ///
+  /// In ja, this message translates to:
+  /// **'月'**
+  String get weekdayMon;
+
+  /// No description provided for @weekdayTue.
+  ///
+  /// In ja, this message translates to:
+  /// **'火'**
+  String get weekdayTue;
+
+  /// No description provided for @weekdayWed.
+  ///
+  /// In ja, this message translates to:
+  /// **'水'**
+  String get weekdayWed;
+
+  /// No description provided for @weekdayThu.
+  ///
+  /// In ja, this message translates to:
+  /// **'木'**
+  String get weekdayThu;
+
+  /// No description provided for @weekdayFri.
+  ///
+  /// In ja, this message translates to:
+  /// **'金'**
+  String get weekdayFri;
+
+  /// No description provided for @weekdaySat.
+  ///
+  /// In ja, this message translates to:
+  /// **'土'**
+  String get weekdaySat;
+
+  /// Title for selected day section with date
+  ///
+  /// In ja, this message translates to:
+  /// **'当日の項目：{date}'**
+  String dayItemsTitle(String date);
+
+  /// No description provided for @noDueItemsForDay.
+  ///
+  /// In ja, this message translates to:
+  /// **'この日に期限が設定された項目はありません。'**
+  String get noDueItemsForDay;
+
+  /// No description provided for @setDueHint.
+  ///
+  /// In ja, this message translates to:
+  /// **'ヒント：項目に期限を設定するとカレンダーに表示されます。'**
+  String get setDueHint;
+
+  /// No description provided for @noDueDate.
+  ///
+  /// In ja, this message translates to:
+  /// **'期限なし'**
+  String get noDueDate;
+
+  /// Due date label prefix on inbox card
+  ///
+  /// In ja, this message translates to:
+  /// **'期限：{due}'**
+  String duePrefix(String due);
+
+  /// No description provided for @nextStep.
+  ///
+  /// In ja, this message translates to:
+  /// **'次へ'**
+  String get nextStep;
+
+  /// No description provided for @inboxDetailTitle.
+  ///
+  /// In ja, this message translates to:
+  /// **'詳細'**
+  String get inboxDetailTitle;
+
+  /// No description provided for @inboxDetailSource.
+  ///
+  /// In ja, this message translates to:
+  /// **'出所：{source}'**
+  String inboxDetailSource(String source);
+
+  /// No description provided for @inboxDetailThumbnailPlaceholder.
+  ///
+  /// In ja, this message translates to:
+  /// **'（将来的にサムネイル／元画像をここに表示）'**
+  String get inboxDetailThumbnailPlaceholder;
+
+  /// No description provided for @inboxDetailStructuredFields.
+  ///
+  /// In ja, this message translates to:
+  /// **'構造化フィールド'**
+  String get inboxDetailStructuredFields;
+
+  /// No description provided for @inboxDetailDueTodo.
+  ///
+  /// In ja, this message translates to:
+  /// **'期限：TODO'**
+  String get inboxDetailDueTodo;
+
+  /// No description provided for @inboxDetailAmountTodo.
+  ///
+  /// In ja, this message translates to:
+  /// **'金額：TODO'**
+  String get inboxDetailAmountTodo;
+
+  /// No description provided for @inboxDetailPhoneUrlTodo.
+  ///
+  /// In ja, this message translates to:
+  /// **'電話／URL：TODO'**
+  String get inboxDetailPhoneUrlTodo;
+
+  /// No description provided for @inboxDetailPrimaryActionAddCalendar.
+  ///
+  /// In ja, this message translates to:
+  /// **'主アクション：カレンダーに追加'**
+  String get inboxDetailPrimaryActionAddCalendar;
+
+  /// No description provided for @inboxDetailMarkDoneTodo.
+  ///
+  /// In ja, this message translates to:
+  /// **'完了としてマーク（TODO）'**
+  String get inboxDetailMarkDoneTodo;
+
+  /// No description provided for @inboxDetailEvidenceTitle.
+  ///
+  /// In ja, this message translates to:
+  /// **'解析根拠（OCR 断片）'**
+  String get inboxDetailEvidenceTitle;
+
+  /// No description provided for @inboxDetailOcrPlaceholder.
+  ///
+  /// In ja, this message translates to:
+  /// **'OCR: ...（後ほどローカルOCRキャッシュと連携して表示）'**
+  String get inboxDetailOcrPlaceholder;
+
+  /// No description provided for @inboxTitle.
+  ///
+  /// In ja, this message translates to:
+  /// **'Life Inbox'**
+  String get inboxTitle;
+
+  /// No description provided for @inboxEmptyTitle.
+  ///
+  /// In ja, this message translates to:
+  /// **'まだ内容がありません'**
+  String get inboxEmptyTitle;
+
+  /// No description provided for @inboxEmptySubtitle.
+  ///
+  /// In ja, this message translates to:
+  /// **'スクリーンショットをインポートするか、音声ボタンを長押しして始めましょう'**
+  String get inboxEmptySubtitle;
+
+  /// No description provided for @tooltipCalendarView.
+  ///
+  /// In ja, this message translates to:
+  /// **'カレンダー表示'**
+  String get tooltipCalendarView;
+
+  /// No description provided for @tooltipImport.
+  ///
+  /// In ja, this message translates to:
+  /// **'インポート'**
+  String get tooltipImport;
+
+  /// No description provided for @tooltipSettings.
+  ///
+  /// In ja, this message translates to:
+  /// **'設定'**
+  String get tooltipSettings;
+
+  /// No description provided for @tabHigh.
+  ///
+  /// In ja, this message translates to:
+  /// **'高優先（{count}）'**
+  String tabHigh(int count);
+
+  /// No description provided for @tabPending.
+  ///
+  /// In ja, this message translates to:
+  /// **'未処理（{count}）'**
+  String tabPending(int count);
+
+  /// No description provided for @tabDone.
+  ///
+  /// In ja, this message translates to:
+  /// **'完了（{count}）'**
+  String tabDone(int count);
+
+  /// No description provided for @speechBarHintHoldToTalk.
+  ///
+  /// In ja, this message translates to:
+  /// **'音声を長押しし、話し終えたら離すと文字になります'**
+  String get speechBarHintHoldToTalk;
+
+  /// No description provided for @speechBarRecentPrefix.
+  ///
+  /// In ja, this message translates to:
+  /// **'最近：{text}'**
+  String speechBarRecentPrefix(String text);
 }
 
 class _AppLocalizationsDelegate

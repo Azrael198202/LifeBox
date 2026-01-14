@@ -116,5 +116,99 @@
 
   "ocrFullTextTitle": "OCR全文",
   "close": "閉じる",
-  "viewFullText": "全文を見る"
+  "viewFullText": "全文を見る",
+
+  "calendarTitle": "カレンダー",
+
+  "pickYearMonthTitle": "年月を選択",
+  "yearLabel": "年",
+  "monthLabel": "月",
+  "cancel": "キャンセル",
+  "confirm": "確定",
+
+  "speechSheetTitle": "音声認識の内容",
+  "speechHintEditable": "認識結果がここに表示されます。編集できます。",
+  "goImport": "インポートへ",
+  "receivedSnack": "受信しました：{text}",
+  "@receivedSnack": {
+    "description": "SnackBar message after receiving final text",
+    "placeholders": {
+      "text": { "type": "String" }
+    }
+  },
+  "confirmAction": "確認",
+
+  "weekdaySun": "日",
+  "weekdayMon": "月",
+  "weekdayTue": "火",
+  "weekdayWed": "水",
+  "weekdayThu": "木",
+  "weekdayFri": "金",
+  "weekdaySat": "土",
+
+  "dayItemsTitle": "当日の項目：{date}",
+  "@dayItemsTitle": {
+    "description": "Title for selected day section with date",
+    "placeholders": {
+      "date": { "type": "String" }
+    }
+  },
+  "noDueItemsForDay": "この日に期限が設定された項目はありません。",
+  "setDueHint": "ヒント：項目に期限を設定するとカレンダーに表示されます。",
+
+  "noDueDate": "期限なし",
+  "duePrefix": "期限：{due}",
+  "@duePrefix": {
+    "description": "Due date label prefix on inbox card",
+    "placeholders": {
+      "due": { "type": "String" }
+    }
+  },
+  "nextStep": "次へ",
+
+  "inboxDetailTitle": "詳細",
+  "inboxDetailSource": "出所：{source}",
+  "@inboxDetailSource": {
+    "placeholders": {
+      "source": { "type": "String" }
+    }
+  },
+  "inboxDetailThumbnailPlaceholder": "（将来的にサムネイル／元画像をここに表示）",
+
+  "inboxDetailStructuredFields": "構造化フィールド",
+  "inboxDetailDueTodo": "期限：TODO",
+  "inboxDetailAmountTodo": "金額：TODO",
+  "inboxDetailPhoneUrlTodo": "電話／URL：TODO",
+
+  "inboxDetailPrimaryActionAddCalendar": "主アクション：カレンダーに追加",
+  "inboxDetailMarkDoneTodo": "完了としてマーク（TODO）",
+
+  "inboxDetailEvidenceTitle": "解析根拠（OCR 断片）",
+  "inboxDetailOcrPlaceholder": "OCR: ...（後ほどローカルOCRキャッシュと連携して表示）",
+
+  "inboxTitle": "Life Inbox",
+
+  "inboxEmptyTitle": "まだ内容がありません",
+  "inboxEmptySubtitle": "スクリーンショットをインポートするか、音声ボタンを長押しして始めましょう",
+
+  "tooltipCalendarView": "カレンダー表示",
+  "tooltipImport": "インポート",
+  "tooltipSettings": "設定",
+
+  "tabHigh": "高優先（{count}）",
+  "@tabHigh": { "placeholders": { "count": { "type": "int" } } },
+
+  "tabPending": "未処理（{count}）",
+  "@tabPending": { "placeholders": { "count": { "type": "int" } } },
+
+  "tabDone": "完了（{count}）",
+  "@tabDone": { "placeholders": { "count": { "type": "int" } } },
+
+  "speechBarHintHoldToTalk": "音声を長押しし、話し終えたら離すと文字になります",
+  "speechBarRecentPrefix": "最近：{text}",
+  "@speechBarRecentPrefix": {
+    "placeholders": {
+      "text": { "type": "String" }
+    }
+  }
 }

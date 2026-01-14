@@ -115,5 +115,100 @@
 
   "ocrFullTextTitle": "Full OCR Text",
   "close": "Close",
-  "viewFullText": "View full text"
+  "viewFullText": "View full text",
+
+  
+  "calendarTitle": "Calendar",
+
+  "pickYearMonthTitle": "Select year & month",
+  "yearLabel": "Year",
+  "monthLabel": "Month",
+  "cancel": "Cancel",
+  "confirm": "Confirm",
+
+  "speechSheetTitle": "Speech recognition text",
+  "speechHintEditable": "The recognized text will appear here and can be edited.",
+  "goImport": "Go to import",
+  "receivedSnack": "Received: {text}",
+  "@receivedSnack": {
+    "description": "SnackBar message after receiving final text",
+    "placeholders": {
+      "text": { "type": "String" }
+    }
+  },
+  "confirmAction": "Confirm",
+
+  "weekdaySun": "Sun",
+  "weekdayMon": "Mon",
+  "weekdayTue": "Tue",
+  "weekdayWed": "Wed",
+  "weekdayThu": "Thu",
+  "weekdayFri": "Fri",
+  "weekdaySat": "Sat",
+
+  "dayItemsTitle": "Items for the day: {date}",
+  "@dayItemsTitle": {
+    "description": "Title for selected day section with date",
+    "placeholders": {
+      "date": { "type": "String" }
+    }
+  },
+  "noDueItemsForDay": "There are no items with a due date on this day.",
+  "setDueHint": "Tip: Set a due date to show items on the calendar.",
+
+  "noDueDate": "No due date",
+  "duePrefix": "Due: {due}",
+  "@duePrefix": {
+    "description": "Due date label prefix on inbox card",
+    "placeholders": {
+      "due": { "type": "String" }
+    }
+  },
+  "nextStep": "Next",
+
+  "inboxDetailTitle": "Details",
+  "inboxDetailSource": "Source: {source}",
+  "@inboxDetailSource": {
+    "placeholders": {
+      "source": { "type": "String" }
+    }
+  },
+  "inboxDetailThumbnailPlaceholder": "(Thumbnail/source image will go here in the future)",
+
+  "inboxDetailStructuredFields": "Structured fields",
+  "inboxDetailDueTodo": "Due date: TODO",
+  "inboxDetailAmountTodo": "Amount: TODO",
+  "inboxDetailPhoneUrlTodo": "Phone/URL: TODO",
+
+  "inboxDetailPrimaryActionAddCalendar": "Primary action: Add to calendar",
+  "inboxDetailMarkDoneTodo": "Mark as done (TODO)",
+
+  "inboxDetailEvidenceTitle": "Evidence (OCR snippets)",
+  "inboxDetailOcrPlaceholder": "OCR: ... (Later, this will show local OCR cache content)",
+
+  "inboxTitle": "Life Inbox",
+
+  "inboxEmptyTitle": "Nothing here yet",
+  "inboxEmptySubtitle": "Import screenshots or hold the mic button to start",
+
+  "tooltipCalendarView": "Calendar view",
+  "tooltipImport": "Import",
+  "tooltipSettings": "Settings",
+
+  "tabHigh": "High priority ({count})",
+  "@tabHigh": { "placeholders": { "count": { "type": "int" } } },
+
+  "tabPending": "To do ({count})",
+  "@tabPending": { "placeholders": { "count": { "type": "int" } } },
+
+  "tabDone": "Done ({count})",
+  "@tabDone": { "placeholders": { "count": { "type": "int" } } },
+
+  "speechBarHintHoldToTalk": "Hold to speak. Release when done to generate text.",
+  "speechBarRecentPrefix": "Recent: {text}",
+  "@speechBarRecentPrefix": {
+    "placeholders": {
+      "text": { "type": "String" }
+    }
+  }
 }

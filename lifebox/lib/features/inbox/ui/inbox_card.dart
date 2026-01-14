@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:lifebox/l10n/app_localizations.dart';
+
 import '../../../app/theme/colors.dart';
 import '../../../core/widgets/risk_badge.dart';
 import '../domain/inbox_item.dart';
@@ -18,7 +20,8 @@ class InboxCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dueText = item.dueAt == null ? '无截止' : DateFormat('MM/dd').format(item.dueAt!);
+    final l10n = AppLocalizations.of(context);
+    final dueText = item.dueAt == null ? l10n.noDueDate : DateFormat('MM/dd').format(item.dueAt!);
 
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -34,7 +37,7 @@ class InboxCard extends StatelessWidget {
               const SizedBox(height: 10),
               Row(
                 children: [
-                  Text('截止：$dueText', style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.subtext)),
+                  Text(l10n.duePrefix(dueText), style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.subtext)),
                   const Spacer(),
                   RiskBadge(risk: item.risk),
                 ],
@@ -55,7 +58,7 @@ class InboxCard extends StatelessWidget {
                     height: 34,
                     child: FilledButton.tonal(
                       onPressed: onPrimaryAction,
-                      child: const Text('下一步'),
+                      child: Text(l10n.nextStep),
                     ),
                   ),
                 ],

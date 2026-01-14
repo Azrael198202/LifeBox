@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lifebox/l10n/app_localizations.dart';
 
 import '../domain/inbox_item.dart';
 import '../state/inbox_providers.dart';
@@ -17,7 +18,7 @@ class InboxCalendarPage extends ConsumerStatefulWidget {
 class _InboxCalendarPageState extends ConsumerState<InboxCalendarPage> {
   DateTime _month = DateTime(DateTime.now().year, DateTime.now().month, 1);
   DateTime _selectedDay =
-      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
   // ✅ 语音最近文本（用于浮条显示）
   String _lastSpeechText = '';
@@ -26,11 +27,12 @@ class _InboxCalendarPageState extends ConsumerState<InboxCalendarPage> {
     final picked = await showDialog<DateTime>(
       context: context,
       builder: (context) {
+        final l10n = AppLocalizations.of(context);
         int year = _month.year;
         int month = _month.month;
 
         return AlertDialog(
-          title: const Text('选择年月'),
+          title: Text(l10n.pickYearMonthTitle),
           content: StatefulBuilder(
             builder: (context, setState) {
               return Row(
@@ -38,7 +40,7 @@ class _InboxCalendarPageState extends ConsumerState<InboxCalendarPage> {
                   Expanded(
                     child: DropdownButtonFormField<int>(
                       value: year,
-                      decoration: const InputDecoration(labelText: '年'),
+                      decoration: InputDecoration(labelText: l10n.yearLabel),
                       items:
                           List.generate(21, (i) => DateTime.now().year - 10 + i)
                               .map((y) =>
@@ -51,7 +53,7 @@ class _InboxCalendarPageState extends ConsumerState<InboxCalendarPage> {
                   Expanded(
                     child: DropdownButtonFormField<int>(
                       value: month,
-                      decoration: const InputDecoration(labelText: '月'),
+                      decoration: InputDecoration(labelText: l10n.monthLabel),
                       items: List.generate(12, (i) => i + 1)
                           .map((m) => DropdownMenuItem(
                               value: m,
@@ -67,11 +69,11 @@ class _InboxCalendarPageState extends ConsumerState<InboxCalendarPage> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('取消'),
+              child: Text(l10n.common_Cancel),
             ),
             FilledButton(
               onPressed: () => Navigator.pop(context, DateTime(year, month, 1)),
-              child: const Text('确定'),
+              child: Text(l10n.confirmAction),
             ),
           ],
         );
@@ -95,6 +97,8 @@ class _InboxCalendarPageState extends ConsumerState<InboxCalendarPage> {
       showDragHandle: true,
       builder: (_) {
         final controller = TextEditingController(text: text);
+        final l10n = AppLocalizations.of(context);
+
         return Padding(
           padding: EdgeInsets.only(
             left: 16,
@@ -106,16 +110,16 @@ class _InboxCalendarPageState extends ConsumerState<InboxCalendarPage> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                '语音识别内容',
+              Text(
+                l10n.speechSheetTitle,
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
               ),
               const SizedBox(height: 10),
               TextField(
                 controller: controller,
                 maxLines: 4,
-                decoration: const InputDecoration(
-                  hintText: '识别结果会显示在这里，可编辑',
+                decoration: InputDecoration(
+                  hintText: l10n.speechHintEditable,
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -129,7 +133,7 @@ class _InboxCalendarPageState extends ConsumerState<InboxCalendarPage> {
                         context.push('/import');
                       },
                       icon: const Icon(Icons.add_photo_alternate_outlined),
-                      label: const Text('去导入'),
+                      label: Text(l10n.goImport),
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -141,11 +145,11 @@ class _InboxCalendarPageState extends ConsumerState<InboxCalendarPage> {
 
                         Navigator.pop(context);
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('已收到：$finalText')),
+                          SnackBar(content: Text(l10n.receivedSnack(finalText))),
                         );
                       },
                       icon: const Icon(Icons.check),
-                      label: const Text('确认'),
+                      label: Text(l10n.confirmAction),
                     ),
                   ),
                 ],
@@ -164,6 +168,8 @@ class _InboxCalendarPageState extends ConsumerState<InboxCalendarPage> {
     // ✅ 只显示“要处理”的：高优先 + 待处理
     final actionable = items.where(_isActionable).toList();
 
+    final l10n = AppLocalizations.of(context);
+
     // 按日期聚合（只聚合有 dueAt 的）
     final Map<DateTime, List<InboxItem>> byDay = {};
     for (final it in actionable) {
@@ -178,7 +184,7 @@ class _InboxCalendarPageState extends ConsumerState<InboxCalendarPage> {
     final selectedItems = byDay[selectedKey] ?? const <InboxItem>[];
 
     return Scaffold(
-      appBar: AppBar(title: const Text('日历')),
+      appBar: AppBar(title: Text(l10n.calendarTitle)),
       body: Stack(
         children: [
           // ✅ 主体内容（给底部浮条预留空间）
@@ -299,7 +305,9 @@ class _WeekHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final labels = ['日', '一', '二', '三', '四', '五', '六'];
+
+    final l10n = AppLocalizations.of(context);
+    final labels = [l10n.weekdaySun, l10n.weekdayMon, l10n.weekdayTue, l10n.weekdayWed, l10n.weekdayThu, l10n.weekdayFri, l10n.weekdaySat];
     return Padding(
       padding: const EdgeInsets.fromLTRB(12, 2, 12, 0),
       child: Row(
@@ -470,19 +478,21 @@ class _SelectedDayList extends StatelessWidget {
     final title =
         '${day.year}/${day.month.toString().padLeft(2, '0')}/${day.day.toString().padLeft(2, '0')}';
 
+    final l10n = AppLocalizations.of(context);
+
     if (items.isEmpty) {
       return Padding(
         padding: const EdgeInsets.all(12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('当天事项：$title',
+            Text(l10n.dayItemsTitle(title),
                 style: const TextStyle(fontWeight: FontWeight.w700)),
             const SizedBox(height: 8),
-            Text('这一天没有设置截止日期的事项。',
+            Text(l10n.noDueItemsForDay,
                 style: TextStyle(color: Colors.black.withOpacity(0.6))),
             const SizedBox(height: 8),
-            Text('提示：给事项设置截止日期后会显示在日历里。',
+            Text(l10n.setDueHint,
                 style: TextStyle(
                     color: Colors.black.withOpacity(0.45), fontSize: 12)),
           ],

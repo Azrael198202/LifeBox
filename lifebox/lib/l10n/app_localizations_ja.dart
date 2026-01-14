@@ -317,4 +317,158 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get viewFullText => '全文を見る';
+
+  @override
+  String get calendarTitle => 'カレンダー';
+
+  @override
+  String get pickYearMonthTitle => '年月を選択';
+
+  @override
+  String get yearLabel => '年';
+
+  @override
+  String get monthLabel => '月';
+
+  @override
+  String get cancel => 'キャンセル';
+
+  @override
+  String get confirm => '確定';
+
+  @override
+  String get speechSheetTitle => '音声認識の内容';
+
+  @override
+  String get speechHintEditable => '認識結果がここに表示されます。編集できます。';
+
+  @override
+  String get goImport => 'インポートへ';
+
+  @override
+  String receivedSnack(String text) {
+    return '受信しました：$text';
+  }
+
+  @override
+  String get confirmAction => '確認';
+
+  @override
+  String get weekdaySun => '日';
+
+  @override
+  String get weekdayMon => '月';
+
+  @override
+  String get weekdayTue => '火';
+
+  @override
+  String get weekdayWed => '水';
+
+  @override
+  String get weekdayThu => '木';
+
+  @override
+  String get weekdayFri => '金';
+
+  @override
+  String get weekdaySat => '土';
+
+  @override
+  String dayItemsTitle(String date) {
+    return '当日の項目：$date';
+  }
+
+  @override
+  String get noDueItemsForDay => 'この日に期限が設定された項目はありません。';
+
+  @override
+  String get setDueHint => 'ヒント：項目に期限を設定するとカレンダーに表示されます。';
+
+  @override
+  String get noDueDate => '期限なし';
+
+  @override
+  String duePrefix(String due) {
+    return '期限：$due';
+  }
+
+  @override
+  String get nextStep => '次へ';
+
+  @override
+  String get inboxDetailTitle => '詳細';
+
+  @override
+  String inboxDetailSource(String source) {
+    return '出所：$source';
+  }
+
+  @override
+  String get inboxDetailThumbnailPlaceholder => '（将来的にサムネイル／元画像をここに表示）';
+
+  @override
+  String get inboxDetailStructuredFields => '構造化フィールド';
+
+  @override
+  String get inboxDetailDueTodo => '期限：TODO';
+
+  @override
+  String get inboxDetailAmountTodo => '金額：TODO';
+
+  @override
+  String get inboxDetailPhoneUrlTodo => '電話／URL：TODO';
+
+  @override
+  String get inboxDetailPrimaryActionAddCalendar => '主アクション：カレンダーに追加';
+
+  @override
+  String get inboxDetailMarkDoneTodo => '完了としてマーク（TODO）';
+
+  @override
+  String get inboxDetailEvidenceTitle => '解析根拠（OCR 断片）';
+
+  @override
+  String get inboxDetailOcrPlaceholder => 'OCR: ...（後ほどローカルOCRキャッシュと連携して表示）';
+
+  @override
+  String get inboxTitle => 'Life Inbox';
+
+  @override
+  String get inboxEmptyTitle => 'まだ内容がありません';
+
+  @override
+  String get inboxEmptySubtitle => 'スクリーンショットをインポートするか、音声ボタンを長押しして始めましょう';
+
+  @override
+  String get tooltipCalendarView => 'カレンダー表示';
+
+  @override
+  String get tooltipImport => 'インポート';
+
+  @override
+  String get tooltipSettings => '設定';
+
+  @override
+  String tabHigh(int count) {
+    return '高優先（$count）';
+  }
+
+  @override
+  String tabPending(int count) {
+    return '未処理（$count）';
+  }
+
+  @override
+  String tabDone(int count) {
+    return '完了（$count）';
+  }
+
+  @override
+  String get speechBarHintHoldToTalk => '音声を長押しし、話し終えたら離すと文字になります';
+
+  @override
+  String speechBarRecentPrefix(String text) {
+    return '最近：$text';
+  }
 }

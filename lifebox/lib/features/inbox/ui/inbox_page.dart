@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lifebox/features/inbox/ui/inbox_calendar_page.dart';
 
 import '../../../core/widgets/app_scaffold.dart';
 import '../../../core/widgets/empty_state.dart';
-import '../../../core/widgets/hold_to_talk_button.dart';
 import '../domain/inbox_item.dart';
 import '../state/inbox_providers.dart';
 import 'inbox_card.dart';
+import 'inbox_speech_bar.dart';
 
 class InboxPage extends ConsumerStatefulWidget {
   const InboxPage({super.key});
@@ -74,9 +75,8 @@ class _InboxPageState extends ConsumerState<InboxPage>
                   Expanded(
                     child: OutlinedButton.icon(
                       onPressed: () {
-                        // 你也可以做成“把文本带去 import 页作为搜索/备注”
                         Navigator.pop(context);
-                        context.push('/import'); // 先简单跳导入
+                        context.push('/import');
                       },
                       icon: const Icon(Icons.add_photo_alternate_outlined),
                       label: const Text('去导入'),
@@ -89,17 +89,7 @@ class _InboxPageState extends ConsumerState<InboxPage>
                         final finalText = controller.text.trim();
                         if (finalText.isEmpty) return;
 
-                        // ✅ 如果你想把语音作为 inbox item 新增：
-                        // 这里我不强行写入（因为你 providers 的写入 API 我没看到）
-                        // 你可以在 inbox_providers.dart 里提供 addSpeechItem(finalText)
-                        // 然后在这里调用。
-                        //
-                        // 示例（你实现后打开这行）：
-                        // ref.read(inboxActionsProvider).addSpeech(finalText);
-
                         Navigator.pop(context);
-
-                        // 临时：只做一个 SnackBar
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text('已收到：$finalText')),
                         );
@@ -139,7 +129,8 @@ class _InboxPageState extends ConsumerState<InboxPage>
           return InboxCard(
             item: item,
             onTap: () => context.push('/inbox/detail/${item.id}'),
-            onPrimaryAction: () => context.push('/action?type=calendar&id=${item.id}'),
+            onPrimaryAction: () =>
+                context.push('/action?type=calendar&id=${item.id}'),
           );
         },
       );
@@ -148,6 +139,15 @@ class _InboxPageState extends ConsumerState<InboxPage>
     return AppScaffold(
       title: 'Life Inbox',
       actions: [
+        IconButton(
+          tooltip: '日历视图',
+          icon: const Icon(Icons.calendar_month_outlined),
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const InboxCalendarPage()),
+            );
+          },
+        ),
         IconButton(
           tooltip: '导入',
           onPressed: () => context.push('/import'),
@@ -188,68 +188,21 @@ class _InboxPageState extends ConsumerState<InboxPage>
             ],
           ),
 
-          // ✅ 底部悬浮语音按钮
+          // ✅ 底部悬浮语音按钮（组件来自 inbox_calendar_page.dart）
           Positioned(
             left: 16,
             right: 16,
             bottom: 12,
             child: SafeArea(
               top: false,
-              child: _SpeechFloatingBar(
+              child: SpeechFloatingBar(
+                localeId: 'zh_CN',
                 lastText: _lastSpeechText,
                 onFinalText: (text) => _showSpeechResultSheet(context, text),
               ),
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _SpeechFloatingBar extends StatelessWidget {
-  const _SpeechFloatingBar({
-    required this.lastText,
-    required this.onFinalText,
-  });
-
-  final String lastText;
-  final void Function(String text) onFinalText;
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      elevation: 8,
-      borderRadius: BorderRadius.circular(18),
-      color: Theme.of(context).colorScheme.surface,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(color: Colors.black.withOpacity(0.06)),
-        ),
-        child: Row(
-          children: [
-            // 按住说话按钮（你已有组件）
-            HoldToTalkButton(
-              // 需要日语：'ja_JP'，中文：'zh_CN'
-              localeId: 'zh_CN',
-              onFinalText: onFinalText,
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Text(
-                lastText.isEmpty ? '按住语音，说完松开即可生成文字' : '最近：$lastText',
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.black.withOpacity(0.72),
-                ),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

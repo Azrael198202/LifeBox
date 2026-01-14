@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../state/auth_controller.dart';
 import 'auth_widgets.dart';
+import 'package:lifebox/l10n/app_localizations.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -27,45 +28,46 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final auth = ref.watch(authControllerProvider);
+    final l10n = AppLocalizations.of(context);
 
     return AuthLayout(
-      title: '欢迎回来',
-      subtitle: '登录后开始导入截图，自动识别待办与风险，并用应用锁保护隐私。',
+      title: l10n.login_title,
+      subtitle: l10n.login_subtitle,
       logo: Image.asset('assets/images/logo-b.png', height: 34),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           AuthTextField(
             controller: _email,
-            label: '邮箱',
-            hint: 'example@email.com',
+            label: l10n.common_mail,
+            hint: l10n.common_mail_hit,
             icon: Icons.email_outlined,
             keyboardType: TextInputType.emailAddress,
           ),
           const SizedBox(height: 14),
           AuthTextField(
             controller: _pwd,
-            label: '密码',
-            hint: '请输入密码',
+            label: l10n.common_password,
+            hint: l10n.common_mail_hit,
             icon: Icons.lock_outline,
             obscureText: _obscure,
             suffix: IconButton(
               onPressed: () => setState(() => _obscure = !_obscure),
               icon: Icon(
-                _obscure ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                _obscure
+                    ? Icons.visibility_off_outlined
+                    : Icons.visibility_outlined,
                 color: const Color(0xFF6B7280),
               ),
             ),
           ),
           const SizedBox(height: 14),
-
           if (auth.error != null) ...[
             Text(auth.error!, style: const TextStyle(color: Colors.red)),
             const SizedBox(height: 10),
           ],
-
           AuthPrimaryButton(
-            label: auth.loading ? '登录中...' : '邮箱登录',
+            label: auth.loading ? l10n.login_logining : l10n.login_with_mail,
             onPressed: auth.loading
                 ? null
                 : () => ref.read(authControllerProvider.notifier).login(
@@ -73,29 +75,27 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       _pwd.text,
                     ),
           ),
-
           const SizedBox(height: 10),
-          const AuthDivider(),
+          AuthDivider(text: l10n.common_or),
           const SizedBox(height: 10),
-
           AuthSecondaryButton(
-            label: '使用 Google 登录（占位）',
+            label: l10n.login_with_google,
             icon: Icons.g_mobiledata,
             onPressed: auth.loading
                 ? null
-                : () => ref.read(authControllerProvider.notifier).loginWithGoogle(),
+                : () =>
+                    ref.read(authControllerProvider.notifier).loginWithGoogle(),
           ),
-
           const SizedBox(height: 10),
           TextButton(
             onPressed: () => context.push('/register'),
-            child: const Text(
-              '没有账号？去注册',
-              style: TextStyle(color: Color(0xFF111827), fontWeight: FontWeight.w700),
+            child: Text(
+              l10n.login_to_register,
+              style: TextStyle(
+                  color: Color(0xFF111827), fontWeight: FontWeight.w700),
             ),
           ),
-
-          const AuthHintText('提示：登录后可在设置中开启应用锁（面容 / 指纹 / 系统认证）。'),
+          AuthHintText(l10n.login_hit),
         ],
       ),
     );

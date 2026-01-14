@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lifebox/l10n/app_localizations.dart';
 
 import '../state/auth_controller.dart';
 import 'auth_widgets.dart';
@@ -31,30 +32,31 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     final auth = ref.watch(authControllerProvider);
+    final l10n = AppLocalizations.of(context);
 
     final pwdNotMatch = _pwd.text.isNotEmpty &&
         _pwd2.text.isNotEmpty &&
         _pwd.text != _pwd2.text;
 
     return AuthLayout(
-      title: '创建账号',
-      subtitle: '用邮箱注册，后续可绑定 Google/Apple，并开启应用锁增强安全。',
+      title: l10n.register_title,
+      subtitle: l10n.register_subtitle,
       logo: Image.asset('assets/images/logo.png', height: 34),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           AuthTextField(
             controller: _email,
-            label: '邮箱',
-            hint: 'example@email.com',
+            label: l10n.common_mail,
+            hint: l10n.common_mail_hit,
             icon: Icons.email_outlined,
             keyboardType: TextInputType.emailAddress,
           ),
           const SizedBox(height: 14),
           AuthTextField(
             controller: _pwd,
-            label: '密码',
-            hint: '至少 8 位',
+            label: l10n.common_password,
+            hint: l10n.register_password_hint,
             icon: Icons.lock_outline,
             obscureText: _obscure1,
             suffix: IconButton(
@@ -68,8 +70,8 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
           const SizedBox(height: 14),
           AuthTextField(
             controller: _pwd2,
-            label: '确认密码',
-            hint: '再次输入密码',
+            label: l10n.register_password_confirm_label,
+            hint: l10n.register_password_confirm_hint,
             icon: Icons.lock_outline,
             obscureText: _obscure2,
             suffix: IconButton(
@@ -83,7 +85,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
           const SizedBox(height: 12),
 
           if (pwdNotMatch) ...[
-            const Text('两次密码不一致', style: TextStyle(color: Colors.red)),
+            Text(l10n.register_password_mismatch, style: TextStyle(color: Colors.red)),
             const SizedBox(height: 8),
           ],
 
@@ -93,7 +95,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
           ],
 
           AuthPrimaryButton(
-            label: auth.loading ? '注册中...' : '邮箱注册',
+            label: auth.loading ? l10n.register_button_loading: l10n.register_button_email,
             onPressed: auth.loading
                 ? null
                 : () {
@@ -103,19 +105,19 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
 
                     if (email.isEmpty || !email.contains('@')) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('请输入正确的邮箱')),
+                        SnackBar(content: Text(l10n.register_error_email_invalid)),
                       );
                       return;
                     }
                     if (p1.length < 8) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('密码至少 8 位')),
+                        SnackBar(content: Text(l10n.register_error_password_too_short)),
                       );
                       return;
                     }
                     if (p1 != p2) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('两次密码不一致')),
+                        SnackBar(content: Text(l10n.register_password_mismatch)),
                       );
                       return;
                     }
@@ -125,13 +127,13 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
 
           const SizedBox(height: 10),
           AuthSecondaryButton(
-            label: '返回登录',
+            label: l10n.register_back_to_login,
             icon: Icons.arrow_back,
             onPressed: () => context.pop(),
           ),
 
           const SizedBox(height: 10),
-          const AuthHintText('注册成功后将自动进入收件箱。'),
+          AuthHintText(l10n.register_hint_success),
         ],
       ),
     );

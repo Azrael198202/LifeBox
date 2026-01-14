@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lifebox/l10n/app_localizations.dart';
+
+import '../../../core/i18n/locale_controller.dart';
 
 import '../../../core/widgets/app_scaffold.dart';
 import '../../../core/services/app_lock.dart';
 import '../../auth/state/auth_controller.dart';
+
 
 class SettingsPage extends ConsumerWidget {
   const SettingsPage({super.key});
@@ -13,10 +17,11 @@ class SettingsPage extends ConsumerWidget {
     final lock = ref.watch(appLockProvider);
     final auth = ref.watch(authControllerProvider);
 
-    // 示例：上传策略（这里先用本地状态占位，后续可接入本地DB/secure storage）
-    // 若你想持久化，我可以下一步加 SharedPreferences / secure storage。
+    final l10n = AppLocalizations.of(context);
+    final locale = ref.watch(localeProvider);
+
     return AppScaffold(
-      title: '设置',
+      title: l10n.settings_title,
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -24,7 +29,7 @@ class SettingsPage extends ConsumerWidget {
           Card(
             child: ListTile(
               leading: const Icon(Icons.account_circle_outlined),
-              title: Text(auth.user?.displayName ?? '未登录'),
+              title: Text(auth.user?.displayName ?? l10n.not_logged_in),
               subtitle: Text(auth.user?.email ?? ''),
             ),
           ),
@@ -41,8 +46,8 @@ class SettingsPage extends ConsumerWidget {
                   const SnackBar(content: Text('已保存（示例：后续接入持久化）')),
                 );
               },
-              title: const Text('仅上传 OCR 文本（默认开）'),
-              subtitle: const Text('隐私友好：默认不上传原图（后续可配置）'),
+              title: Text(l10n.upload_policy_title),
+              subtitle: Text(l10n.upload_policy_subtitle),
             ),
           ),
 
@@ -53,8 +58,8 @@ class SettingsPage extends ConsumerWidget {
             child: SwitchListTile(
               value: lock.enabled,
               onChanged: (v) => ref.read(appLockProvider.notifier).setEnabled(v),
-              title: const Text('启用应用锁（推荐）'),
-              subtitle: const Text('从后台回来需解锁（后续支持面部/指纹/系统认证）'),
+              title: Text(l10n.app_lock_title),
+              subtitle: Text(l10n.app_lock_subtitle),
             ),
           ),
 
@@ -64,8 +69,8 @@ class SettingsPage extends ConsumerWidget {
           Card(
             child: ListTile(
               leading: const Icon(Icons.storage_outlined),
-              title: const Text('本地缓存'),
-              subtitle: const Text('保留 7/30/永久（TODO）'),
+              title: Text(l10n.cache_title),
+              subtitle:  Text(l10n.cache_subtitle),
               trailing: const Icon(Icons.chevron_right),
               onTap: () {
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -81,8 +86,8 @@ class SettingsPage extends ConsumerWidget {
           Card(
             child: ListTile(
               leading: const Icon(Icons.delete_outline),
-              title: const Text('清除数据'),
-              subtitle: const Text('本地清除 / 云端清除（接口预留）'),
+              title: Text(l10n.clear_data_title),
+              subtitle: Text(l10n.clear_data_subtitle),
               onTap: () async {
                 final ok = await showDialog<bool>(
                   context: context,
@@ -92,7 +97,7 @@ class SettingsPage extends ConsumerWidget {
                     actions: [
                       TextButton(
                         onPressed: () => Navigator.pop(ctx, false),
-                        child: const Text('取消'),
+                        child: Text(l10n.common_Cancel),
                       ),
                       FilledButton(
                         onPressed: () => Navigator.pop(ctx, true),
@@ -111,6 +116,29 @@ class SettingsPage extends ConsumerWidget {
               },
             ),
           ),
+          
+          Card(
+            child: ListTile(
+              leading: const Icon(Icons.language_outlined),
+              title: Text(l10n.language_title),
+              subtitle: Text(l10n.language_subtitle),
+              trailing: DropdownButtonHideUnderline(
+                child: DropdownButton<Locale>(
+                  value: locale,
+                  items: const [
+                    DropdownMenuItem(value: Locale('ja'), child: Text('日本語')),
+                    DropdownMenuItem(value: Locale('zh'), child: Text('中文')),
+                    DropdownMenuItem(value: Locale('en'), child: Text('English')),
+                  ],
+                  onChanged: (v) {
+                    if (v == null) return;
+                    ref.read(localeProvider.notifier).setLocale(v);
+                  },
+                ),
+              ),
+            ),
+          ),
+
 
           const SizedBox(height: 12),
 
@@ -118,21 +146,21 @@ class SettingsPage extends ConsumerWidget {
           Card(
             child: ListTile(
               leading: const Icon(Icons.logout),
-              title: const Text('退出登录'),
+              title: Text(l10n.logout_title),
               onTap: () async {
                 final ok = await showDialog<bool>(
                   context: context,
                   builder: (ctx) => AlertDialog(
-                    title: const Text('退出登录'),
-                    content: const Text('确定要退出当前账号吗？'),
+                    title: Text(l10n.logout_title),
+                    content: Text(l10n.logout_QA),
                     actions: [
                       TextButton(
                         onPressed: () => Navigator.pop(ctx, false),
-                        child: const Text('取消'),
+                        child: Text(l10n.common_Cancel),
                       ),
                       FilledButton(
                         onPressed: () => Navigator.pop(ctx, true),
-                        child: const Text('退出'),
+                        child: Text(l10n.logout_OK),
                       ),
                     ],
                   ),
@@ -148,9 +176,9 @@ class SettingsPage extends ConsumerWidget {
           const SizedBox(height: 24),
 
           // ====== 版本信息（占位）======
-          const Center(
+          Center(
             child: Text(
-              'Life Inbox • v0.1.0 (MVP)',
+              l10n.version_text,
               style: TextStyle(color: Colors.black45),
             ),
           ),

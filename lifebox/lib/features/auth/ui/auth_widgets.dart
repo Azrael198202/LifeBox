@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lifebox/l10n/app_localizations.dart';
 
 class AuthLayout extends StatelessWidget {
   final String title;
@@ -54,7 +55,6 @@ class AuthLayout extends StatelessWidget {
                   logo: logo,
                 ),
                 const SizedBox(height: 14),
-
                 Card(
                   elevation: 0,
                   shape: RoundedRectangleBorder(
@@ -66,12 +66,10 @@ class AuthLayout extends StatelessWidget {
                     child: child,
                   ),
                 ),
-
                 if (footer.isNotEmpty) ...[
                   const SizedBox(height: 14),
                   ...footer,
                 ],
-
                 if (showTerms) ...[
                   const SizedBox(height: 18),
                   const _TermsText(),
@@ -98,14 +96,16 @@ class _Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     final logoWidget = logo ??
         Row(
           mainAxisSize: MainAxisSize.min,
-          children: const [
+          children: [
             _LogoMark(),
             SizedBox(width: 10),
             Text(
-              'Life Inbox',
+              l10n.app_name,
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w800,
@@ -258,7 +258,8 @@ class AuthTextField extends StatelessWidget {
         suffixIcon: suffix,
         filled: true,
         fillColor: const Color(0xFFF9FAFB),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.black.withOpacity(0.10)),
           borderRadius: BorderRadius.circular(14),
@@ -287,7 +288,8 @@ class AuthPrimaryButton extends StatelessWidget {
       width: double.infinity,
       child: FilledButton(
         style: FilledButton.styleFrom(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
         ),
         onPressed: onPressed,
         child: Text(label),
@@ -316,7 +318,8 @@ class AuthSecondaryButton extends StatelessWidget {
       width: double.infinity,
       child: OutlinedButton.icon(
         style: OutlinedButton.styleFrom(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
           side: BorderSide(color: Colors.black.withOpacity(0.12)),
         ),
         onPressed: onPressed,
@@ -330,13 +333,17 @@ class AuthSecondaryButton extends StatelessWidget {
 /// —— 分割线（“或”）——
 class AuthDivider extends StatelessWidget {
   final String text;
-  const AuthDivider({super.key, this.text = '或'});
+  const AuthDivider({
+    super.key,
+    required this.text, 
+  });
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Expanded(child: Divider(color: Colors.black.withOpacity(0.10), height: 1)),
+        Expanded(
+            child: Divider(color: Colors.black.withOpacity(0.10), height: 1)),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Text(
@@ -344,7 +351,8 @@ class AuthDivider extends StatelessWidget {
             style: const TextStyle(color: Color(0xFF6B7280), fontSize: 12),
           ),
         ),
-        Expanded(child: Divider(color: Colors.black.withOpacity(0.10), height: 1)),
+        Expanded(
+            child: Divider(color: Colors.black.withOpacity(0.10), height: 1)),
       ],
     );
   }
@@ -374,30 +382,33 @@ class _TermsText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final style = const TextStyle(color: Color(0xFF6B7280), fontSize: 11, height: 1.35);
-    final linkStyle = style.copyWith(color: const Color(0xFF111827), fontWeight: FontWeight.w700);
+    final style =
+        const TextStyle(color: Color(0xFF6B7280), fontSize: 11, height: 1.35);
+    final linkStyle = style.copyWith(
+        color: const Color(0xFF111827), fontWeight: FontWeight.w700);
+    final l10n = AppLocalizations.of(context);
 
     return Center(
       child: Wrap(
         alignment: WrapAlignment.center,
         children: [
-          Text('继续即表示同意 ', style: style),
+          Text(l10n.terms_agree_prefix, style: style),
           GestureDetector(
             onTap: () {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('TODO：打开服务条款')),
+                SnackBar(content: Text(l10n.open_terms_action)),
               );
             },
-            child: Text('服务条款', style: linkStyle),
+            child: Text(l10n.terms_title, style: linkStyle),
           ),
-          Text(' 与 ', style: style),
+          Text(l10n.terms_and, style: style),
           GestureDetector(
             onTap: () {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('TODO：打开隐私政策')),
+                SnackBar(content: Text(l10n.open_privacy_action)),
               );
             },
-            child: Text('隐私政策', style: linkStyle),
+            child: Text(l10n.privacy_title, style: linkStyle),
           ),
           Text('。', style: style),
         ],

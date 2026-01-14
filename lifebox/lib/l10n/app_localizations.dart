@@ -951,6 +951,30 @@ abstract class AppLocalizations {
   /// In ja, this message translates to:
   /// **'最近：{text}'**
   String speechBarRecentPrefix(String text);
+
+  /// No description provided for @lockPageTitle.
+  ///
+  /// In ja, this message translates to:
+  /// **'アプリはロックされています'**
+  String get lockPageTitle;
+
+  /// No description provided for @lockPageNeedUnlock.
+  ///
+  /// In ja, this message translates to:
+  /// **'続行するにはロック解除が必要です'**
+  String get lockPageNeedUnlock;
+
+  /// No description provided for @unlock.
+  ///
+  /// In ja, this message translates to:
+  /// **'ロック解除'**
+  String get unlock;
+
+  /// No description provided for @unlockReturnTo.
+  ///
+  /// In ja, this message translates to:
+  /// **'ロック解除後に戻ります：{target}'**
+  String unlockReturnTo(String target);
 }
 
 class _AppLocalizationsDelegate

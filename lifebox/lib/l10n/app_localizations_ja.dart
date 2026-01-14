@@ -471,4 +471,18 @@ class AppLocalizationsJa extends AppLocalizations {
   String speechBarRecentPrefix(String text) {
     return '最近：$text';
   }
+
+  @override
+  String get lockPageTitle => 'アプリはロックされています';
+
+  @override
+  String get lockPageNeedUnlock => '続行するにはロック解除が必要です';
+
+  @override
+  String get unlock => 'ロック解除';
+
+  @override
+  String unlockReturnTo(String target) {
+    return 'ロック解除後に戻ります：$target';
+  }
 }

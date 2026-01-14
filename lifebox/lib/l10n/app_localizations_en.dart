@@ -486,4 +486,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String speechBarRecentPrefix(String text) {
     return 'Recent: $text';
   }
+
+  @override
+  String get lockPageTitle => 'App locked';
+
+  @override
+  String get lockPageNeedUnlock => 'Unlock to continue';
+
+  @override
+  String get unlock => 'Unlock';
+
+  @override
+  String unlockReturnTo(String target) {
+    return 'After unlocking, you will return to: $target';
+  }
 }

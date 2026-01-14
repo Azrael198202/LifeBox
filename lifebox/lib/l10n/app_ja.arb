@@ -210,5 +210,15 @@
     "placeholders": {
       "text": { "type": "String" }
     }
+  },
+
+    "lockPageTitle": "アプリはロックされています",
+  "lockPageNeedUnlock": "続行するにはロック解除が必要です",
+  "unlock": "ロック解除",
+  "unlockReturnTo": "ロック解除後に戻ります：{target}",
+  "@unlockReturnTo": {
+    "placeholders": {
+      "target": { "type": "String" }
+    }
   }
 }

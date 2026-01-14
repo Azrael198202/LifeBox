@@ -467,4 +467,18 @@ class AppLocalizationsZh extends AppLocalizations {
   String speechBarRecentPrefix(String text) {
     return '最近：$text';
   }
+
+  @override
+  String get lockPageTitle => '应用已锁定';
+
+  @override
+  String get lockPageNeedUnlock => '需要解锁后才能继续';
+
+  @override
+  String get unlock => '解锁';
+
+  @override
+  String unlockReturnTo(String target) {
+    return '解锁后将返回：$target';
+  }
 }

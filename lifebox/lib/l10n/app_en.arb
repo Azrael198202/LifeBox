@@ -210,5 +210,15 @@
     "placeholders": {
       "text": { "type": "String" }
     }
+  },
+
+    "lockPageTitle": "App locked",
+  "lockPageNeedUnlock": "Unlock to continue",
+  "unlock": "Unlock",
+  "unlockReturnTo": "After unlocking, you will return to: {target}",
+  "@unlockReturnTo": {
+    "placeholders": {
+      "target": { "type": "String" }
+    }
   }
 }

@@ -208,5 +208,15 @@
     "placeholders": {
       "text": { "type": "String" }
     }
+  },
+
+  "lockPageTitle": "应用已锁定",
+  "lockPageNeedUnlock": "需要解锁后才能继续",
+  "unlock": "解锁",
+  "unlockReturnTo": "解锁后将返回：{target}",
+  "@unlockReturnTo": {
+    "placeholders": {
+      "target": { "type": "String" }
+    }
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../app/theme/colors.dart';
+import 'package:lifebox/l10n/app_localizations.dart';
 
 /// 原来的风险等级（三档）——保留
 enum RiskLevel { high, mid, low }
@@ -43,7 +44,8 @@ class RiskBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final (text, color) = _resolveTextAndColor();
+    final l10n = AppLocalizations.of(context);
+    final (text, color) = _resolveTextAndColor(l10n);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -59,15 +61,15 @@ class RiskBadge extends StatelessWidget {
     );
   }
 
-  (String, Color) _resolveTextAndColor() {
+  (String, Color) _resolveTextAndColor(AppLocalizations l10n) {
     // 1) 旧模式：风险等级
     if (risk != null) {
       final (t, c) = switch (risk!) {
-        RiskLevel.high => ('高', AppColors.riskHigh),
-        RiskLevel.mid => ('中', AppColors.riskMid),
-        RiskLevel.low => ('低', AppColors.riskLow),
+        RiskLevel.high => (l10n.riskHigh, AppColors.riskHigh),
+        RiskLevel.mid => (l10n.riskMid, AppColors.riskMid),
+        RiskLevel.low => (l10n.riskLow, AppColors.riskLow),
       };
-      final prefix = showPrefix ? '风险 ' : '';
+      final prefix = showPrefix ? l10n.riskPrefix : '';
       return ('$prefix$t', c);
     }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
+import 'package:lifebox/l10n/app_localizations.dart';
 
 class HoldToTalkButton extends StatefulWidget {
   const HoldToTalkButton({
@@ -130,6 +131,8 @@ class _HoldToTalkButtonState extends State<HoldToTalkButton> {
     final color =
         _listening ? Colors.red : Theme.of(context).colorScheme.primary;
 
+    final l10n = AppLocalizations.of(context);
+
     return GestureDetector(
       onLongPressStart: (_) => _start(),
       onLongPressEnd: (_) => _stop(),
@@ -146,7 +149,7 @@ class _HoldToTalkButtonState extends State<HoldToTalkButton> {
             Icon(_listening ? Icons.mic : Icons.mic_none, color: color),
             const SizedBox(width: 8),
             Text(
-              _listening ? '松开结束' : (_available ? '按住说话' : '语音不可用'),
+              _listening ? l10n.holdToTalkReleaseToStop : (_available ? l10n.holdToTalkHoldToSpeak : l10n.holdToTalkUnavailable),
               style: TextStyle(color: color, fontWeight: FontWeight.w600),
             ),
           ],

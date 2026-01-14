@@ -67,7 +67,7 @@
   "import_screenshots_not_found": "「スクリーンショット」アルバムが見つかりません。スクリーンショット絞り込みは全ての写真に切り替わります。",
   "import_screenshots_album_prefix": "スクリーンショット： {count}",
   "import_selected_count": "{count} 件選択中",
-  "import_select_all_visible": "表示中を全選択",
+  "import_select_all_visible": "全選択",
   "import_clear_selection": "選択解除",
   "import_queue_label": "キュー {count}",
   "import_empty_title": "条件に一致する写真がありません",
@@ -212,7 +212,7 @@
     }
   },
 
-    "lockPageTitle": "アプリはロックされています",
+  "lockPageTitle": "アプリはロックされています",
   "lockPageNeedUnlock": "続行するにはロック解除が必要です",
   "unlock": "ロック解除",
   "unlockReturnTo": "ロック解除後に戻ります：{target}",
@@ -220,5 +220,18 @@
     "placeholders": {
       "target": { "type": "String" }
     }
-  }
+  },
+
+  "holdToTalkReleaseToStop": "離して終了",
+  "holdToTalkHoldToSpeak": "長押しで話す",
+  "holdToTalkUnavailable": "音声は利用できません",
+
+  "riskPrefix": "リスク ",
+  "riskHigh": "高",
+  "riskMid": "中",
+  "riskLow": "低",
+
+  "importTypeAll": "すべて",
+  "importTypeScreenshots": "スクショ",
+  "importTypePhotos": "写真"
 }

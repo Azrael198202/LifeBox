@@ -1,19 +1,18 @@
 import 'dart:collection';
 import 'package:flutter/material.dart'; 
 import 'package:photo_manager/photo_manager.dart';
+import 'package:lifebox/l10n/app_localizations.dart';
 
 enum ImportPhotoType { all, screenshots, photos }
 
 extension ImportPhotoTypeX on ImportPhotoType {
-  String get label {
-    switch (this) {
-      case ImportPhotoType.all:
-        return '全部';
-      case ImportPhotoType.screenshots:
-        return '截图';
-      case ImportPhotoType.photos:
-        return '相册照片';
-    }
+  String label(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return switch (this) {
+      ImportPhotoType.all => l10n.importTypeAll,
+      ImportPhotoType.screenshots => l10n.importTypeScreenshots,
+      ImportPhotoType.photos => l10n.importTypePhotos,
+    };
   }
 }
 

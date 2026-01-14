@@ -200,8 +200,8 @@ class _FilterBar extends StatelessWidget {
                     isDense: true,
                   ),
                   items: ImportPhotoType.values
-                      .map((t) =>
-                          DropdownMenuItem(value: t, child: Text(t.label)))
+                      .map((t) => DropdownMenuItem(
+                          value: t, child: Text(t.label(context))))
                       .toList(),
                   onChanged: (v) => v == null ? null : onTypeChanged(v),
                 ),
@@ -243,7 +243,8 @@ class _FilterBar extends StatelessWidget {
                 child: Text(
                   screenshotsAlbumName == null
                       ? l10n.import_screenshots_not_found
-                      : l10n.import_screenshots_album_prefix(screenshotsAlbumName as String),
+                      : l10n.import_screenshots_album_prefix(
+                          screenshotsAlbumName as String),
                   style: TextStyle(
                     fontSize: 12,
                     color: screenshotsAlbumName == null
@@ -281,7 +282,6 @@ class _SelectionBar extends StatelessWidget {
   final int queueCount;
   final bool queuePanelOpen;
   final VoidCallback onToggleQueuePanel;
-  
 
   @override
   Widget build(BuildContext context) {
@@ -290,22 +290,53 @@ class _SelectionBar extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(12, 6, 12, 6),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(l10n.import_selected_count(selectedCount)),
-          const SizedBox(width: 10),
-          TextButton(
-            onPressed: onSelectAllVisible,
-            child: Text(l10n.import_select_all_visible),
+          // ✅ 左侧：允许换行
+          Expanded(
+            child: Wrap(
+              spacing: 8,
+              runSpacing: 4,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              children: [
+                Text(
+                  l10n.import_selected_count(selectedCount),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                TextButton(
+                  onPressed: onSelectAllVisible,
+                  child: Text(
+                    l10n.import_select_all_visible,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                TextButton(
+                  onPressed: onClear,
+                  child: Text(
+                    l10n.import_clear_selection,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
           ),
-          TextButton(
-            onPressed: onClear,
-            child: Text(l10n.import_clear_selection),
-          ),
-          const Spacer(),
+
+          const SizedBox(width: 8),
+
+          // ✅ 右侧：队列按钮固定，不被挤掉
           TextButton.icon(
             onPressed: onToggleQueuePanel,
             icon: Icon(queuePanelOpen ? Icons.expand_more : Icons.expand_less),
-            label: Text(l10n.import_queue_label(queueCount)),
+            label: Text(
+              l10n.import_queue_label(
+                  queueCount), // "キュー {count}" / "Queue {count}"
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              softWrap: false,
+            ),
           ),
         ],
       ),
@@ -330,7 +361,6 @@ class _Grid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final l10n = AppLocalizations.of(context);
 
     if (assets.isEmpty && loading) {
@@ -379,7 +409,7 @@ class _Grid extends StatelessWidget {
                   borderRadius: BorderRadius.circular(999),
                 ),
                 child: Text(
-                   l10n.import_loading_more,
+                  l10n.import_loading_more,
                   style: TextStyle(color: Colors.white, fontSize: 12),
                 ),
               ),
@@ -454,7 +484,6 @@ class _BottomActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final l10n = AppLocalizations.of(context);
 
     return SafeArea(
@@ -465,7 +494,9 @@ class _BottomActions extends StatelessWidget {
           children: [
             Expanded(
               child: PrimaryButton(
-                label: enabled ? l10n.import_enqueue_button_with_count(selectedCount) : l10n.import_enqueue_button,
+                label: enabled
+                    ? l10n.import_enqueue_button_with_count(selectedCount)
+                    : l10n.import_enqueue_button,
                 icon: Icons.queue,
                 enabled: enabled,
                 onPressed: enabled ? onEnqueue : null,
@@ -526,7 +557,8 @@ class _QueuePanel extends StatelessWidget {
                           // 你下一步操作可以在这里接住
                           debugPrint('Selected OCR cards: $selected');
                         },
-                  child: Text(l10n.ocr_results_button(queue.completedJobs.length)),
+                  child:
+                      Text(l10n.ocr_results_button(queue.completedJobs.length)),
                 ),
               ],
             ),

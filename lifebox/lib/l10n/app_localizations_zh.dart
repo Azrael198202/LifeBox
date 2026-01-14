@@ -481,4 +481,34 @@ class AppLocalizationsZh extends AppLocalizations {
   String unlockReturnTo(String target) {
     return '解锁后将返回：$target';
   }
+
+  @override
+  String get holdToTalkReleaseToStop => '松开结束';
+
+  @override
+  String get holdToTalkHoldToSpeak => '按住说话';
+
+  @override
+  String get holdToTalkUnavailable => '语音不可用';
+
+  @override
+  String get riskPrefix => '风险 ';
+
+  @override
+  String get riskHigh => '高';
+
+  @override
+  String get riskMid => '中';
+
+  @override
+  String get riskLow => '低';
+
+  @override
+  String get importTypeAll => '全部';
+
+  @override
+  String get importTypeScreenshots => '截图';
+
+  @override
+  String get importTypePhotos => '相册照片';
 }

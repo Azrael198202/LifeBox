@@ -7,7 +7,7 @@ final inboxItemsProvider = StateProvider<List<InboxItem>>((ref) {
   return [
     InboxItem(
       id: '1',
-      title: '学校：下周家长会确认',
+      title: '学校：来週の保護者会の確認',
       dueAt: now.add(const Duration(days: 2)),
       risk: RiskLevel.mid,
       source: '学校',
@@ -15,18 +15,18 @@ final inboxItemsProvider = StateProvider<List<InboxItem>>((ref) {
     ),
     InboxItem(
       id: '2',
-      title: '银行：信用卡还款提醒',
+      title: '銀行：クレジットカードの支払い通知',
       dueAt: now.add(const Duration(days: 5)),
       risk: RiskLevel.high,
-      source: '银行',
+      source: '銀行',
       status: InboxStatus.pending,
     ),
     InboxItem(
       id: '3',
-      title: '医院：复诊预约',
+      title: '病院：再診の予約',
       dueAt: null,
       risk: RiskLevel.low,
-      source: '医院',
+      source: '病院',
       status: InboxStatus.done,
     ),
   ];

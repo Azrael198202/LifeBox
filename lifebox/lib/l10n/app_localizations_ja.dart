@@ -212,7 +212,7 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String get import_select_all_visible => '表示中を全選択';
+  String get import_select_all_visible => '全選択';
 
   @override
   String get import_clear_selection => '選択解除';
@@ -485,4 +485,34 @@ class AppLocalizationsJa extends AppLocalizations {
   String unlockReturnTo(String target) {
     return 'ロック解除後に戻ります：$target';
   }
+
+  @override
+  String get holdToTalkReleaseToStop => '離して終了';
+
+  @override
+  String get holdToTalkHoldToSpeak => '長押しで話す';
+
+  @override
+  String get holdToTalkUnavailable => '音声は利用できません';
+
+  @override
+  String get riskPrefix => 'リスク ';
+
+  @override
+  String get riskHigh => '高';
+
+  @override
+  String get riskMid => '中';
+
+  @override
+  String get riskLow => '低';
+
+  @override
+  String get importTypeAll => 'すべて';
+
+  @override
+  String get importTypeScreenshots => 'スクショ';
+
+  @override
+  String get importTypePhotos => '写真';
 }

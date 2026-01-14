@@ -219,7 +219,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get import_select_all_visible => 'Select all (visible)';
+  String get import_select_all_visible => 'All';
 
   @override
   String get import_clear_selection => 'Clear selection';
@@ -500,4 +500,34 @@ class AppLocalizationsEn extends AppLocalizations {
   String unlockReturnTo(String target) {
     return 'After unlocking, you will return to: $target';
   }
+
+  @override
+  String get holdToTalkReleaseToStop => 'Release to stop';
+
+  @override
+  String get holdToTalkHoldToSpeak => 'Hold to speak';
+
+  @override
+  String get holdToTalkUnavailable => 'Voice unavailable';
+
+  @override
+  String get riskPrefix => 'Risk ';
+
+  @override
+  String get riskHigh => 'High';
+
+  @override
+  String get riskMid => 'Medium';
+
+  @override
+  String get riskLow => 'Low';
+
+  @override
+  String get importTypeAll => 'All';
+
+  @override
+  String get importTypeScreenshots => 'Screenshots';
+
+  @override
+  String get importTypePhotos => 'Photos';
 }

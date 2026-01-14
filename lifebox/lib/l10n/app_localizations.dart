@@ -493,7 +493,7 @@ abstract class AppLocalizations {
   /// No description provided for @import_select_all_visible.
   ///
   /// In ja, this message translates to:
-  /// **'表示中を全選択'**
+  /// **'全選択'**
   String get import_select_all_visible;
 
   /// No description provided for @import_clear_selection.
@@ -975,6 +975,66 @@ abstract class AppLocalizations {
   /// In ja, this message translates to:
   /// **'ロック解除後に戻ります：{target}'**
   String unlockReturnTo(String target);
+
+  /// No description provided for @holdToTalkReleaseToStop.
+  ///
+  /// In ja, this message translates to:
+  /// **'離して終了'**
+  String get holdToTalkReleaseToStop;
+
+  /// No description provided for @holdToTalkHoldToSpeak.
+  ///
+  /// In ja, this message translates to:
+  /// **'長押しで話す'**
+  String get holdToTalkHoldToSpeak;
+
+  /// No description provided for @holdToTalkUnavailable.
+  ///
+  /// In ja, this message translates to:
+  /// **'音声は利用できません'**
+  String get holdToTalkUnavailable;
+
+  /// No description provided for @riskPrefix.
+  ///
+  /// In ja, this message translates to:
+  /// **'リスク '**
+  String get riskPrefix;
+
+  /// No description provided for @riskHigh.
+  ///
+  /// In ja, this message translates to:
+  /// **'高'**
+  String get riskHigh;
+
+  /// No description provided for @riskMid.
+  ///
+  /// In ja, this message translates to:
+  /// **'中'**
+  String get riskMid;
+
+  /// No description provided for @riskLow.
+  ///
+  /// In ja, this message translates to:
+  /// **'低'**
+  String get riskLow;
+
+  /// No description provided for @importTypeAll.
+  ///
+  /// In ja, this message translates to:
+  /// **'すべて'**
+  String get importTypeAll;
+
+  /// No description provided for @importTypeScreenshots.
+  ///
+  /// In ja, this message translates to:
+  /// **'スクショ'**
+  String get importTypeScreenshots;
+
+  /// No description provided for @importTypePhotos.
+  ///
+  /// In ja, this message translates to:
+  /// **'写真'**
+  String get importTypePhotos;
 }
 
 class _AppLocalizationsDelegate

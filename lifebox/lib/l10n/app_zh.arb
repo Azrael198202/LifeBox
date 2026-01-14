@@ -218,5 +218,18 @@
     "placeholders": {
       "target": { "type": "String" }
     }
-  }
+  },
+
+  "holdToTalkReleaseToStop": "松开结束",
+  "holdToTalkHoldToSpeak": "按住说话",
+  "holdToTalkUnavailable": "语音不可用",
+
+  "riskPrefix": "风险 ",
+  "riskHigh": "高",
+  "riskMid": "中",
+  "riskLow": "低",
+
+  "importTypeAll": "全部",
+  "importTypeScreenshots": "截图",
+  "importTypePhotos": "相册照片"
 }

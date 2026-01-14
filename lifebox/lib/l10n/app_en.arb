@@ -66,7 +66,7 @@
   "import_screenshots_not_found": "No “Screenshots” album detected. Screenshot filtering will fall back to all photos.",
   "import_screenshots_album_prefix": "Screenshots album:  {count}",
   "import_selected_count": "{count} selected",
-  "import_select_all_visible": "Select all (visible)",
+  "import_select_all_visible": "All",
   "import_clear_selection": "Clear selection",
   "import_queue_label": "Queue {count}",
   "import_empty_title": "No photos match your filters",
@@ -212,7 +212,7 @@
     }
   },
 
-    "lockPageTitle": "App locked",
+  "lockPageTitle": "App locked",
   "lockPageNeedUnlock": "Unlock to continue",
   "unlock": "Unlock",
   "unlockReturnTo": "After unlocking, you will return to: {target}",
@@ -220,5 +220,18 @@
     "placeholders": {
       "target": { "type": "String" }
     }
-  }
+  },
+
+  "holdToTalkReleaseToStop": "Release to stop",
+  "holdToTalkHoldToSpeak": "Hold to speak",
+  "holdToTalkUnavailable": "Voice unavailable",
+
+  "riskPrefix": "Risk ",
+  "riskHigh": "High",
+  "riskMid": "Medium",
+  "riskLow": "Low",
+
+  "importTypeAll": "All",
+  "importTypeScreenshots": "Screenshots",
+  "importTypePhotos": "Photos"
 }

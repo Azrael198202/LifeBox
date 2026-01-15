@@ -89,16 +89,29 @@ FAILSAFE:
   confidence=0.2
   others = null / [] / defaults
 
+ANTI-EMPTY RULE (CRITICAL):
+- NEVER return an "all-null" record.
+- title MUST be a meaningful action derived from the text if ANY readable characters exist.
+- notes MUST include an exact snippet copied from Text (at least 10 chars) if ANY readable characters exist.
+- If SourceHint is not null and source is otherwise unknown, set source = SourceHint.
+- If due_at is null but the text contains a clear deadline word (e.g., 期限, 締切, まで, due), still create a title.
+
+
 """
 
 def build_user_prompt(text: str, locale: str, source_hint: str | None, now: str | None) -> str:
-    # IMPORTANT: now is provided only for context; DO NOT use it to add/guess year.
-    return f"""Locale={locale}
-SourceHint={source_hint}
-Now={now}
-Text:
-{text}
+    return f"""INPUT
+Locale: {locale}
+SourceHint: {source_hint}
+Now: {now}
 
-Return ONLY one JSON object that matches the schema.
-Do not add a year to dates. Keep due_at exactly as in Text.
-If you can find any evidence, fill notes with an exact snippet from Text."""
+TEXT_START
+{text}
+TEXT_END
+
+TASK
+Return ONLY one JSON object that matches the schema exactly.
+- title must not be empty if TEXT_START..TEXT_END contains any readable text
+- notes must include an exact snippet copied from the text
+"""
+

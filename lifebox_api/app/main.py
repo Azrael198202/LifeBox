@@ -1,44 +1,48 @@
-import json
+from __future__ import annotations
+
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+from typing import Optional
 
-from .schemas import AnalyzeRequest, AnalyzeResponse
-from .prompts import SYSTEM_PROMPT, build_user_prompt
 from .ollama_client import ollama_chat
+from .task_extractor import SYSTEM_PROMPT, build_user_prompt, normalize_to_schema
 
-#MODEL = "qwen2.5:7b-instruct"
-#MODEL = "qwen2.5:3b-instruct"
-MODEL = "qwen2.5:3b-instruct"
 
-app = FastAPI(title="lifebox-ai-api")
+app = FastAPI()
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+
+class AnalyzeRequest(BaseModel):
+    text: str
+    locale: str = "ja-JP"
+    source_hint: Optional[str] = None
+    now: Optional[str] = None
+    model: str = "qwen2.5:3b-instruct"
+
 
 @app.get("/health")
 async def health():
     return {"ok": True}
 
-@app.post("/api/ai/analyze", response_model=AnalyzeResponse)
+
+@app.post("/api/ai/analyze")
 async def analyze(req: AnalyzeRequest):
     user_prompt = build_user_prompt(
-        req.text, req.locale, req.source_hint, req.now
+        text=req.text,
+        locale=req.locale,
+        source_hint=req.source_hint,
+        now=req.now,
     )
 
-    content = await ollama_chat(
-        model=MODEL,
+    raw = await ollama_chat(
+        model=req.model,
         system=SYSTEM_PROMPT,
         user=user_prompt,
     )
 
-    try:
-        return AnalyzeResponse.model_validate(json.loads(content))
-    except Exception:
-        return AnalyzeResponse(
-            notes="Model did not return valid JSON",
-            raw=content,
-        )
+    result = normalize_to_schema(
+        model_output_text=raw,
+        input_text=req.text,
+        source_hint=req.source_hint,
+        locale=req.locale,
+    )
+    return result

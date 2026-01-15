@@ -6,10 +6,12 @@ import 'package:lifebox/l10n/app_localizations.dart';
 
 import '../../../core/widgets/app_scaffold.dart';
 import '../../../core/widgets/empty_state.dart';
-import '../domain/inbox_item.dart';
-import '../state/inbox_providers.dart';
-import 'inbox_card.dart';
 import 'inbox_speech_bar.dart';
+
+// ✅ 新增
+import '../domain/analyze_models.dart';
+import '../state/local_inbox_providers.dart';
+import 'analyze_confirm_page.dart';
 
 class InboxPage extends ConsumerStatefulWidget {
   const InboxPage({super.key});
@@ -22,7 +24,6 @@ class _InboxPageState extends ConsumerState<InboxPage>
     with SingleTickerProviderStateMixin {
   late final TabController _tab;
 
-  // ✅ 保存最近一次识别文本（用于 UI 显示）
   String _lastSpeechText = '';
 
   @override
@@ -37,6 +38,25 @@ class _InboxPageState extends ConsumerState<InboxPage>
     super.dispose();
   }
 
+  Future<void> _goAnalyzeAndConfirm(BuildContext context, String text) async {
+    // ✅ 这里模拟 request（你要求的格式）
+    final req = AnalyzeRequest(
+      text: text,
+      locale: "ja",
+      sourceHint: "銀行",
+    );
+
+    final ok = await Navigator.of(context).push<bool>(
+      MaterialPageRoute(builder: (_) => AnalyzeConfirmPage(request: req)),
+    );
+
+    if (ok == true && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('已保存到本机 Inbox')),
+      );
+    }
+  }
+
   void _showSpeechResultSheet(BuildContext context, String text) {
     setState(() => _lastSpeechText = text);
 
@@ -45,9 +65,9 @@ class _InboxPageState extends ConsumerState<InboxPage>
       isScrollControlled: true,
       showDragHandle: true,
       builder: (_) {
-
         final l10n = AppLocalizations.of(context);
         final controller = TextEditingController(text: text);
+
         return Padding(
           padding: EdgeInsets.only(
             left: 16,
@@ -61,7 +81,7 @@ class _InboxPageState extends ConsumerState<InboxPage>
             children: [
               Text(
                 l10n.speechSheetTitle,
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
               ),
               const SizedBox(height: 10),
               TextField(
@@ -69,7 +89,7 @@ class _InboxPageState extends ConsumerState<InboxPage>
                 maxLines: 4,
                 decoration: InputDecoration(
                   hintText: l10n.speechHintEditable,
-                  border: OutlineInputBorder(),
+                  border: const OutlineInputBorder(),
                 ),
               ),
               const SizedBox(height: 12),
@@ -88,14 +108,12 @@ class _InboxPageState extends ConsumerState<InboxPage>
                   const SizedBox(width: 10),
                   Expanded(
                     child: FilledButton.icon(
-                      onPressed: () {
+                      onPressed: () async {
                         final finalText = controller.text.trim();
                         if (finalText.isEmpty) return;
 
                         Navigator.pop(context);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(l10n.receivedSnack(finalText)),
-                        ));
+                        await _goAnalyzeAndConfirm(context, finalText);
                       },
                       icon: const Icon(Icons.check),
                       label: Text(l10n.confirmAction),
@@ -112,33 +130,10 @@ class _InboxPageState extends ConsumerState<InboxPage>
 
   @override
   Widget build(BuildContext context) {
-    final items = ref.watch(inboxItemsProvider);
     final l10n = AppLocalizations.of(context);
 
-    List<InboxItem> by(InboxStatus s) =>
-        items.where((e) => e.status == s).toList();
-
-    Widget listOf(List<InboxItem> list) {
-      if (list.isEmpty) {
-        return EmptyState(
-          title: l10n.inboxEmptyTitle,
-          subtitle: l10n.inboxEmptySubtitle,
-        );
-      }
-      return ListView.builder(
-        padding: const EdgeInsets.only(bottom: 96), // ✅ 给底部悬浮按钮留空间
-        itemCount: list.length,
-        itemBuilder: (context, i) {
-          final item = list[i];
-          return InboxCard(
-            item: item,
-            onTap: () => context.push('/inbox/detail/${item.id}'),
-            onPrimaryAction: () =>
-                context.push('/action?type=calendar&id=${item.id}'),
-          );
-        },
-      );
-    }
+    // ✅ 改为从本地 DB 读取
+    final asyncList = ref.watch(localInboxListProvider);
 
     return AppScaffold(
       title: l10n.inboxTitle,
@@ -165,34 +160,81 @@ class _InboxPageState extends ConsumerState<InboxPage>
       ],
       body: Stack(
         children: [
-          // 主体内容
-          Column(
-            children: [
-              Material(
-                color: Theme.of(context).colorScheme.surface,
-                child: TabBar(
-                  controller: _tab,
-                  tabs: [
-                    Tab(text: l10n.tabHigh(by(InboxStatus.high).length)),
-                    Tab(text: l10n.tabPending(by(InboxStatus.pending).length)),
-                    Tab(text: l10n.tabDone(by(InboxStatus.done).length)),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: TabBarView(
-                  controller: _tab,
-                  children: [
-                    listOf(by(InboxStatus.high)),
-                    listOf(by(InboxStatus.pending)),
-                    listOf(by(InboxStatus.done)),
-                  ],
-                ),
-              ),
-            ],
+          asyncList.when(
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (e, _) => Center(child: Text('加载失败: $e')),
+            data: (list) {
+              if (list.isEmpty) {
+                return EmptyState(
+                  title: l10n.inboxEmptyTitle,
+                  subtitle: l10n.inboxEmptySubtitle,
+                );
+              }
+
+              // ✅ 简化：按 risk 分 tab
+              List<dynamic> byRisk(String r) =>
+                  list.where((e) => e.risk == r).toList();
+
+              Widget listOf(List<dynamic> l) {
+                if (l.isEmpty) {
+                  return EmptyState(
+                    title: l10n.inboxEmptyTitle,
+                    subtitle: l10n.inboxEmptySubtitle,
+                  );
+                }
+                return ListView.builder(
+                  padding: const EdgeInsets.only(bottom: 96),
+                  itemCount: l.length,
+                  itemBuilder: (context, i) {
+                    final item = l[i];
+                    return ListTile(
+                      title: Text(item.title),
+                      subtitle: Text(
+                        item.summary,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      trailing: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(item.risk, style: const TextStyle(fontWeight: FontWeight.w700)),
+                          if (item.dueAt != null) Text(item.dueAt!, style: const TextStyle(fontSize: 12)),
+                        ],
+                      ),
+                    );
+                  },
+                );
+              }
+
+              return Column(
+                children: [
+                  Material(
+                    color: Theme.of(context).colorScheme.surface,
+                    child: TabBar(
+                      controller: _tab,
+                      tabs: [
+                        Tab(text: 'High (${byRisk("high").length})'),
+                        Tab(text: 'Mid (${byRisk("mid").length})'),
+                        Tab(text: 'Low (${byRisk("low").length})'),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: TabBarView(
+                      controller: _tab,
+                      children: [
+                        listOf(byRisk("high")),
+                        listOf(byRisk("mid")),
+                        listOf(byRisk("low")),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
 
-          // ✅ 底部悬浮语音按钮（组件来自 inbox_calendar_page.dart）
           Positioned(
             left: 16,
             right: 16,

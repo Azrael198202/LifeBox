@@ -6,8 +6,8 @@ from .schemas import AnalyzeRequest, AnalyzeResponse
 from .prompts import SYSTEM_PROMPT, build_user_prompt
 from .ollama_client import ollama_chat
 
-#MODEL = "qwen2.5:7b-instruct"
-MODEL = "qwen2.5:3b-instruct"
+MODEL = "qwen2.5:7b-instruct"
+#MODEL = "qwen2.5:3b-instruct"
 
 app = FastAPI(title="lifebox-ai-api")
 

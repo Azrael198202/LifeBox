@@ -53,5 +53,10 @@
 		<string>用于语音输入</string>
 		<key>NSSpeechRecognitionUsageDescription</key>
 		<string>用于将语音转换为文字</string>
+		<key>NSAppTransportSecurity</key>
+		<dict>
+			<key>NSAllowsArbitraryLoads</key>
+			<true/>
+		</dict>
 	</dict>
 </plist>

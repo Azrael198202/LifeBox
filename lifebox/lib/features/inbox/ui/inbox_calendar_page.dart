@@ -4,9 +4,12 @@ import 'package:go_router/go_router.dart';
 import 'package:lifebox/l10n/app_localizations.dart';
 
 import '../domain/inbox_item.dart';
-import '../state/inbox_providers.dart';
+import '../state/local_inbox_providers.dart';
+import '../domain/local_inbox_record.dart';
+
 import 'inbox_card.dart';
 import 'inbox_speech_bar.dart';
+import '../../../core/widgets/risk_badge.dart';
 
 class InboxCalendarPage extends ConsumerStatefulWidget {
   const InboxCalendarPage({super.key});
@@ -18,10 +21,62 @@ class InboxCalendarPage extends ConsumerStatefulWidget {
 class _InboxCalendarPageState extends ConsumerState<InboxCalendarPage> {
   DateTime _month = DateTime(DateTime.now().year, DateTime.now().month, 1);
   DateTime _selectedDay =
-    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
-  // ✅ 语音最近文本（用于浮条显示）
   String _lastSpeechText = '';
+
+  RiskLevel _mapRisk(String v) {
+    switch (v) {
+      case 'high':
+        return RiskLevel.high;
+      case 'mid':
+        return RiskLevel.mid;
+      case 'low':
+      default:
+        return RiskLevel.low;
+    }
+  }
+
+  DateTime? _parseDueAt(String? v) {
+    if (v == null) return null;
+    final s = v.trim();
+    if (s.isEmpty) return null;
+    try {
+      return DateTime.parse(s); // yyyy-mm-dd
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// ✅ LocalInboxRecord -> InboxItem
+  /// - done => InboxStatus.done
+  /// - risk=high 且未done => InboxStatus.highRisk
+  /// - 其他未done => InboxStatus.pending
+  InboxItem _toInboxItem(LocalInboxRecord r) {
+    final status = (r.status == 'done')
+        ? InboxStatus.done
+        : (r.risk == 'high' ? InboxStatus.highRisk : InboxStatus.pending);
+
+    return InboxItem(
+      id: r.id,
+      title: r.title,
+      summary: r.summary,
+      rawText: r.rawText,
+      locale: r.locale,
+      amount: r.amount,
+      currency: r.currency,
+      dueAt: _parseDueAt(r.dueAt),
+      risk: _mapRisk(r.risk),
+      source: r.sourceHint,
+      status: status,
+    );
+  }
+
+  bool _isActionable(InboxItem item) {
+    // ✅ Calendar 只显示：高风险 + 待办
+    return item.status == InboxStatus.highRisk ||
+        item.status == InboxStatus.pending;
+  }
 
   Future<void> _pickYearMonth() async {
     final picked = await showDialog<DateTime>(
@@ -56,8 +111,9 @@ class _InboxCalendarPageState extends ConsumerState<InboxCalendarPage> {
                       decoration: InputDecoration(labelText: l10n.monthLabel),
                       items: List.generate(12, (i) => i + 1)
                           .map((m) => DropdownMenuItem(
-                              value: m,
-                              child: Text(m.toString().padLeft(2, '0'))))
+                                value: m,
+                                child: Text(m.toString().padLeft(2, '0')),
+                              ))
                           .toList(),
                       onChanged: (v) => setState(() => month = v ?? month),
                     ),
@@ -112,7 +168,8 @@ class _InboxCalendarPageState extends ConsumerState<InboxCalendarPage> {
             children: [
               Text(
                 l10n.speechSheetTitle,
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                style:
+                    const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
               ),
               const SizedBox(height: 10),
               TextField(
@@ -120,7 +177,7 @@ class _InboxCalendarPageState extends ConsumerState<InboxCalendarPage> {
                 maxLines: 4,
                 decoration: InputDecoration(
                   hintText: l10n.speechHintEditable,
-                  border: OutlineInputBorder(),
+                  border: const OutlineInputBorder(),
                 ),
               ),
               const SizedBox(height: 12),
@@ -142,10 +199,11 @@ class _InboxCalendarPageState extends ConsumerState<InboxCalendarPage> {
                       onPressed: () {
                         final finalText = controller.text.trim();
                         if (finalText.isEmpty) return;
-
                         Navigator.pop(context);
+
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(l10n.receivedSnack(finalText))),
+                          SnackBar(
+                              content: Text(l10n.receivedSnack(finalText))),
                         );
                       },
                       icon: const Icon(Icons.check),
@@ -163,66 +221,72 @@ class _InboxCalendarPageState extends ConsumerState<InboxCalendarPage> {
 
   @override
   Widget build(BuildContext context) {
-    final List<InboxItem> items = ref.watch(inboxItemsProvider);
-
-    // ✅ 只显示“要处理”的：高优先 + 待处理
-    final actionable = items.where(_isActionable).toList();
-
     final l10n = AppLocalizations.of(context);
 
-    // 按日期聚合（只聚合有 dueAt 的）
-    final Map<DateTime, List<InboxItem>> byDay = {};
-    for (final it in actionable) {
-      final d = it.dueAt;
-      if (d == null) continue;
-      final key = DateTime(d.year, d.month, d.day);
-      byDay.putIfAbsent(key, () => []).add(it);
-    }
-
-    final selectedKey =
-        DateTime(_selectedDay.year, _selectedDay.month, _selectedDay.day);
-    final selectedItems = byDay[selectedKey] ?? const <InboxItem>[];
+    final asyncList = ref.watch(localInboxListProvider);
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.calendarTitle)),
       body: Stack(
         children: [
-          // ✅ 主体内容（给底部浮条预留空间）
           Padding(
             padding: const EdgeInsets.only(bottom: 96),
-            child: Column(
-              children: [
-                _MonthHeader(
-                  month: _month,
-                  onPrev: () => setState(() =>
-                      _month = DateTime(_month.year, _month.month - 1, 1)),
-                  onNext: () => setState(() =>
-                      _month = DateTime(_month.year, _month.month + 1, 1)),
-                  onPick: _pickYearMonth,
-                ),
-                const _WeekHeader(),
-                Expanded(
-                  flex: 6,
-                  child: _MonthGrid(
-                    month: _month,
-                    selectedDay: _selectedDay,
-                    itemsByDay: byDay,
-                    onSelect: (d) => setState(() => _selectedDay = d),
-                  ),
-                ),
-                const Divider(height: 1),
-                Expanded(
-                  flex: 5,
-                  child: _SelectedDayList(
-                    day: _selectedDay,
-                    items: selectedItems,
-                  ),
-                ),
-              ],
+            child: asyncList.when(
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (e, _) => Center(child: Text('加载失败: $e')),
+              data: (raw) {
+                // ✅ 转换为 InboxItem
+                final items = raw.map(_toInboxItem).toList();
+
+                // ✅ 只显示“要处理”的：高风险 + 待办
+                final actionable = items.where(_isActionable).toList();
+
+                // ✅ 按日期聚合（只聚合有 dueAt 的）
+                final Map<DateTime, List<InboxItem>> byDay = {};
+                for (final it in actionable) {
+                  final d = it.dueAt;
+                  if (d == null) continue;
+                  final key = DateTime(d.year, d.month, d.day);
+                  byDay.putIfAbsent(key, () => []).add(it);
+                }
+
+                final selectedKey = DateTime(
+                    _selectedDay.year, _selectedDay.month, _selectedDay.day);
+                final selectedItems = byDay[selectedKey] ?? const <InboxItem>[];
+
+                return Column(
+                  children: [
+                    _MonthHeader(
+                      month: _month,
+                      onPrev: () => setState(() =>
+                          _month = DateTime(_month.year, _month.month - 1, 1)),
+                      onNext: () => setState(() =>
+                          _month = DateTime(_month.year, _month.month + 1, 1)),
+                      onPick: _pickYearMonth,
+                    ),
+                    const _WeekHeader(),
+                    Expanded(
+                      flex: 6,
+                      child: _MonthGrid(
+                        month: _month,
+                        selectedDay: _selectedDay,
+                        itemsByDay: byDay,
+                        onSelect: (d) => setState(() => _selectedDay = d),
+                      ),
+                    ),
+                    const Divider(height: 1),
+                    Expanded(
+                      flex: 5,
+                      child: _SelectedDayList(
+                        day: _selectedDay,
+                        items: selectedItems,
+                      ),
+                    ),
+                  ],
+                );
+              },
             ),
           ),
-
-          // ✅ 底部悬浮语音按钮（组件就在本文件底部）
           Positioned(
             left: 16,
             right: 16,
@@ -239,10 +303,6 @@ class _InboxCalendarPageState extends ConsumerState<InboxCalendarPage> {
         ],
       ),
     );
-  }
-
-  bool _isActionable(InboxItem item) {
-    return item.status == InboxStatus.pending || item.status == InboxStatus.high;
   }
 }
 
@@ -305,9 +365,17 @@ class _WeekHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final l10n = AppLocalizations.of(context);
-    final labels = [l10n.weekdaySun, l10n.weekdayMon, l10n.weekdayTue, l10n.weekdayWed, l10n.weekdayThu, l10n.weekdayFri, l10n.weekdaySat];
+    final labels = [
+      l10n.weekdaySun,
+      l10n.weekdayMon,
+      l10n.weekdayTue,
+      l10n.weekdayWed,
+      l10n.weekdayThu,
+      l10n.weekdayFri,
+      l10n.weekdaySat
+    ];
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(12, 2, 12, 0),
       child: Row(
@@ -367,7 +435,7 @@ class _MonthGrid extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(12, 2, 12, 12),
       child: GridView.builder(
-        padding: EdgeInsets.zero, // ✅ 让标题和第一行更贴近
+        padding: EdgeInsets.zero,
         physics: const NeverScrollableScrollPhysics(),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 7,
@@ -377,14 +445,13 @@ class _MonthGrid extends StatelessWidget {
         itemCount: totalCells,
         itemBuilder: (context, index) {
           final dayNum = index - firstWeekday + 1;
-          if (dayNum < 1 || dayNum > daysInMonth) {
+          if (dayNum < 1 || dayNum > daysInMonth)
             return const SizedBox.shrink();
-          }
 
           final d = DateTime(month.year, month.month, dayNum);
           final key = DateTime(d.year, d.month, d.day);
 
-          final weekday = d.weekday; // Mon=1 ... Sun=7
+          final weekday = d.weekday;
           final isSunday = weekday == DateTime.sunday;
           final isSaturday = weekday == DateTime.saturday;
 
@@ -511,6 +578,15 @@ class _SelectedDayList extends StatelessWidget {
           onTap: () => context.push('/inbox/detail/${item.id}'),
           onPrimaryAction: () =>
               context.push('/action?type=calendar&id=${item.id}'),
+          onDelete: () async {
+            // TODO: 调用 db.delete(item.id) 然后 ref.invalidate(localInboxListProvider)
+          },
+          onMarkDone: () async {
+            // TODO: db.upsert(status='done') 然后 invalidate
+          },
+          onMarkTodo: () async {
+            // TODO: db.upsert(status='pending') 然后 invalidate
+          },
         );
       },
     );

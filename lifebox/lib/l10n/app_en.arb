@@ -181,7 +181,7 @@
   "inboxDetailPhoneUrlTodo": "Phone/URL: TODO",
 
   "inboxDetailPrimaryActionAddCalendar": "Primary action: Add to calendar",
-  "inboxDetailMarkDoneTodo": "Mark as done (TODO)",
+  "inboxDetailMarkDoneTodo": "Done：TODO",
 
   "inboxDetailEvidenceTitle": "Evidence (OCR snippets)",
   "inboxDetailOcrPlaceholder": "OCR: ... (Later, this will show local OCR cache content)",

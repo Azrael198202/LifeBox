@@ -170,10 +170,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get all_Time => '期間指定なし';
 
   @override
-  String get import_title => '取り込み';
+  String get import_title => '写真取込';
 
   @override
-  String get import_title_full => '取り込み（絞り込み + キュー）';
+  String get import_title_full => '写真取込';
 
   @override
   String get import_perm_title => '写真へのアクセス権がありません';
@@ -423,7 +423,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get inboxDetailPrimaryActionAddCalendar => '主アクション：カレンダーに追加';
 
   @override
-  String get inboxDetailMarkDoneTodo => '完了としてマーク（TODO）';
+  String get inboxDetailMarkDoneTodo => '完了：TODO';
 
   @override
   String get inboxDetailEvidenceTitle => '解析根拠（OCR 断片）';

@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lifebox/features/inbox/ui/inbox_calendar_page.dart';
 import 'package:lifebox/l10n/app_localizations.dart';
 
 import '../../../core/widgets/app_scaffold.dart';
 import '../../../core/widgets/empty_state.dart';
+import '../../../core/widgets/risk_badge.dart'; // RiskLevel
 import 'inbox_speech_bar.dart';
 
-// ✅ 新增
-import '../domain/analyze_models.dart';
 import '../state/local_inbox_providers.dart';
-import 'analyze_confirm_page.dart';
+import '../domain/local_inbox_record.dart';
+import 'inbox_calendar_page.dart';
+
+// ✅ 你已有的卡片 & Item 模型
+import '../domain/inbox_item.dart';
+import 'inbox_card.dart';
 
 class InboxPage extends ConsumerStatefulWidget {
   const InboxPage({super.key});
@@ -23,7 +26,6 @@ class InboxPage extends ConsumerStatefulWidget {
 class _InboxPageState extends ConsumerState<InboxPage>
     with SingleTickerProviderStateMixin {
   late final TabController _tab;
-
   String _lastSpeechText = '';
 
   @override
@@ -38,91 +40,96 @@ class _InboxPageState extends ConsumerState<InboxPage>
     super.dispose();
   }
 
-  Future<void> _goAnalyzeAndConfirm(BuildContext context, String text) async {
-    // ✅ 这里模拟 request（你要求的格式）
-    final req = AnalyzeRequest(
-      text: text,
-      locale: "ja",
-      sourceHint: "銀行",
-    );
-
-    final ok = await Navigator.of(context).push<bool>(
-      MaterialPageRoute(builder: (_) => AnalyzeConfirmPage(request: req)),
-    );
-
-    if (ok == true && mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('已保存到本机 Inbox')),
-      );
+  RiskLevel _mapRisk(String v) {
+    switch (v) {
+      case 'high':
+        return RiskLevel.high;
+      case 'mid':
+        return RiskLevel.mid;
+      case 'low':
+      default:
+        return RiskLevel.low;
     }
   }
 
-  void _showSpeechResultSheet(BuildContext context, String text) {
-    setState(() => _lastSpeechText = text);
+  DateTime? _parseDueAt(String? v) {
+    if (v == null) return null;
+    final s = v.trim();
+    if (s.isEmpty) return null;
 
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      showDragHandle: true,
-      builder: (_) {
-        final l10n = AppLocalizations.of(context);
-        final controller = TextEditingController(text: text);
+    // LocalInboxRecord.dueAt = "yyyy-mm-dd"（或为空）
+    try {
+      return DateTime.parse(s);
+    } catch (_) {
+      return null;
+    }
+  }
 
-        return Padding(
-          padding: EdgeInsets.only(
-            left: 16,
-            right: 16,
-            top: 8,
-            bottom: 16 + MediaQuery.of(context).viewInsets.bottom,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                l10n.speechSheetTitle,
-                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
-              ),
-              const SizedBox(height: 10),
-              TextField(
-                controller: controller,
-                maxLines: 4,
-                decoration: InputDecoration(
-                  hintText: l10n.speechHintEditable,
-                  border: const OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton.icon(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        context.push('/import');
-                      },
-                      icon: const Icon(Icons.add_photo_alternate_outlined),
-                      label: Text(l10n.goImport),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: FilledButton.icon(
-                      onPressed: () async {
-                        final finalText = controller.text.trim();
-                        if (finalText.isEmpty) return;
+  // ✅ 关键：LocalInboxRecord -> InboxItem（补上你缺的函数）
+  InboxItem _toInboxItem(LocalInboxRecord r) {
+    // 你现在 InboxItem 定义里有 InboxStatus { high, pending, done }
+    // 这里把 record 的 status/risk 映射进去
+    final isDone = r.status == 'done';
+    final isHighRisk = r.risk == 'high';
 
-                        Navigator.pop(context);
-                        await _goAnalyzeAndConfirm(context, finalText);
-                      },
-                      icon: const Icon(Icons.check),
-                      label: Text(l10n.confirmAction),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
+    final status = isDone
+        ? InboxStatus.done
+        : (isHighRisk ? InboxStatus.highRisk : InboxStatus.pending);
+
+    return InboxItem(
+      id: r.id,
+      title: r.title.isEmpty ? '(No title)' : r.title,
+      dueAt: _parseDueAt(r.dueAt),
+      risk: _mapRisk(r.risk),
+      summary: r.summary,
+      amount: r.amount,
+      currency: r.currency,
+      rawText: r.rawText,
+      source: r.sourceHint.isEmpty ? '其他' : r.sourceHint,
+      status: status,
+      locale: r.locale,
+    );
+  }
+
+  List<LocalInboxRecord> _sortNewestFirst(List<LocalInboxRecord> list) {
+    final copied = [...list];
+    copied.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+    return copied;
+  }
+
+  Widget _buildList(
+    BuildContext context,
+    AppLocalizations l10n,
+    List<LocalInboxRecord> records,
+  ) {
+    if (records.isEmpty) {
+      return EmptyState(
+        title: l10n.inboxEmptyTitle,
+        subtitle: l10n.inboxEmptySubtitle,
+      );
+    }
+
+    return ListView.builder(
+      padding: const EdgeInsets.only(bottom: 96),
+      itemCount: records.length,
+      itemBuilder: (context, i) {
+        final r = records[i];
+        final item = _toInboxItem(r);
+
+        return InboxCard(
+          item: item,
+          onTap: () => context.push('/inbox/detail/${item.id}'),
+          onPrimaryAction: () =>
+              context.push('/action?type=calendar&id=${item.id}'),
+          onDelete: () async {
+            // TODO: 调用 db.delete(item.id) 然后 ref.invalidate(localInboxListProvider)
+          },
+          onMarkDone: () async {
+            // TODO: db.upsert(status='done') 然后 invalidate
+          },
+          onMarkTodo: () async {
+            // TODO: db.upsert(status='pending') 然后 invalidate
+          },
         );
       },
     );
@@ -131,8 +138,6 @@ class _InboxPageState extends ConsumerState<InboxPage>
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-
-    // ✅ 改为从本地 DB 读取
     final asyncList = ref.watch(localInboxListProvider);
 
     return AppScaffold(
@@ -163,49 +168,19 @@ class _InboxPageState extends ConsumerState<InboxPage>
           asyncList.when(
             loading: () => const Center(child: CircularProgressIndicator()),
             error: (e, _) => Center(child: Text('加载失败: $e')),
-            data: (list) {
-              if (list.isEmpty) {
-                return EmptyState(
-                  title: l10n.inboxEmptyTitle,
-                  subtitle: l10n.inboxEmptySubtitle,
-                );
-              }
+            data: (raw) {
+              final list = _sortNewestFirst(raw);
 
-              // ✅ 简化：按 risk 分 tab
-              List<dynamic> byRisk(String r) =>
-                  list.where((e) => e.risk == r).toList();
+              // ✅ Tab 1：高风险（risk=high 且未 done）
+              final highRisk = list
+                  .where((e) => e.risk == 'high' && e.status != 'done')
+                  .toList();
 
-              Widget listOf(List<dynamic> l) {
-                if (l.isEmpty) {
-                  return EmptyState(
-                    title: l10n.inboxEmptyTitle,
-                    subtitle: l10n.inboxEmptySubtitle,
-                  );
-                }
-                return ListView.builder(
-                  padding: const EdgeInsets.only(bottom: 96),
-                  itemCount: l.length,
-                  itemBuilder: (context, i) {
-                    final item = l[i];
-                    return ListTile(
-                      title: Text(item.title),
-                      subtitle: Text(
-                        item.summary,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      trailing: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(item.risk, style: const TextStyle(fontWeight: FontWeight.w700)),
-                          if (item.dueAt != null) Text(item.dueAt!, style: const TextStyle(fontSize: 12)),
-                        ],
-                      ),
-                    );
-                  },
-                );
-              }
+              // ✅ Tab 2：待办（pending）
+              final todo = list.where((e) => e.status == 'pending').toList();
+
+              // ✅ Tab 3：已完成（done）
+              final done = list.where((e) => e.status == 'done').toList();
 
               return Column(
                 children: [
@@ -214,19 +189,20 @@ class _InboxPageState extends ConsumerState<InboxPage>
                     child: TabBar(
                       controller: _tab,
                       tabs: [
-                        Tab(text: 'High (${byRisk("high").length})'),
-                        Tab(text: 'Mid (${byRisk("mid").length})'),
-                        Tab(text: 'Low (${byRisk("low").length})'),
+                        Tab(text: '高风险 (${highRisk.length})'),
+                        Tab(text: '待办 (${todo.length})'),
+                        Tab(text: '已完成 (${done.length})'),
                       ],
                     ),
                   ),
                   Expanded(
                     child: TabBarView(
                       controller: _tab,
+                      physics: const NeverScrollableScrollPhysics(),
                       children: [
-                        listOf(byRisk("high")),
-                        listOf(byRisk("mid")),
-                        listOf(byRisk("low")),
+                        _buildList(context, l10n, highRisk),
+                        _buildList(context, l10n, todo),
+                        _buildList(context, l10n, done),
                       ],
                     ),
                   ),
@@ -235,6 +211,7 @@ class _InboxPageState extends ConsumerState<InboxPage>
             },
           ),
 
+          // ✅ 底部语音条：保留你现在的行为（仅显示最后文字）
           Positioned(
             left: 16,
             right: 16,
@@ -244,7 +221,7 @@ class _InboxPageState extends ConsumerState<InboxPage>
               child: SpeechFloatingBar(
                 localeId: 'zh_CN',
                 lastText: _lastSpeechText,
-                onFinalText: (text) => _showSpeechResultSheet(context, text),
+                onFinalText: (text) => setState(() => _lastSpeechText = text),
               ),
             ),
           ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 
@@ -6,6 +7,7 @@ import '../domain/analyze_models.dart';
 import '../domain/local_inbox_record.dart';
 import '../state/local_inbox_providers.dart';
 import '../../settings/state/settings_providers.dart';
+import '../../../core/input_formatters/date_input_formatter.dart';
 
 class AnalyzeConfirmPage extends ConsumerStatefulWidget {
   const AnalyzeConfirmPage({
@@ -69,9 +71,29 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
     super.dispose();
   }
 
+  bool _isValidDate(String v) {
+    final reg = RegExp(r'^\d{4}-\d{2}-\d{2}$');
+    if (!reg.hasMatch(v)) return false;
+
+    try {
+      final dt = DateTime.parse(v);
+      return dt.year >= 1900 && dt.year <= 2100;
+    } catch (_) {
+      return false;
+    }
+  }
+
   Future<void> _onSave() async {
     if (_saving) return;
     setState(() => _saving = true);
+
+    final due = _dueAt.text.trim();
+    if (due.isNotEmpty && !_isValidDate(due)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('日期格式不正确，请使用 YYYY-MM-DD')),
+      );
+      return;
+    }
 
     try {
       final id = const Uuid().v4();
@@ -105,7 +127,7 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
       ref.invalidate(localInboxListProvider);
 
       if (!mounted) return;
-      Navigator.pop(context, true);
+      Navigator.of(context).popUntil((route) => route.isFirst);
     } finally {
       if (mounted) setState(() => _saving = false);
     }
@@ -114,6 +136,9 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
   @override
   Widget build(BuildContext context) {
     final resp = _resp;
+    final cs = Theme.of(context).colorScheme;
+    final onSurface = cs.onSurface;
+    final onSurfaceHint = cs.onSurface.withOpacity(0.7);
 
     return Scaffold(
       appBar: AppBar(
@@ -130,9 +155,7 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
                     children: [
                       TextField(
                         controller: _title,
-                        style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.black),
+                        style: TextStyle(fontSize: 14, color: onSurface),
                         cursorColor: Theme.of(context).colorScheme.primary,
                         decoration: const InputDecoration(
                           labelText: '标题',
@@ -142,9 +165,7 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
                       const SizedBox(height: 12),
                       TextField(
                         controller: _summary,
-                        style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.black),
+                        style: TextStyle(fontSize: 12, color: onSurface),
                         cursorColor: Theme.of(context).colorScheme.primary,
                         maxLines: 5,
                         decoration: const InputDecoration(
@@ -158,8 +179,15 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
                           Expanded(
                             child: TextField(
                               controller: _dueAt,
+                              keyboardType: TextInputType.number,
+                              inputFormatters: [
+                                FilteringTextInputFormatter
+                                    .digitsOnly,      // ① 只允许数字
+                                DateInputFormatter(), // ② 自动格式 yyyy-mm-dd
+                              ],
+                              style: TextStyle(fontSize: 14, color: onSurface),
                               decoration: const InputDecoration(
-                                labelText: '期限 (YYYY-MM-DD)',
+                                labelText: '期限 (YYYYMMDD)',
                                 border: OutlineInputBorder(),
                               ),
                             ),
@@ -168,9 +196,12 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
                           Expanded(
                             child: DropdownButtonFormField<String>(
                               value: _risk,
-                              decoration: const InputDecoration(
+                              dropdownColor: cs.surface,
+                              style: TextStyle(color: onSurface),
+                              decoration: InputDecoration(
                                 labelText: '风险',
                                 border: OutlineInputBorder(),
+                                labelStyle: TextStyle(color: onSurfaceHint),
                               ),
                               items: const [
                                 DropdownMenuItem(
@@ -192,6 +223,7 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
                           Expanded(
                             child: TextField(
                               controller: _amount,
+                              style: TextStyle(fontSize: 14, color: onSurface),
                               keyboardType: TextInputType.number,
                               decoration: const InputDecoration(
                                 labelText: '金额',
@@ -203,6 +235,7 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
                           Expanded(
                             child: TextField(
                               controller: _currency,
+                              style: TextStyle(fontSize: 14, color: onSurface),
                               decoration: const InputDecoration(
                                 labelText: '币种 (JPY/CNY)',
                                 border: OutlineInputBorder(),
@@ -219,7 +252,7 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
                   title: '模拟请求（参考）',
                   child: SelectableText(
                     widget.request.toJson().toString(),
-                    style: const TextStyle(fontSize: 12),
+                    style: TextStyle(fontSize: 12, color: onSurface),
                   ),
                 ),
                 const SizedBox(height: 22),
@@ -250,6 +283,7 @@ class _Section extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(14),
         border: Border.all(color: Colors.black.withOpacity(0.08)),
       ),

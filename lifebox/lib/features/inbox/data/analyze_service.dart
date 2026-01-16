@@ -9,7 +9,8 @@ class AnalyzeService {
     await Future.delayed(const Duration(milliseconds: 650)); // 模拟网络耗时
 
     // ---- 超简易解析（你之后接真 API 时直接替换这里）----
-    final text = req.text;
+    // final text = req.text;
+    String text = "銀行より：クレジットカードのお支払い期限は1/20です。金額3万円。";
 
     // amount
     int? amount;

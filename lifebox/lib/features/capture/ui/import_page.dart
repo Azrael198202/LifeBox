@@ -24,6 +24,10 @@ class _ImportPageState extends ConsumerState<ImportPage> {
   final ScrollController _scroll = ScrollController();
   bool _queuePanelOpen = true;
 
+  // ✅ 新增：记录“本次加入队列”的 assetIds，用于 OCR 全部完成后自动跳转
+  Set<String>? _autoJumpIds;
+  bool _autoJumping = false;
+
   @override
   void initState() {
     super.initState();
@@ -78,10 +82,8 @@ class _ImportPageState extends ConsumerState<ImportPage> {
 
     if (picked != null) {
       final normalized = DateTimeRange(
-        start:
-            DateTime(picked.start.year, picked.start.month, picked.start.day),
-        end: DateTime(
-            picked.end.year, picked.end.month, picked.end.day, 23, 59, 59),
+        start: DateTime(picked.start.year, picked.start.month, picked.start.day),
+        end: DateTime(picked.end.year, picked.end.month, picked.end.day, 23, 59, 59),
       );
       await c.setRange(normalized);
     }
@@ -92,6 +94,41 @@ class _ImportPageState extends ConsumerState<ImportPage> {
     final c = ref.watch(importControllerProvider);
     final q = ref.watch(ocrQueueManagerProvider);
     final l10n = AppLocalizations.of(context);
+
+    // ✅ 新增：监听 OCR 队列状态 —— 当本次加入队列的那批全部完成时自动跳到结果页
+    ref.listen(ocrQueueManagerProvider, (prev, next) {
+      final ids = _autoJumpIds;
+      if (ids == null || ids.isEmpty) return;
+      if (_autoJumping) return;
+
+      // completedJobs 中属于本次 ids 的数量
+      final completedForThisBatch = next.completedJobs
+          .where((job) => ids.contains(job.assetId))
+          .length;
+
+      // ✅ 成功/失败都算完成：只要这批都进入 completedJobs 就跳转
+      if (completedForThisBatch == ids.length) {
+        _autoJumping = true;
+
+        Future.microtask(() async {
+          if (!mounted) return;
+
+          await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => OcrResultsPage(filterAssetIds: ids.toList()),
+            ),
+          );
+
+          // 返回后重置，避免反复跳
+          if (!mounted) return;
+          setState(() {
+            _autoJumpIds = null;
+            _autoJumping = false;
+          });
+        });
+      }
+    });
 
     if (!c.permissionGranted && !c.loading) {
       return AppScaffold(
@@ -152,9 +189,17 @@ class _ImportPageState extends ConsumerState<ImportPage> {
             enabled: c.selectedAssetIds.isNotEmpty,
             selectedCount: c.selectedAssetIds.length,
             onEnqueue: () {
-              q.enqueueMany(c.selectedAssetIds.toList());
+              final ids = c.selectedAssetIds.toList();
+
+              // ✅ 记录本次 ids，用于 OCR 完成后自动跳转
+              setState(() {
+                _autoJumpIds = ids.toSet();
+                _autoJumping = false;
+                _queuePanelOpen = true;
+              });
+
+              q.enqueueMany(ids);
               c.clearSelection();
-              setState(() => _queuePanelOpen = true);
             },
           ),
           if (_queuePanelOpen) _QueuePanel(queue: q),
@@ -196,7 +241,7 @@ class _FilterBar extends StatelessWidget {
                   initialValue: type,
                   decoration: InputDecoration(
                     labelText: l10n.type_label,
-                    border: OutlineInputBorder(),
+                    border: const OutlineInputBorder(),
                     isDense: true,
                   ),
                   items: ImportPhotoType.values
@@ -213,14 +258,13 @@ class _FilterBar extends StatelessWidget {
                   child: InputDecorator(
                     decoration: InputDecoration(
                       labelText: l10n.import_filter_range_label,
-                      border: OutlineInputBorder(),
+                      border: const OutlineInputBorder(),
                       isDense: true,
                     ),
                     child: Row(
                       children: [
                         Expanded(
-                          child:
-                              Text(rangeText, overflow: TextOverflow.ellipsis),
+                          child: Text(rangeText, overflow: TextOverflow.ellipsis),
                         ),
                         const Icon(Icons.date_range, size: 18),
                       ],
@@ -233,11 +277,7 @@ class _FilterBar extends StatelessWidget {
           const SizedBox(height: 8),
           Row(
             children: [
-              if (screenshotsAlbumName == null)
-                // 你现有 RiskBadge 是“高/中/低”，这里用 low 当提示（不改文件也能用）
-                const RiskBadge(risk: RiskLevel.low)
-              else
-                const RiskBadge(risk: RiskLevel.low),
+              const RiskBadge(risk: RiskLevel.low),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
@@ -292,7 +332,6 @@ class _SelectionBar extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // ✅ 左侧：允许换行
           Expanded(
             child: Wrap(
               spacing: 8,
@@ -323,16 +362,12 @@ class _SelectionBar extends StatelessWidget {
               ],
             ),
           ),
-
           const SizedBox(width: 8),
-
-          // ✅ 右侧：队列按钮固定，不被挤掉
           TextButton.icon(
             onPressed: onToggleQueuePanel,
             icon: Icon(queuePanelOpen ? Icons.expand_more : Icons.expand_less),
             label: Text(
-              l10n.import_queue_label(
-                  queueCount), // "キュー {count}" / "Queue {count}"
+              l10n.import_queue_label(queueCount),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               softWrap: false,
@@ -402,15 +437,14 @@ class _Grid extends StatelessWidget {
             bottom: 10,
             child: Center(
               child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
                   color: Colors.black.withOpacity(0.65),
                   borderRadius: BorderRadius.circular(999),
                 ),
                 child: Text(
                   l10n.import_loading_more,
-                  style: TextStyle(color: Colors.white, fontSize: 12),
+                  style: const TextStyle(color: Colors.white, fontSize: 12),
                 ),
               ),
             ),
@@ -512,7 +546,7 @@ class _BottomActions extends StatelessWidget {
 class _QueuePanel extends StatelessWidget {
   const _QueuePanel({required this.queue});
 
-  final dynamic queue; // 这里不强绑类型，避免你文件路径调整时泛型报错
+  final dynamic queue;
 
   @override
   Widget build(BuildContext context) {
@@ -522,10 +556,7 @@ class _QueuePanel extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: Theme.of(context)
-            .colorScheme
-            .surfaceContainerHighest
-            .withOpacity(0.65),
+        color: Theme.of(context).colorScheme.surfaceContainerHighest.withOpacity(0.65),
         border: Border(top: BorderSide(color: Colors.black.withOpacity(0.06))),
       ),
       child: Padding(
@@ -536,29 +567,23 @@ class _QueuePanel extends StatelessWidget {
             Row(
               children: [
                 Text(l10n.ocr_queue_title,
-                    style: TextStyle(fontWeight: FontWeight.w600)),
+                    style: const TextStyle(fontWeight: FontWeight.w600)),
                 const Spacer(),
                 TextButton(
-                  onPressed:
-                      queue.queuedJobs.isEmpty ? null : queue.clearQueued,
+                  onPressed: queue.queuedJobs.isEmpty ? null : queue.clearQueued,
                   child: Text(l10n.ocr_queue_clear),
                 ),
+                // ✅ “结果”按钮仍保留（你说下面部分还需要）
                 TextButton(
                   onPressed: queue.completedJobs.isEmpty
                       ? null
                       : () async {
-                          final selected = await Navigator.push(
+                          await Navigator.push(
                             context,
-                            MaterialPageRoute(
-                                builder: (_) => const OcrResultsPage()),
+                            MaterialPageRoute(builder: (_) => const OcrResultsPage()),
                           );
-
-                          // selected 是 List<String>（assetId 列表）
-                          // 你下一步操作可以在这里接住
-                          debugPrint('Selected OCR cards: $selected');
                         },
-                  child:
-                      Text(l10n.ocr_results_button(queue.completedJobs.length)),
+                  child: Text(l10n.ocr_results_button(queue.completedJobs.length)),
                 ),
               ],
             ),
@@ -569,7 +594,8 @@ class _QueuePanel extends StatelessWidget {
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      l10n.ocr_processing_prefix({cur.assetId}),
+                      // 你原来这里传的是 Set，会怪；先按 string 输出
+                      '${l10n.ocr_processing_prefix('')}${cur.assetId}',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -583,8 +609,8 @@ class _QueuePanel extends StatelessWidget {
             ] else ...[
               Row(
                 children: [
-                  Icon(Icons.pause_circle, size: 18),
-                  SizedBox(width: 8),
+                  const Icon(Icons.pause_circle, size: 18),
+                  const SizedBox(width: 8),
                   Text(l10n.ocr_no_current),
                 ],
               ),
@@ -600,17 +626,15 @@ class _QueuePanel extends StatelessWidget {
                     final j = queue.queuedJobs[i];
                     return Container(
                       margin: const EdgeInsets.only(right: 8),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 8),
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                       decoration: BoxDecoration(
                         color: Colors.white.withOpacity(0.75),
                         borderRadius: BorderRadius.circular(12),
-                        border:
-                            Border.all(color: Colors.black.withOpacity(0.06)),
+                        border: Border.all(color: Colors.black.withOpacity(0.06)),
                       ),
                       child: Center(
                         child: Text(
-                          l10n.ocr_queued_prefix({j.assetId}),
+                          '${l10n.ocr_queued_prefix('')}${j.assetId}',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),

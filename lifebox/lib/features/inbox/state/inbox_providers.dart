@@ -1,33 +1,20 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../domain/inbox_item.dart';
-import '../../../core/widgets/risk_badge.dart';
 
-final inboxItemsProvider = StateProvider<List<InboxItem>>((ref) {
-  final now = DateTime.now();
-  return [
-    InboxItem(
-      id: '1',
-      title: '学校：来週の保護者会の確認',
-      dueAt: now.add(const Duration(days: 2)),
-      risk: RiskLevel.mid,
-      source: '学校',
-      status: InboxStatus.high,
-    ),
-    InboxItem(
-      id: '2',
-      title: '銀行：クレジットカードの支払い通知',
-      dueAt: now.add(const Duration(days: 5)),
-      risk: RiskLevel.high,
-      source: '銀行',
-      status: InboxStatus.pending,
-    ),
-    InboxItem(
-      id: '3',
-      title: '病院：再診の予約',
-      dueAt: null,
-      risk: RiskLevel.low,
-      source: '病院',
-      status: InboxStatus.done,
-    ),
-  ];
+import '../domain/inbox_item.dart';
+import '../../inbox/state/local_inbox_providers.dart';
+
+/// ✅ UI 用 InboxItem 列表（来源：本地 DB）
+final inboxItemsProvider = FutureProvider<List<InboxItem>>((ref) async {
+  final records = await ref.watch(localInboxListProvider.future);
+
+  return records
+      .map((r) => InboxItem.fromLocal(r))
+      .toList()
+    ..sort((a, b) {
+      // 可选：按创建时间/到期日排序（先到期的在前）
+      if (a.dueAt == null && b.dueAt == null) return 0;
+      if (a.dueAt == null) return 1;
+      if (b.dueAt == null) return -1;
+      return a.dueAt!.compareTo(b.dueAt!);
+    });
 });

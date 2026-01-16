@@ -435,7 +435,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Primary action: Add to calendar';
 
   @override
-  String get inboxDetailMarkDoneTodo => 'Mark as done (TODO)';
+  String get inboxDetailMarkDoneTodo => 'Done：TODO';
 
   @override
   String get inboxDetailEvidenceTitle => 'Evidence (OCR snippets)';

@@ -421,13 +421,13 @@ abstract class AppLocalizations {
   /// No description provided for @import_title.
   ///
   /// In ja, this message translates to:
-  /// **'取り込み'**
+  /// **'写真取込'**
   String get import_title;
 
   /// No description provided for @import_title_full.
   ///
   /// In ja, this message translates to:
-  /// **'取り込み（絞り込み + キュー）'**
+  /// **'写真取込'**
   String get import_title_full;
 
   /// No description provided for @import_perm_title.
@@ -871,7 +871,7 @@ abstract class AppLocalizations {
   /// No description provided for @inboxDetailMarkDoneTodo.
   ///
   /// In ja, this message translates to:
-  /// **'完了としてマーク（TODO）'**
+  /// **'完了：TODO'**
   String get inboxDetailMarkDoneTodo;
 
   /// No description provided for @inboxDetailEvidenceTitle.

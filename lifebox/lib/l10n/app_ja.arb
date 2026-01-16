@@ -54,8 +54,8 @@
   "register_error_email_invalid": "正しいメールアドレスを入力してください",
   "register_error_password_too_short": "パスワードは8文字以上にしてください",
   "all_Time":"期間指定なし",
-  "import_title": "取り込み",
-  "import_title_full": "取り込み（絞り込み + キュー）",
+  "import_title": "写真取込",
+  "import_title_full": "写真取込",
   "import_perm_title": "写真へのアクセス権がありません",
   "import_perm_subtitle_ios": "iOS の「設定 → プライバシーとセキュリティ → 写真」からアクセスを許可してください。",
   "import_perm_retry": "権限を再リクエスト",
@@ -181,7 +181,7 @@
   "inboxDetailPhoneUrlTodo": "電話／URL：TODO",
 
   "inboxDetailPrimaryActionAddCalendar": "主アクション：カレンダーに追加",
-  "inboxDetailMarkDoneTodo": "完了としてマーク（TODO）",
+  "inboxDetailMarkDoneTodo": "完了：TODO",
 
   "inboxDetailEvidenceTitle": "解析根拠（OCR 断片）",
   "inboxDetailOcrPlaceholder": "OCR: ...（後ほどローカルOCRキャッシュと連携して表示）",

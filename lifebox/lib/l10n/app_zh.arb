@@ -179,7 +179,7 @@
   "inboxDetailPhoneUrlTodo": "电话/URL：TODO",
 
   "inboxDetailPrimaryActionAddCalendar": "主动作：加入日历",
-  "inboxDetailMarkDoneTodo": "标记完成（TODO）",
+  "inboxDetailMarkDoneTodo": "完成（TODO）",
 
   "inboxDetailEvidenceTitle": "解析依据（OCR 片段）",
   "inboxDetailOcrPlaceholder": "OCR: ...（后续接入本地 OCR 缓存并展示）",

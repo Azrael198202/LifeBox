@@ -53,27 +53,29 @@ ThemeData buildDarkTheme() {
     ),
   );
 
-  // 这里不用强依赖你现有 AppColors 的暗色值（你可能没定义）
-  // 先用系统暗色基底 + 保持品牌色一致即可
   return base.copyWith(
+    // ✅ 关键：明确暗色背景
+    scaffoldBackgroundColor: const Color(0xFF121212),
+
     colorScheme: base.colorScheme.copyWith(primary: AppColors.brand),
+
     textTheme: AppTypography.textTheme().apply(
       bodyColor: Colors.white,
       displayColor: Colors.white,
     ),
+
     appBarTheme: const AppBarTheme(
       backgroundColor: Color(0xFF121212),
       foregroundColor: Colors.white,
       elevation: 0,
-      centerTitle: false,
     ),
+
     cardTheme: CardThemeData(
       color: const Color(0xFF1E1E1E),
       elevation: 0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
     ),
 
-    // ✅ 输入框（黑夜：白字）
     inputDecorationTheme: const InputDecorationTheme(
       filled: true,
       fillColor: Color(0xFF1E1E1E),
@@ -84,3 +86,4 @@ ThemeData buildDarkTheme() {
     ),
   );
 }
+

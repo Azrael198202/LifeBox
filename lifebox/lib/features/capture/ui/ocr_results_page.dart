@@ -12,7 +12,9 @@ import '../../inbox/domain/analyze_models.dart';
 import '../../inbox/ui/analyze_confirm_page.dart';
 
 class OcrResultsPage extends ConsumerStatefulWidget {
-  const OcrResultsPage({super.key});
+  const OcrResultsPage({super.key, this.filterAssetIds});
+
+  final List<String>? filterAssetIds;
 
   @override
   ConsumerState<OcrResultsPage> createState() => _OcrResultsPageState();
@@ -25,7 +27,8 @@ class _OcrResultsPageState extends ConsumerState<OcrResultsPage> {
     if (_selected.isEmpty) return;
 
     // ✅ 简化：把选中项的 OCR 文本合并为一段（你也可以改成逐条确认）
-    final selectedJobs = jobs.where((j) => _selected.contains(j.assetId)).toList();
+    final selectedJobs =
+        jobs.where((j) => _selected.contains(j.assetId)).toList();
     final text = selectedJobs
         .map((j) => j.resultText ?? '')
         .where((t) => t.trim().isNotEmpty)
@@ -58,7 +61,11 @@ class _OcrResultsPageState extends ConsumerState<OcrResultsPage> {
   @override
   Widget build(BuildContext context) {
     final q = ref.watch(ocrQueueManagerProvider);
-    final jobs = q.completedJobs;
+    final ids = widget.filterAssetIds;
+    final jobs = ids == null
+        ? q.completedJobs
+        : q.completedJobs.where((j) => ids.contains(j.assetId)).toList();
+
     final l10n = AppLocalizations.of(context);
 
     return Scaffold(
@@ -76,7 +83,8 @@ class _OcrResultsPageState extends ConsumerState<OcrResultsPage> {
             child: Text(l10n.selectAll),
           ),
           TextButton(
-            onPressed: _selected.isEmpty ? null : () => setState(_selected.clear),
+            onPressed:
+                _selected.isEmpty ? null : () => setState(_selected.clear),
             child: Text(l10n.clearSelection),
           ),
           IconButton(
@@ -91,7 +99,9 @@ class _OcrResultsPageState extends ConsumerState<OcrResultsPage> {
         child: Padding(
           padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
           child: FilledButton.icon(
-            onPressed: _selected.isEmpty ? null : () => _confirmSelected(context, jobs),
+            onPressed: _selected.isEmpty
+                ? null
+                : () => _confirmSelected(context, jobs),
             icon: const Icon(Icons.check),
             label: Text(
               _selected.isEmpty

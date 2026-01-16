@@ -419,7 +419,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get inboxDetailPrimaryActionAddCalendar => '主动作：加入日历';
 
   @override
-  String get inboxDetailMarkDoneTodo => '标记完成（TODO）';
+  String get inboxDetailMarkDoneTodo => '完成（TODO）';
 
   @override
   String get inboxDetailEvidenceTitle => '解析依据（OCR 片段）';

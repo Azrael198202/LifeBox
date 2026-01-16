@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lifebox/features/inbox/state/cloud_inbox_service_provider.dart';
 import 'package:uuid/uuid.dart';
 
 import '../domain/analyze_models.dart';
@@ -46,15 +47,30 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
 
   Future<void> _bootstrap() async {
     final svc = ref.read(analyzeServiceProvider);
-    final resp = await svc.analyze(widget.request);
+
+    // 1) 组装请求（AnalyzeRequest）
+    // final req = AnalyzeRequest(
+    //   text: widget.request.text,
+    //   locale: widget.request.locale,
+    //   sourceHint: widget.request.sourceHint,
+    // );
+
+    final req = AnalyzeRequest(
+      text: "銀行より：クレジットカードのお支払い期限は1/20です。金額3万円。",
+      locale: "ja",
+      sourceHint: "銀行"
+    );
+
+    // 2) 调用接口，拿到返回（AnalyzeResponse）
+    final resp = await svc.analyze(req);
 
     if (!mounted) return;
 
     setState(() {
-      _resp = resp;
+      _resp = resp; // ✅ _resp 应该是 AnalyzeResponse 类型
       _risk = resp.risk;
       _title.text = resp.title;
-      _summary.text = resp.summary;
+      _summary.text = resp.notes ?? '';
       _dueAt.text = resp.dueAt ?? '';
       _amount.text = resp.amount?.toString() ?? '';
       _currency.text = resp.currency ?? '';
@@ -119,8 +135,8 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
       // ✅ 若开启云保存，则模拟调用云保存 API（收费功能）
       final cloudEnabled = ref.read(cloudEnabledProvider);
       if (cloudEnabled) {
-        final svc = ref.read(analyzeServiceProvider);
-        await svc.saveToCloud(record);
+        final cloud = ref.read(cloudInboxServiceProvider);
+        await cloud.saveToCloud(record);
       }
 
       // ✅ 刷新 inbox 列表
@@ -182,7 +198,7 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
                               keyboardType: TextInputType.number,
                               inputFormatters: [
                                 FilteringTextInputFormatter
-                                    .digitsOnly,      // ① 只允许数字
+                                    .digitsOnly, // ① 只允许数字
                                 DateInputFormatter(), // ② 自动格式 yyyy-mm-dd
                               ],
                               style: TextStyle(fontSize: 14, color: onSurface),

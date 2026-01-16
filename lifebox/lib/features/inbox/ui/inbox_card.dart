@@ -1,161 +1,207 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lifebox/l10n/app_localizations.dart';
 
 import '../../../app/theme/colors.dart';
 import '../../../core/widgets/risk_badge.dart';
 import '../domain/inbox_item.dart';
+import '../state/local_inbox_providers.dart';
 
-class InboxCard extends StatelessWidget {
+class InboxCard extends ConsumerWidget {
   final InboxItem item;
-
-  /// 点卡片进入详情
   final VoidCallback onTap;
-
-  /// “下一步”按钮
   final VoidCallback onPrimaryAction;
-
-  /// ✅ 追加：滑动操作（可选）
-  final VoidCallback? onDelete;
-  final VoidCallback? onMarkDone;
-  final VoidCallback? onMarkTodo;
-
-  /// ✅ 是否启用滑动（默认 true）
-  final bool slidableEnabled;
 
   const InboxCard({
     super.key,
     required this.item,
     required this.onTap,
     required this.onPrimaryAction,
-    this.onDelete,
-    this.onMarkDone,
-    this.onMarkTodo,
-    this.slidableEnabled = true,
   });
 
+  bool get _isDone => item.status == InboxStatus.done;
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final dueText =
         item.dueAt == null ? l10n.noDueDate : DateFormat('MM/dd').format(item.dueAt!);
 
-    final card = Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(16),
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(14),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(item.title, style: Theme.of(context).textTheme.titleMedium),
-              const SizedBox(height: 10),
-              Row(
-                children: [
-                  Text(
-                    l10n.duePrefix(dueText),
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodySmall
-                        ?.copyWith(color: AppColors.subtext),
-                  ),
-                  const Spacer(),
-                  RiskBadge(risk: item.risk),
-                ],
-              ),
-              const SizedBox(height: 10),
-              Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.04),
-                      borderRadius: BorderRadius.circular(999),
+    final db = ref.read(localInboxDbProvider);
+
+    Future<void> _markDone() async {
+      await db.updateStatus(item.id, 'done');
+      ref.invalidate(localInboxListProvider);
+    }
+
+    Future<void> _markTodo() async {
+      await db.updateStatus(item.id, 'pending');
+      ref.invalidate(localInboxListProvider);
+    }
+
+    Future<void> _delete() async {
+      await db.deleteById(item.id);
+      ref.invalidate(localInboxListProvider);
+    }
+
+    Future<bool> _confirmDelete() async {
+      final ok = await showDialog<bool>(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: const Text('确认删除'),
+          content: const Text('确定要删除这条记录吗？'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: Text(l10n.common_Cancel),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text('删除'),
+            ),
+          ],
+        ),
+      );
+      return ok == true;
+    }
+
+    Future<bool> _onDismiss(DismissDirection dir) async {
+      // 👉 右滑：完成 / 恢复
+      if (dir == DismissDirection.startToEnd) {
+        if (_isDone) {
+          await _markTodo();
+        } else {
+          await _markDone();
+        }
+        return false; // 不让 Dismissible 真正移除
+      }
+
+      // 👉 左滑：删除
+      if (dir == DismissDirection.endToStart) {
+        final ok = await _confirmDelete();
+        if (ok) await _delete();
+        return false;
+      }
+
+      return false;
+    }
+
+    return Dismissible(
+      key: ValueKey('inbox_${item.id}'),
+      confirmDismiss: _onDismiss,
+
+      background: _SwipeBackground(
+        left: true,
+        label: _isDone ? '恢复待办' : '标记完成',
+        icon: _isDone ? Icons.undo : Icons.check_circle_outline,
+        color: Colors.green,
+      ),
+
+      secondaryBackground: _SwipeBackground(
+        left: false,
+        label: '删除',
+        icon: Icons.delete_outline,
+        color: Colors.red,
+      ),
+
+      child: Card(
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.all(14),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(item.title, style: Theme.of(context).textTheme.titleMedium),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    Text(
+                      l10n.duePrefix(dueText),
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodySmall
+                          ?.copyWith(color: AppColors.subtext),
                     ),
-                    child: Text(
-                      item.source,
-                      style: const TextStyle(fontSize: 12, color: AppColors.subtext),
+                    const Spacer(),
+                    RiskBadge(risk: item.risk),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    Container(
+                      padding:
+                          const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.04),
+                        borderRadius: BorderRadius.circular(999),
+                      ),
+                      child: Text(
+                        item.source,
+                        style: const TextStyle(
+                            fontSize: 12, color: AppColors.subtext),
+                      ),
                     ),
-                  ),
-                  const Spacer(),
-                  SizedBox(
-                    height: 34,
-                    child: FilledButton.tonal(
-                      onPressed: onPrimaryAction,
-                      child: Text(l10n.nextStep),
+                    const Spacer(),
+                    SizedBox(
+                      height: 34,
+                      child: FilledButton.tonal(
+                        onPressed: onPrimaryAction,
+                        child: Text(l10n.nextStep),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
+  }
+}
 
-    // ✅ 没启用滑动 or 没提供任何操作 -> 直接返回卡片
-    final hasAnyAction = (onDelete != null) || (onMarkDone != null) || (onMarkTodo != null);
-    if (!slidableEnabled || !hasAnyAction) {
-      return card;
-    }
+class _SwipeBackground extends StatelessWidget {
+  final bool left;
+  final String label;
+  final IconData icon;
+  final Color color;
 
-    // ✅ 右侧动作（最常用：删除 / 完成）
-    final endActions = <Widget>[
-      if (onMarkDone != null)
-        SlidableAction(
-          onPressed: (_) => onMarkDone!(),
-          icon: Icons.check_circle_outline,
-          label: l10n.inboxDetailMarkDoneTodo, // 你已有的文言就用它；没有就换成 '完成'
-          backgroundColor: Colors.green,
-          foregroundColor: Colors.white,
-          borderRadius: BorderRadius.circular(14),
-        ),
-      if (onDelete != null)
-        SlidableAction(
-          onPressed: (_) => onDelete!(),
-          icon: Icons.delete_outline,
-          label: MaterialLocalizations.of(context).deleteButtonTooltip,
-          backgroundColor: Colors.red,
-          foregroundColor: Colors.white,
-          borderRadius: BorderRadius.circular(14),
-        ),
-    ];
+  const _SwipeBackground({
+    required this.left,
+    required this.label,
+    required this.icon,
+    required this.color,
+  });
 
-    // ✅ 左侧动作（可选：恢复为待办）
-    final startActions = <Widget>[
-      if (onMarkTodo != null)
-        SlidableAction(
-          onPressed: (_) => onMarkTodo!(),
-          icon: Icons.undo,
-          label: '待办',
-          backgroundColor: Colors.blueGrey,
-          foregroundColor: Colors.white,
-          borderRadius: BorderRadius.circular(14),
-        ),
-    ];
-
-    return Slidable(
-      key: ValueKey(item.id),
-      // 左侧动作（向右滑）
-      startActionPane: startActions.isEmpty
-          ? null
-          : ActionPane(
-              motion: const DrawerMotion(),
-              extentRatio: 0.28,
-              children: startActions,
-            ),
-      // 右侧动作（向左滑）
-      endActionPane: endActions.isEmpty
-          ? null
-          : ActionPane(
-              motion: const DrawerMotion(),
-              extentRatio: endActions.length == 1 ? 0.28 : 0.52,
-              children: endActions,
-            ),
-      child: card,
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: left ? Alignment.centerLeft : Alignment.centerRight,
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.12),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Row(
+        mainAxisAlignment:
+            left ? MainAxisAlignment.start : MainAxisAlignment.end,
+        children: [
+          if (!left) Text(label,
+              style: TextStyle(color: color, fontWeight: FontWeight.w700)),
+          if (!left) const SizedBox(width: 8),
+          Icon(icon, color: color),
+          if (left) const SizedBox(width: 8),
+          if (left)
+            Text(label,
+                style:
+                    TextStyle(color: color, fontWeight: FontWeight.w700)),
+        ],
+      ),
     );
   }
 }

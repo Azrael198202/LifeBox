@@ -18,30 +18,38 @@ class AnalyzeRequest {
 
 class AnalyzeResponse {
   final String title;
-  final String summary;
-  final String? dueAt; // "YYYY-MM-DD" or null
-  final int? amount;
-  final String? currency; // "JPY" / "CNY" etc
-  final String risk; // "high" "mid" "low"
-  final String source;
+  final String? source;
+  final String? dueAt;
+  final double? amount;
+  final String? currency;
+  final String risk;
+  final String status;
+  final String? notes;
 
   AnalyzeResponse({
     required this.title,
-    required this.summary,
-    required this.dueAt,
-    required this.amount,
-    required this.currency,
+    this.source,
+    this.dueAt,
+    this.amount,
+    this.currency,
     required this.risk,
-    required this.source,
+    required this.status,
+    this.notes,
   });
 
-  Map<String, dynamic> toJson() => {
-        "title": title,
-        "summary": summary,
-        "due_at": dueAt,
-        "amount": amount,
-        "currency": currency,
-        "risk": risk,
-        "source": source,
-      };
+  factory AnalyzeResponse.fromJson(Map<String, dynamic> json) {
+    return AnalyzeResponse(
+      title: (json['title'] ?? '') as String,
+      source: json['source'] as String?,
+      dueAt: json['due_at'] as String?,
+      amount: (json['amount'] as num?)?.toDouble(),
+      currency: json['currency'] as String?,
+      risk: (json['risk'] ?? 'low') as String,
+      status: (json['status'] ?? 'pending') as String,
+      notes: json['notes'] as String?,
+    );
+  }
+
+  // 兼容你 UI 里用 summary 的写法（可选）
+  String get summary => notes ?? '';
 }

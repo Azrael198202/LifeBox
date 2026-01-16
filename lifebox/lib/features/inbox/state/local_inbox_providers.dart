@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../data/analyze_service.dart';
+import '../../../core/services/analyze_service.dart';
 import '../data/local_inbox_db.dart';
 import '../domain/local_inbox_record.dart';
 

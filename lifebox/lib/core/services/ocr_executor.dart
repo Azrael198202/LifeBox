@@ -129,11 +129,11 @@ class OcrExecutor {
       if (android.isPhysicalDevice == false) return true;
 
       // ✅ 兜底：看 fingerprint / model / brand / device 关键词
-      final fingerprint = (android.fingerprint ?? '').toLowerCase();
-      final model = (android.model ?? '').toLowerCase();
-      final brand = (android.brand ?? '').toLowerCase();
-      final device = (android.device ?? '').toLowerCase();
-      final product = (android.product ?? '').toLowerCase();
+      final fingerprint = android.fingerprint.toLowerCase();
+      final model = android.model.toLowerCase();
+      final brand = android.brand.toLowerCase();
+      final device = android.device.toLowerCase();
+      final product = android.product.toLowerCase();
 
       final flags = '$fingerprint $model $brand $device $product';
       final isEmu = flags.contains('generic') ||
@@ -179,7 +179,8 @@ class OcrExecutor {
 
     // “疑似乱码/符号”数量（既不是空白，也不是CJK，也不是拉丁数字）
     final garbleCount = RegExp(
-            r'[^\s\u4E00-\u9FFF\u3400-\u4DBF\u3040-\u30FFA-Za-z0-9，。！？：；、（）【】《》“”‘’…\-–—,.!?:"''()【】\[\]]')
+            r'[^\s\u4E00-\u9FFF\u3400-\u4DBF\u3040-\u30FFA-Za-z0-9，。！？：；、（）【】《》“”‘’…\-–—,.!?:"'
+            '()【】\[\]]')
         .allMatches(text)
         .length;
 

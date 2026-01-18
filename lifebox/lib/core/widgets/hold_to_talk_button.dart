@@ -24,7 +24,7 @@ class _HoldToTalkButtonState extends State<HoldToTalkButton> {
   bool _listening = false;
 
   String _partial = '';
-  String? _finalText; // ✅ 关键：补上
+  String? _finalText;
   SpeechRecognitionResult? _lastResult;
 
   DateTime _lastLevelLog = DateTime.fromMillisecondsSinceEpoch(0);

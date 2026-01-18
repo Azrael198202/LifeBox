@@ -70,11 +70,9 @@ class InboxDetailPage extends ConsumerWidget {
               ? '-'
               : (r.currency == null ? '${r.amount}' : '${r.amount} ${r.currency}');
 
-          final sourceText = (r.sourceHint == null || r.sourceHint!.trim().isEmpty)
-              ? '-'
-              : r.sourceHint!.trim();
+          final sourceText = r.sourceHint.trim().isEmpty ? '-' : r.sourceHint.trim();
 
-          final localeText = (r.locale == null || r.locale!.trim().isEmpty) ? '-' : r.locale!.trim();
+          final localeText = r.locale.trim().isEmpty ? '-' : r.locale.trim();
 
           return ListView(
             padding: const EdgeInsets.all(16),

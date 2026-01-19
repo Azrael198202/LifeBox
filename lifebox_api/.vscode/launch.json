@@ -2,7 +2,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "FastAPI (uvicorn)",
+      "name": "FastAPI (uvicorn) - DEV",
       "type": "python",
       "request": "launch",
       "module": "uvicorn",
@@ -15,12 +15,14 @@
         "8000"
       ],
       "cwd": "${workspaceFolder}",
+
       "env": {
+        "ENV": "dev",
         "PYTHONUNBUFFERED": "1",
         "OLLAMA_HOST": "http://localhost:11434",
-
         "PATH": "C:\\Users\\hy\\AppData\\Local\\Programs\\Ollama;${env:PATH}"
       },
+
       "console": "integratedTerminal",
       "justMyCode": true
     }

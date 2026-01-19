@@ -3,3 +3,4 @@ lifebox_api/app/__pycache__/main.cpython-312.pyc
 lifebox_api/app/__pycache__/ollama_client.cpython-312.pyc
 lifebox_api/app/__pycache__/prompts.cpython-312.pyc
 lifebox_api/app/__pycache__/schemas.cpython-312.pyc
+lifebox_api/.env

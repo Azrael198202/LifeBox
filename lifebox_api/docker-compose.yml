@@ -1,0 +1,27 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: lifebox-postgres
+    environment:
+      POSTGRES_USER: lifebox
+      POSTGRES_PASSWORD: lifebox_pass_123
+      POSTGRES_DB: lifebox_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  flyway:
+    image: flyway/flyway
+    depends_on:
+      - postgres
+    volumes:
+      - ./db/migrations:/flyway/sql
+    command: >
+      -url=jdbc:postgresql://postgres:5432/lifebox_db
+      -user=lifebox
+      -password=lifebox_pass_123
+      migrate
+
+volumes:
+  pgdata:

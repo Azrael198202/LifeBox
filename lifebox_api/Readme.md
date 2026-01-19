@@ -40,4 +40,4 @@ docker compose run --rm flyway-migrate
   # requirements
   pip install asyncpg pyjwt google-auth python-dotenv
   pip install bcrypt
-  
+  pip install "pydantic[email]"

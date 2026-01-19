@@ -443,7 +443,7 @@ class _Grid extends StatelessWidget {
                   borderRadius: BorderRadius.circular(999),
                 ),
                 child: Text(
-                  l10n.import_loading_more,
+                  l10n.loading_more,
                   style: const TextStyle(color: Colors.white, fontSize: 12),
                 ),
               ),

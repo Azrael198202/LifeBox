@@ -520,11 +520,11 @@ abstract class AppLocalizations {
   /// **'期間や種類の条件を変更してみてください。'**
   String get import_empty_subtitle;
 
-  /// No description provided for @import_loading_more.
+  /// No description provided for @loading_more.
   ///
   /// In ja, this message translates to:
   /// **'読み込み中…'**
-  String get import_loading_more;
+  String get loading_more;
 
   /// No description provided for @import_enqueue_button.
   ///
@@ -613,13 +613,13 @@ abstract class AppLocalizations {
   /// Confirm button label with selected count
   ///
   /// In ja, this message translates to:
-  /// **'確定（{count}）'**
+  /// **'確認（{count}）'**
   String confirmButtonSelectedCount(int count);
 
   /// No description provided for @analysis_confirm_title.
   ///
   /// In ja, this message translates to:
-  /// **'確認して保存'**
+  /// **'確認保存'**
   String get analysis_confirm_title;
 
   /// No description provided for @analysis_confirm_section_editable.
@@ -1257,6 +1257,84 @@ abstract class AppLocalizations {
   /// In ja, this message translates to:
   /// **'クリアしました（サンプル：後ほど実装予定）。'**
   String get setting_clear_done;
+
+  /// No description provided for @input_valid_mail_must.
+  ///
+  /// In ja, this message translates to:
+  /// **'メールを入力してください'**
+  String get input_valid_mail_must;
+
+  /// No description provided for @input_valid_mail_format.
+  ///
+  /// In ja, this message translates to:
+  /// **'正しいメールアドレスを入力してください'**
+  String get input_valid_mail_format;
+
+  /// No description provided for @input_valid_pwd_must.
+  ///
+  /// In ja, this message translates to:
+  /// **'パスワードを入力してください'**
+  String get input_valid_pwd_must;
+
+  /// No description provided for @input_valid_comfirm_pwd.
+  ///
+  /// In ja, this message translates to:
+  /// **'確認用パスワードを入力してください'**
+  String get input_valid_comfirm_pwd;
+
+  /// No description provided for @register_with_mail.
+  ///
+  /// In ja, this message translates to:
+  /// **'Eメールで登録'**
+  String get register_with_mail;
+
+  /// No description provided for @badRequest.
+  ///
+  /// In ja, this message translates to:
+  /// **'リクエスト内容が正しくありません'**
+  String get badRequest;
+
+  /// No description provided for @unauthorized.
+  ///
+  /// In ja, this message translates to:
+  /// **'メールアドレスまたはパスワードが正しくありません'**
+  String get unauthorized;
+
+  /// No description provided for @forbidden.
+  ///
+  /// In ja, this message translates to:
+  /// **'この操作を行う権限がありません'**
+  String get forbidden;
+
+  /// No description provided for @notFound.
+  ///
+  /// In ja, this message translates to:
+  /// **'データが見つかりません'**
+  String get notFound;
+
+  /// No description provided for @conflict.
+  ///
+  /// In ja, this message translates to:
+  /// **'このメールアドレスは既に登録されています'**
+  String get conflict;
+
+  /// No description provided for @validationError.
+  ///
+  /// In ja, this message translates to:
+  /// **'入力内容を確認してください（メール形式など）'**
+  String get validationError;
+
+  /// No description provided for @serverError.
+  ///
+  /// In ja, this message translates to:
+  /// **'サーバーエラーが発生しました。しばらくしてから再試行してください'**
+  String get serverError;
+
+  /// No description provided for @unknown.
+  ///
+  /// In ja, this message translates to:
+  /// **'不明なエラーが発生しました'**
+  String get unknown;
 }
 
 class _AppLocalizationsDelegate

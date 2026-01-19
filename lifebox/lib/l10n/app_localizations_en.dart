@@ -237,7 +237,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Try changing the date range or type filter.';
 
   @override
-  String get import_loading_more => 'Loading…';
+  String get loading_more => 'Loading…';
 
   @override
   String get import_enqueue_button => 'Add to processing queue';
@@ -663,4 +663,43 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get setting_clear_done =>
       'Cleared (demo: real cleanup will be added later).';
+
+  @override
+  String get input_valid_mail_must => 'Please enter the email address';
+
+  @override
+  String get input_valid_mail_format => 'Please enter a valid email address';
+
+  @override
+  String get input_valid_pwd_must => 'Please enter the password';
+
+  @override
+  String get input_valid_comfirm_pwd => 'Please enter the confirm password';
+
+  @override
+  String get register_with_mail => 'Register with Email';
+
+  @override
+  String get badRequest => 'Invalid request';
+
+  @override
+  String get unauthorized => 'Invalid email or password';
+
+  @override
+  String get forbidden => 'You do not have permission to perform this action';
+
+  @override
+  String get notFound => 'Resource not found';
+
+  @override
+  String get conflict => 'This email is already registered';
+
+  @override
+  String get validationError => 'Please check your input (e.g. email format)';
+
+  @override
+  String get serverError => 'Server error occurred. Please try again later';
+
+  @override
+  String get unknown => 'An unknown error occurred';
 }

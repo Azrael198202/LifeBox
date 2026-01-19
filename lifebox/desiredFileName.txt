@@ -1,5 +1,6 @@
 {
   "zh": [
-    "cancel"
+    "cancel",
+    "register_with_mail"
   ]
 }

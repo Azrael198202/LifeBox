@@ -225,7 +225,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get import_empty_subtitle => '尝试更换时间范围或类型筛选。';
 
   @override
-  String get import_loading_more => '加载中…';
+  String get loading_more => '加载中…';
 
   @override
   String get import_enqueue_button => '加入待处理队列';
@@ -634,4 +634,43 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get setting_clear_done => '已清除（示例：后续接入真实清理逻辑）';
+
+  @override
+  String get input_valid_mail_must => '请输入邮箱。';
+
+  @override
+  String get input_valid_mail_format => '请输入正确的邮箱';
+
+  @override
+  String get input_valid_pwd_must => '请输入密码。';
+
+  @override
+  String get input_valid_comfirm_pwd => '请输入确认密码';
+
+  @override
+  String get register_with_mail => 'Eメールで登録';
+
+  @override
+  String get badRequest => '请求内容不正确';
+
+  @override
+  String get unauthorized => '邮箱或密码不正确';
+
+  @override
+  String get forbidden => '没有权限执行此操作';
+
+  @override
+  String get notFound => '未找到相关数据';
+
+  @override
+  String get conflict => '该邮箱已被注册';
+
+  @override
+  String get validationError => '请检查输入内容（如邮箱格式）';
+
+  @override
+  String get serverError => '服务器发生错误，请稍后再试';
+
+  @override
+  String get unknown => '发生未知错误';
 }

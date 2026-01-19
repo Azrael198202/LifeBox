@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:lifebox/l10n/app_localizations.dart';
+import '../../../core/network/api_error_l10n.dart';
 
 import '../state/auth_controller.dart';
 import 'auth_widgets.dart';
@@ -17,9 +17,27 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
   final _email = TextEditingController();
   final _pwd = TextEditingController();
   final _pwd2 = TextEditingController();
-
+  final _formKey = GlobalKey<FormState>();
+  bool _submitted = false;
   bool _obscure1 = true;
   bool _obscure2 = true;
+
+  bool _isValidEmail(String s) {
+    final email = s.trim();
+    final re = RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$');
+    return re.hasMatch(email);
+  }
+
+  void _submitRegister() {
+    setState(() => _submitted = true);
+    final ok = _formKey.currentState?.validate() ?? false;
+    if (!ok) return;
+
+    ref.read(authControllerProvider.notifier).registerWithEmail(
+          _email.text.trim(),
+          _pwd.text,
+        );
+  }
 
   @override
   void dispose() {
@@ -51,6 +69,15 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
             hint: l10n.common_mail_hit,
             icon: Icons.email_outlined,
             keyboardType: TextInputType.emailAddress,
+            autovalidateMode: _submitted
+                ? AutovalidateMode.onUserInteraction
+                : AutovalidateMode.disabled,
+            validator: (v) {
+              final s = (v ?? '').trim();
+              if (s.isEmpty) return l10n.input_valid_mail_must;
+              if (!_isValidEmail(s)) return l10n.register_error_email_invalid;
+              return null;
+            },
           ),
           const SizedBox(height: 14),
           AuthTextField(
@@ -59,10 +86,21 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
             hint: l10n.register_password_hint,
             icon: Icons.lock_outline,
             obscureText: _obscure1,
+            autovalidateMode: _submitted
+                ? AutovalidateMode.onUserInteraction
+                : AutovalidateMode.disabled,
+            validator: (v) {
+              final s = (v ?? '');
+              if (s.isEmpty) return l10n.input_valid_mail_must;
+              if (s.length < 8) return l10n.register_error_password_too_short;
+              return null;
+            },
             suffix: IconButton(
               onPressed: () => setState(() => _obscure1 = !_obscure1),
               icon: Icon(
-                _obscure1 ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                _obscure1
+                    ? Icons.visibility_off_outlined
+                    : Icons.visibility_outlined,
                 color: const Color(0xFF6B7280),
               ),
             ),
@@ -74,64 +112,65 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
             hint: l10n.register_password_confirm_hint,
             icon: Icons.lock_outline,
             obscureText: _obscure2,
+            autovalidateMode: _submitted
+                ? AutovalidateMode.onUserInteraction
+                : AutovalidateMode.disabled,
+            textInputAction: TextInputAction.done,
+            onFieldSubmitted: (_) => _submitRegister(),
+            validator: (v) {
+              final s = (v ?? '');
+              if (s.isEmpty) return l10n.input_valid_comfirm_pwd;
+              if (s != _pwd.text) return l10n.register_password_mismatch;
+              return null;
+            },
             suffix: IconButton(
               onPressed: () => setState(() => _obscure2 = !_obscure2),
               icon: Icon(
-                _obscure2 ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                _obscure2
+                    ? Icons.visibility_off_outlined
+                    : Icons.visibility_outlined,
                 color: const Color(0xFF6B7280),
               ),
             ),
           ),
           const SizedBox(height: 12),
-
           if (pwdNotMatch) ...[
-            Text(l10n.register_password_mismatch, style: TextStyle(color: Colors.red)),
+            Text(l10n.register_password_mismatch,
+                style: TextStyle(color: Colors.red)),
             const SizedBox(height: 8),
           ],
 
-          if (auth.error != null) ...[
-            Text(auth.error!, style: const TextStyle(color: Colors.red)),
-            const SizedBox(height: 10),
-          ],
-
+          if (auth.errorKey != null) ...[
+              Text(
+                auth.errorKey!.message(l10n),
+                style: const TextStyle(color: Colors.red),
+              ),
+              const SizedBox(height: 10),
+            ],
           AuthPrimaryButton(
-            label: auth.loading ? l10n.register_button_loading: l10n.register_button_email,
+            label: auth.loading ? l10n.loading_more : l10n.register_button_email,
+            onPressed: auth.loading ? null : _submitRegister,
+          ),
+          const SizedBox(height: 10),
+          Row(
+            children: const [
+              Expanded(child: Divider()),
+              Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 12),
+                  child: Text('or')),
+              Expanded(child: Divider()),
+            ],
+          ),
+          const SizedBox(height: 16),
+          // ✅ Google 注册（后端自动注册/登录）
+          AuthSecondaryButton(
+            label: 'Continue with Google',
+            icon: Icons.g_mobiledata,
             onPressed: auth.loading
                 ? null
-                : () {
-                    final email = _email.text.trim();
-                    final p1 = _pwd.text;
-                    final p2 = _pwd2.text;
-
-                    if (email.isEmpty || !email.contains('@')) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(l10n.register_error_email_invalid)),
-                      );
-                      return;
-                    }
-                    if (p1.length < 8) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(l10n.register_error_password_too_short)),
-                      );
-                      return;
-                    }
-                    if (p1 != p2) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(l10n.register_password_mismatch)),
-                      );
-                      return;
-                    }
-                    ref.read(authControllerProvider.notifier).register(email, p1);
-                  },
+                : () =>
+                    ref.read(authControllerProvider.notifier).loginWithGoogle(),
           ),
-
-          const SizedBox(height: 10),
-          AuthSecondaryButton(
-            label: l10n.register_back_to_login,
-            icon: Icons.arrow_back,
-            onPressed: () => context.pop(),
-          ),
-
           const SizedBox(height: 10),
           AuthHintText(l10n.register_hint_success),
         ],

@@ -71,7 +71,7 @@
   "import_queue_label": "队列 {count}",
   "import_empty_title": "没有符合条件的照片",
   "import_empty_subtitle": "尝试更换时间范围或类型筛选。",
-  "import_loading_more": "加载中…",
+  "loading_more": "加载中…",
   "import_enqueue_button": "加入待处理队列",
   "import_enqueue_button_with_count": "加入待处理队列（{count}）",
   "ocr_queue_title": "OCR 队列",
@@ -296,5 +296,19 @@
   "setting_clear_confirm_title": "确认清除？",
   "setting_clear_confirm_desc": "这将清除本地缓存数据（示例占位）。",
   "setting_clear_ok": "清除",
-  "setting_clear_done": "已清除（示例：后续接入真实清理逻辑）"
+  "setting_clear_done": "已清除（示例：后续接入真实清理逻辑）",
+
+  "input_valid_mail_must":"请输入邮箱。",
+  "input_valid_mail_format":"请输入正确的邮箱",
+  "input_valid_pwd_must":"请输入密码。",
+  "input_valid_comfirm_pwd":"请输入确认密码",
+
+  "badRequest":"请求内容不正确",
+  "unauthorized":"邮箱或密码不正确",
+  "forbidden":"没有权限执行此操作",
+  "notFound":"未找到相关数据",
+  "conflict":"该邮箱已被注册",
+  "validationError":"请检查输入内容（如邮箱格式）",
+  "serverError":"服务器发生错误，请稍后再试",
+  "unknown":"发生未知错误"
 }

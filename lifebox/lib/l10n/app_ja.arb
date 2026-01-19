@@ -72,7 +72,7 @@
   "import_queue_label": "キュー {count}",
   "import_empty_title": "条件に一致する写真がありません",
   "import_empty_subtitle": "期間や種類の条件を変更してみてください。",
-  "import_loading_more": "読み込み中…",
+  "loading_more": "読み込み中…",
   "import_enqueue_button": "処理キューに追加",
   "import_enqueue_button_with_count": "処理キューに追加（{count}）",
   "ocr_queue_title": "OCR キュー",
@@ -96,7 +96,7 @@
   "clearResultsTooltip": "結果をクリア",
 
   "confirmButtonPleaseSelect": "カードを選択してください",
-  "confirmButtonSelectedCount": 確認（{count}）",
+  "confirmButtonSelectedCount": "確認（{count}）",
   "@confirmButtonSelectedCount": {
     "description": "Confirm button label with selected count",
     "placeholders": {
@@ -297,5 +297,20 @@
   "setting_clear_confirm_title": "クリアしますか？",
   "setting_clear_confirm_desc": "端末内のキャッシュデータを削除します（サンプル表示）。",
   "setting_clear_ok": "クリア",
-  "setting_clear_done": "クリアしました（サンプル：後ほど実装予定）。"
+  "setting_clear_done": "クリアしました（サンプル：後ほど実装予定）。",
+
+  "input_valid_mail_must":"メールを入力してください",
+  "input_valid_mail_format":"正しいメールアドレスを入力してください",
+  "input_valid_pwd_must":"パスワードを入力してください",
+  "input_valid_comfirm_pwd":"確認用パスワードを入力してください",
+  "register_with_mail": "Eメールで登録",
+
+  "badRequest":"リクエスト内容が正しくありません",
+  "unauthorized":"メールアドレスまたはパスワードが正しくありません",
+  "forbidden":"この操作を行う権限がありません",
+  "notFound":"データが見つかりません",
+  "conflict":"このメールアドレスは既に登録されています",
+  "validationError":"入力内容を確認してください（メール形式など）",
+  "serverError":"サーバーエラーが発生しました。しばらくしてから再試行してください",
+  "unknown":"不明なエラーが発生しました"
 }

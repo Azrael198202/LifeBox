@@ -71,7 +71,7 @@
   "import_queue_label": "Queue {count}",
   "import_empty_title": "No photos match your filters",
   "import_empty_subtitle": "Try changing the date range or type filter.",
-  "import_loading_more": "Loading…",
+  "loading_more": "Loading…",
   "import_enqueue_button": "Add to processing queue",
   "import_enqueue_button_with_count": "Add to processing queue ({count})",
   "ocr_queue_title": "OCR Queue",
@@ -297,5 +297,20 @@
   "setting_clear_confirm_title": "Clear data?",
   "setting_clear_confirm_desc": "This will clear local cached data (demo placeholder).",
   "setting_clear_ok": "Clear",
-  "setting_clear_done": "Cleared (demo: real cleanup will be added later)."
+  "setting_clear_done": "Cleared (demo: real cleanup will be added later).",
+
+  "input_valid_mail_must":"Please enter the email address",
+  "input_valid_mail_format":"Please enter a valid email address",
+  "input_valid_pwd_must":"Please enter the password",
+  "input_valid_comfirm_pwd":"Please enter the confirm password",
+  "register_with_mail": "Register with Email",
+
+  "badRequest":"Invalid request",
+  "unauthorized":"Invalid email or password",
+  "forbidden":"You do not have permission to perform this action",
+  "notFound":"Resource not found",
+  "conflict":"This email is already registered",
+  "validationError":"Please check your input (e.g. email format)",
+  "serverError":"Server error occurred. Please try again later",
+  "unknown":"An unknown error occurred"
 }

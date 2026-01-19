@@ -228,6 +228,11 @@ class AuthTextField extends StatelessWidget {
   final bool obscureText;
   final Widget? suffix;
 
+  final String? Function(String?)? validator;
+  final AutovalidateMode autovalidateMode;
+  final TextInputAction textInputAction;
+  final void Function(String)? onFieldSubmitted;
+
   const AuthTextField({
     super.key,
     required this.controller,
@@ -237,6 +242,10 @@ class AuthTextField extends StatelessWidget {
     this.keyboardType = TextInputType.text,
     this.obscureText = false,
     this.suffix,
+    this.validator,
+    this.autovalidateMode = AutovalidateMode.disabled,
+    this.textInputAction = TextInputAction.next,
+    this.onFieldSubmitted,
   });
 
   @override
@@ -244,11 +253,15 @@ class AuthTextField extends StatelessWidget {
     const textColor = Color(0xFF111827);
     const hintColor = Color(0xFF6B7280);
 
-    return TextField(
+    return TextFormField(
       controller: controller,
       keyboardType: keyboardType,
       obscureText: obscureText,
       style: const TextStyle(color: textColor),
+      validator: validator,
+      autovalidateMode: autovalidateMode,
+      textInputAction: textInputAction,
+      onFieldSubmitted: onFieldSubmitted,
       decoration: InputDecoration(
         labelText: label,
         labelStyle: const TextStyle(color: hintColor),
@@ -258,8 +271,7 @@ class AuthTextField extends StatelessWidget {
         suffixIcon: suffix,
         filled: true,
         fillColor: const Color(0xFFF9FAFB),
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.black.withOpacity(0.10)),
           borderRadius: BorderRadius.circular(14),
@@ -268,6 +280,9 @@ class AuthTextField extends StatelessWidget {
           borderSide: BorderSide(color: Colors.black.withOpacity(0.28)),
           borderRadius: BorderRadius.circular(14),
         ),
+
+
+        errorMaxLines: 2,
       ),
     );
   }
@@ -335,7 +350,7 @@ class AuthDivider extends StatelessWidget {
   final String text;
   const AuthDivider({
     super.key,
-    required this.text, 
+    required this.text,
   });
 
   @override

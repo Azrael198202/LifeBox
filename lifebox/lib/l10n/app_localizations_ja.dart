@@ -229,7 +229,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get import_empty_subtitle => '期間や種類の条件を変更してみてください。';
 
   @override
-  String get import_loading_more => '読み込み中…';
+  String get loading_more => '読み込み中…';
 
   @override
   String get import_enqueue_button => '処理キューに追加';
@@ -285,11 +285,11 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String confirmButtonSelectedCount(int count) {
-    return '確定（$count）';
+    return '確認（$count）';
   }
 
   @override
-  String get analysis_confirm_title => '確認して保存';
+  String get analysis_confirm_title => '確認保存';
 
   @override
   String get analysis_confirm_section_editable => '解析結果（編集可）';
@@ -639,4 +639,43 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get setting_clear_done => 'クリアしました（サンプル：後ほど実装予定）。';
+
+  @override
+  String get input_valid_mail_must => 'メールを入力してください';
+
+  @override
+  String get input_valid_mail_format => '正しいメールアドレスを入力してください';
+
+  @override
+  String get input_valid_pwd_must => 'パスワードを入力してください';
+
+  @override
+  String get input_valid_comfirm_pwd => '確認用パスワードを入力してください';
+
+  @override
+  String get register_with_mail => 'Eメールで登録';
+
+  @override
+  String get badRequest => 'リクエスト内容が正しくありません';
+
+  @override
+  String get unauthorized => 'メールアドレスまたはパスワードが正しくありません';
+
+  @override
+  String get forbidden => 'この操作を行う権限がありません';
+
+  @override
+  String get notFound => 'データが見つかりません';
+
+  @override
+  String get conflict => 'このメールアドレスは既に登録されています';
+
+  @override
+  String get validationError => '入力内容を確認してください（メール形式など）';
+
+  @override
+  String get serverError => 'サーバーエラーが発生しました。しばらくしてから再試行してください';
+
+  @override
+  String get unknown => '不明なエラーが発生しました';
 }

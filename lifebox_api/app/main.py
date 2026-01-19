@@ -1,10 +1,12 @@
+
+from __future__ import annotations
+
 from dotenv import load_dotenv
 import os
 
 env = os.getenv("ENV", "dev")
 load_dotenv(f".env.{env}")
 
-from __future__ import annotations
 
 from fastapi import FastAPI
 from pydantic import BaseModel

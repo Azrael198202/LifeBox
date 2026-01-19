@@ -1,8 +1,15 @@
 from __future__ import annotations
 
-from pydantic import BaseModel
+from pydantic import BaseModel,EmailStr
 from typing import Optional, List
 
+class EmailRegisterRequest(BaseModel):
+    email: EmailStr
+    password: str  # 至少 8 位（后端会校验）
+
+class EmailLoginRequest(BaseModel):
+    email: EmailStr
+    password: str
 
 class GoogleAuthRequest(BaseModel):
     id_token: str

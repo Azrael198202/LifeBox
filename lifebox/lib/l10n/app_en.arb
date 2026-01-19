@@ -103,6 +103,20 @@
     }
   },
 
+    "analysis_confirm_title": "Confirm & Save",
+  "analysis_confirm_section_editable": "Parsed Result (Editable)",
+  "analysis_confirm_field_title": "Title",
+  "analysis_confirm_field_summary": "Content / Summary",
+  "analysis_confirm_field_due": "Due date (YYYYMMDD)",
+  "analysis_confirm_field_risk": "Risk",
+  "analysis_confirm_field_amount": "Amount",
+  "analysis_confirm_field_currency": "Currency (JPY/CNY)",
+  "analysis_confirm_section_request": "Request (Reference)",
+  "analysis_confirm_saving": "Saving...",
+  "analysis_confirm_save": "Looks good, save",
+  "analysis_confirm_invalid_date": "Invalid date format. Please use YYYY-MM-DD.",
+  "analysis_confirm_untitled": "Untitled",
+
   "emptyOcrResults": "No OCR results yet",
 
   "ocrStatusSuccess": "Success",
@@ -257,5 +271,31 @@
   },
 
   "actionTodoDynamicRender": "TODO: Render dynamically based on actionType",
-  "actionConfirmTodo": "Confirm (TODO: open native calendar / copy template / open external link)"
+  "actionConfirmTodo": "Confirm (TODO: open native calendar / copy template / open external link)",
+
+  "error_loading": "Failed to load:{error}",
+  "@error_loading": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+
+  "setting_title": "Settings",
+  "setting_not_logged_in": "Not logged in",
+  "setting_cloud_title": "Cloud Backup (Paid)",
+  "setting_cloud_on": "Cloud backup is on (will sync to the server).",
+  "setting_cloud_off": "Cloud backup is off (saved on this device only).",
+  "setting_cloud_sub_success": "Subscription successful. Cloud backup is now on.",
+  "setting_cloud_status_subscribed": "Subscribed",
+  "setting_cloud_status_unsubscribed": "Not subscribed",
+  "setting_cloud_desc_on": "On: The app will call the cloud API when saving ({status}).",
+  "setting_cloud_desc_off": "Off by default: Data is saved on this device only ({status}).",
+  "setting_debug_reset_sub": "DEBUG: Reset subscription to not subscribed",
+  "setting_debug_reset_done": "Reset to not subscribed (DEBUG)",
+  "setting_privacy_saved_demo": "Saved (demo: persistence will be added later).",
+  "setting_cache_todo": "TODO: Cache settings page.",
+  "setting_clear_confirm_title": "Clear data?",
+  "setting_clear_confirm_desc": "This will clear local cached data (demo placeholder).",
+  "setting_clear_ok": "Clear",
+  "setting_clear_done": "Cleared (demo: real cleanup will be added later)."
 }

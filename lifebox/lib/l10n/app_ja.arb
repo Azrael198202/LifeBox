@@ -96,13 +96,27 @@
   "clearResultsTooltip": "結果をクリア",
 
   "confirmButtonPleaseSelect": "カードを選択してください",
-  "confirmButtonSelectedCount": "確定（{count}）",
+  "confirmButtonSelectedCount": 確認（{count}）",
   "@confirmButtonSelectedCount": {
     "description": "Confirm button label with selected count",
     "placeholders": {
       "count": { "type": "int" }
     }
   },
+
+  "analysis_confirm_title": "確認保存",
+  "analysis_confirm_section_editable": "解析結果（編集可）",
+  "analysis_confirm_field_title": "タイトル",
+  "analysis_confirm_field_summary": "内容／要約",
+  "analysis_confirm_field_due": "期限（YYYYMMDD）",
+  "analysis_confirm_field_risk": "リスク",
+  "analysis_confirm_field_amount": "金額",
+  "analysis_confirm_field_currency": "通貨（JPY/CNY）",
+  "analysis_confirm_section_request": "リクエスト（参考）",
+  "analysis_confirm_saving": "保存中...",
+  "analysis_confirm_save": "問題なければ保存",
+  "analysis_confirm_invalid_date": "日付形式が正しくありません。YYYY-MM-DD を使用してください。",
+  "analysis_confirm_untitled": "無題",
 
   "emptyOcrResults": "OCR結果がありません",
 
@@ -257,5 +271,31 @@
   },
 
   "actionTodoDynamicRender": "TODO：ここは actionType に応じて動的に描画",
-  "actionConfirmTodo": "確認（TODO：端末のカレンダー呼び出し／テンプレ複製／外部リンク遷移）"
+  "actionConfirmTodo": "確認（TODO：端末のカレンダー呼び出し／テンプレ複製／外部リンク遷移）",
+
+  "error_loading": "読み込みに失敗しました:{error}",
+  "@error_loading": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+
+  "setting_title": "設定",
+  "setting_not_logged_in": "未ログイン",
+  "setting_cloud_title": "クラウド保存（有料）",
+  "setting_cloud_on": "クラウド保存をオンにしました（サーバーに同期します）。",
+  "setting_cloud_off": "クラウド保存をオフにしました（端末内のみに保存されます）。",
+  "setting_cloud_sub_success": "購読に成功しました。クラウド保存をオンにしました。",
+  "setting_cloud_status_subscribed": "購読中",
+  "setting_cloud_status_unsubscribed": "未購読",
+  "setting_cloud_desc_on": "オン：保存確定時にクラウドAPIを呼び出します（{status}）。",
+  "setting_cloud_desc_off": "初期設定はオフ：データは端末内のみに保存されます（{status}）。",
+  "setting_debug_reset_sub": "DEBUG：購読状態を未購読にリセット",
+  "setting_debug_reset_done": "未購読にリセットしました（DEBUG）",
+  "setting_privacy_saved_demo": "保存しました（サンプル：後ほど永続化に対応予定）。",
+  "setting_cache_todo": "TODO：キャッシュ設定ページ。",
+  "setting_clear_confirm_title": "クリアしますか？",
+  "setting_clear_confirm_desc": "端末内のキャッシュデータを削除します（サンプル表示）。",
+  "setting_clear_ok": "クリア",
+  "setting_clear_done": "クリアしました（サンプル：後ほど実装予定）。"
 }

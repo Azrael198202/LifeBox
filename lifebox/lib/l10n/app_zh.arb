@@ -102,6 +102,21 @@
       "count": { "type": "int" }
     }
   },
+  
+  "analysis_confirm_title": "确认并保存",
+  "analysis_confirm_section_editable": "解析结果（可编辑）",
+  "analysis_confirm_field_title": "标题",
+  "analysis_confirm_field_summary": "内容/摘要",
+  "analysis_confirm_field_due": "期限 (YYYYMMDD)",
+  "analysis_confirm_field_risk": "风险",
+  "analysis_confirm_field_amount": "金额",
+  "analysis_confirm_field_currency": "币种 (JPY/CNY)",
+  "analysis_confirm_section_request": "模拟请求（参考）",
+  "analysis_confirm_saving": "保存中...",
+  "analysis_confirm_save": "确认无误，保存",
+  "analysis_confirm_invalid_date": "日期格式不正确，请使用 YYYY-MM-DD",
+  "analysis_confirm_untitled": "未命名",
+
 
   "emptyOcrResults": "暂无 OCR 结果",
 
@@ -255,5 +270,31 @@
   },
 
   "actionTodoDynamicRender": "TODO：这里按 actionType 动态渲染",
-  "actionConfirmTodo": "确认（TODO：调用原生日历/复制模板/外链跳转）"
+  "actionConfirmTodo": "确认（TODO：调用原生日历/复制模板/外链跳转）",
+
+  "error_loading": "加载失败:{error}",
+  "@error_loading": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+
+  "setting_title": "设置",
+  "setting_not_logged_in": "未登录",
+  "setting_cloud_title": "云保存（收费）",
+  "setting_cloud_on": "云保存已开启（将同步到服务器）",
+  "setting_cloud_off": "云保存已关闭（仅本机保存）",
+  "setting_cloud_sub_success": "订阅成功，云保存已开启",
+  "setting_cloud_status_subscribed": "已订阅",
+  "setting_cloud_status_unsubscribed": "未订阅",
+  "setting_cloud_desc_on": "已开启：确认保存时会调用云端 API（{status}）",
+  "setting_cloud_desc_off": "默认关闭：数据仅保存在本机（{status}）",
+  "setting_debug_reset_sub": "DEBUG: 重置订阅为未订阅",
+  "setting_debug_reset_done": "已重置为未订阅（DEBUG）",
+  "setting_privacy_saved_demo": "已保存（示例：后续接入持久化）",
+  "setting_cache_todo": "TODO：缓存策略设置页",
+  "setting_clear_confirm_title": "确认清除？",
+  "setting_clear_confirm_desc": "这将清除本地缓存数据（示例占位）。",
+  "setting_clear_ok": "清除",
+  "setting_clear_done": "已清除（示例：后续接入真实清理逻辑）"
 }

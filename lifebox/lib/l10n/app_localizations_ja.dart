@@ -289,6 +289,46 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String get analysis_confirm_title => '確認して保存';
+
+  @override
+  String get analysis_confirm_section_editable => '解析結果（編集可）';
+
+  @override
+  String get analysis_confirm_field_title => 'タイトル';
+
+  @override
+  String get analysis_confirm_field_summary => '内容／要約';
+
+  @override
+  String get analysis_confirm_field_due => '期限（YYYYMMDD）';
+
+  @override
+  String get analysis_confirm_field_risk => 'リスク';
+
+  @override
+  String get analysis_confirm_field_amount => '金額';
+
+  @override
+  String get analysis_confirm_field_currency => '通貨（JPY/CNY）';
+
+  @override
+  String get analysis_confirm_section_request => 'リクエスト（参考）';
+
+  @override
+  String get analysis_confirm_saving => '保存中...';
+
+  @override
+  String get analysis_confirm_save => '問題なければ保存';
+
+  @override
+  String get analysis_confirm_invalid_date =>
+      '日付形式が正しくありません。YYYY-MM-DD を使用してください。';
+
+  @override
+  String get analysis_confirm_untitled => '無題';
+
+  @override
   String get emptyOcrResults => 'OCR結果がありません';
 
   @override
@@ -536,4 +576,67 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get actionConfirmTodo => '確認（TODO：端末のカレンダー呼び出し／テンプレ複製／外部リンク遷移）';
+
+  @override
+  String error_loading(String error) {
+    return '読み込みに失敗しました:$error';
+  }
+
+  @override
+  String get setting_title => '設定';
+
+  @override
+  String get setting_not_logged_in => '未ログイン';
+
+  @override
+  String get setting_cloud_title => 'クラウド保存（有料）';
+
+  @override
+  String get setting_cloud_on => 'クラウド保存をオンにしました（サーバーに同期します）。';
+
+  @override
+  String get setting_cloud_off => 'クラウド保存をオフにしました（端末内のみに保存されます）。';
+
+  @override
+  String get setting_cloud_sub_success => '購読に成功しました。クラウド保存をオンにしました。';
+
+  @override
+  String get setting_cloud_status_subscribed => '購読中';
+
+  @override
+  String get setting_cloud_status_unsubscribed => '未購読';
+
+  @override
+  String setting_cloud_desc_on(Object status) {
+    return 'オン：保存確定時にクラウドAPIを呼び出します（$status）。';
+  }
+
+  @override
+  String setting_cloud_desc_off(Object status) {
+    return '初期設定はオフ：データは端末内のみに保存されます（$status）。';
+  }
+
+  @override
+  String get setting_debug_reset_sub => 'DEBUG：購読状態を未購読にリセット';
+
+  @override
+  String get setting_debug_reset_done => '未購読にリセットしました（DEBUG）';
+
+  @override
+  String get setting_privacy_saved_demo => '保存しました（サンプル：後ほど永続化に対応予定）。';
+
+  @override
+  String get setting_cache_todo => 'TODO：キャッシュ設定ページ。';
+
+  @override
+  String get setting_clear_confirm_title => 'クリアしますか？';
+
+  @override
+  String get setting_clear_confirm_desc => '端末内のキャッシュデータを削除します（サンプル表示）。';
+
+  @override
+  String get setting_clear_ok => 'クリア';
+
+  @override
+  String get setting_clear_done => 'クリアしました（サンプル：後ほど実装予定）。';
 }

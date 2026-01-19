@@ -10,7 +10,7 @@ import '../../auth/state/auth_controller.dart';
 import '../state/subscription_providers.dart';
 import '../ui/paywall_dialog.dart';
 
-// ✅ 新增：云保存开关的 provider
+// ✅ 云保存开关的 provider
 import '../state/settings_providers.dart';
 
 class SettingsPage extends ConsumerWidget {
@@ -55,7 +55,7 @@ class SettingsPage extends ConsumerWidget {
                       .setEnabled(false);
                   if (!context.mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('云保存已关闭（仅本机保存）')),
+                    SnackBar(content: Text(l10n.setting_cloud_off)),
                   );
                   return;
                 }
@@ -68,7 +68,7 @@ class SettingsPage extends ConsumerWidget {
                       .setEnabled(true);
                   if (!context.mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('云保存已开启（将同步到服务器）')),
+                    SnackBar(content: Text(l10n.setting_cloud_on)),
                   );
                   return;
                 }
@@ -87,18 +87,17 @@ class SettingsPage extends ConsumerWidget {
                 await ref.read(cloudEnabledProvider.notifier).setEnabled(true);
                 if (!context.mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('订阅成功，云保存已开启')),
+                  SnackBar(content: Text(l10n.setting_cloud_sub_success)),
                 );
               },
-              title: const Text('云保存（收费）'),
+              title: Text(l10n.setting_cloud_title),
               subtitle: Consumer(
                 builder: (context, ref, _) {
                   final sub = ref.watch(subscriptionProvider);
-                  final status = sub.subscribed ? '已订阅' : '未订阅';
+                  final status = sub.subscribed ? l10n.setting_cloud_status_subscribed : l10n.setting_cloud_status_unsubscribed;
                   return Text(
                     cloudEnabled
-                        ? '已开启：确认保存时会调用云端 API（$status）'
-                        : '默认关闭：数据仅保存在本机（$status）',
+                        ? l10n.setting_cloud_desc_on (status): l10n.setting_cloud_desc_off(status),
                   );
                 },
               ),
@@ -112,14 +111,14 @@ class SettingsPage extends ConsumerWidget {
           Card(
             child: ListTile(
               leading: const Icon(Icons.bug_report_outlined),
-              title: const Text('DEBUG: 重置订阅为未订阅'),
+              title: Text(l10n.setting_debug_reset_sub),
               onTap: () async {
                 await ref
                     .read(subscriptionProvider.notifier)
                     .debugSetSubscribed(false);
                 if (!context.mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('已重置为未订阅（DEBUG）')),
+                  SnackBar(content: Text(l10n.setting_debug_reset_done)),
                 );
               },
             ),
@@ -135,7 +134,7 @@ class SettingsPage extends ConsumerWidget {
               value: true,
               onChanged: (v) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('已保存（示例：后续接入持久化）')),
+                  SnackBar(content: Text(l10n.setting_privacy_saved_demo)),
                 );
               },
               title: Text(l10n.upload_policy_title),
@@ -169,7 +168,7 @@ class SettingsPage extends ConsumerWidget {
               trailing: const Icon(Icons.chevron_right),
               onTap: () {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('TODO：缓存策略设置页')),
+                  SnackBar(content: Text(l10n.setting_cache_todo)),
                 );
               },
             ),
@@ -187,8 +186,8 @@ class SettingsPage extends ConsumerWidget {
                 final ok = await showDialog<bool>(
                   context: context,
                   builder: (ctx) => AlertDialog(
-                    title: const Text('确认清除？'),
-                    content: const Text('这将清除本地缓存数据（示例占位）。'),
+                    title:  Text(l10n.setting_clear_confirm_title),
+                    content:  Text(l10n.setting_clear_confirm_desc),
                     actions: [
                       TextButton(
                         onPressed: () => Navigator.pop(ctx, false),
@@ -196,7 +195,7 @@ class SettingsPage extends ConsumerWidget {
                       ),
                       FilledButton(
                         onPressed: () => Navigator.pop(ctx, true),
-                        child: const Text('清除'),
+                        child:  Text(l10n.setting_clear_ok),
                       ),
                     ],
                   ),
@@ -206,7 +205,7 @@ class SettingsPage extends ConsumerWidget {
                   // TODO: 清除本地 DB / 缓存（建议同时提示：不会影响云端数据）
                   if (!context.mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('已清除（示例：后续接入真实清理逻辑）')),
+                    SnackBar(content: Text(l10n.setting_clear_done)),
                   );
                 }
               },

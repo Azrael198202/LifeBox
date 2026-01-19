@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lifebox/features/inbox/state/cloud_inbox_service_provider.dart';
 import 'package:uuid/uuid.dart';
+import 'package:lifebox/l10n/app_localizations.dart';
 
 import '../domain/analyze_models.dart';
 import '../domain/local_inbox_record.dart';
@@ -103,10 +104,11 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
     if (_saving) return;
     setState(() => _saving = true);
 
+    final l10n = AppLocalizations.of(context);  
     final due = _dueAt.text.trim();
     if (due.isNotEmpty && !_isValidDate(due)) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('日期格式不正确，请使用 YYYY-MM-DD')),
+        SnackBar(content: Text(l10n.analysis_confirm_invalid_date)),
       );
       return;
     }
@@ -155,10 +157,11 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
     final cs = Theme.of(context).colorScheme;
     final onSurface = cs.onSurface;
     final onSurfaceHint = cs.onSurface.withOpacity(0.7);
+    final l10n = AppLocalizations.of(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('确认并保存'),
+        title: Text(l10n.analysis_confirm_title),
       ),
       body: resp == null
           ? const Center(child: CircularProgressIndicator())
@@ -166,15 +169,15 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
               padding: const EdgeInsets.all(16),
               children: [
                 _Section(
-                  title: '解析结果（可编辑）',
+                  title: l10n.analysis_confirm_section_editable,
                   child: Column(
                     children: [
                       TextField(
                         controller: _title,
                         style: TextStyle(fontSize: 14, color: onSurface),
                         cursorColor: Theme.of(context).colorScheme.primary,
-                        decoration: const InputDecoration(
-                          labelText: '标题',
+                        decoration: InputDecoration(
+                          labelText: l10n.analysis_confirm_field_title,
                           border: OutlineInputBorder(),
                         ),
                       ),
@@ -184,8 +187,8 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
                         style: TextStyle(fontSize: 12, color: onSurface),
                         cursorColor: Theme.of(context).colorScheme.primary,
                         maxLines: 5,
-                        decoration: const InputDecoration(
-                          labelText: '内容/摘要',
+                        decoration: InputDecoration(
+                          labelText: l10n.analysis_confirm_field_summary,
                           border: OutlineInputBorder(),
                         ),
                       ),
@@ -202,8 +205,8 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
                                 DateInputFormatter(), // ② 自动格式 yyyy-mm-dd
                               ],
                               style: TextStyle(fontSize: 14, color: onSurface),
-                              decoration: const InputDecoration(
-                                labelText: '期限 (YYYYMMDD)',
+                              decoration: InputDecoration(
+                                labelText: l10n.analysis_confirm_field_due,
                                 border: OutlineInputBorder(),
                               ),
                             ),
@@ -215,20 +218,20 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
                               dropdownColor: cs.surface,
                               style: TextStyle(color: onSurface),
                               decoration: InputDecoration(
-                                labelText: '风险',
+                                labelText: l10n.analysis_confirm_field_risk,
                                 border: OutlineInputBorder(),
                                 labelStyle: TextStyle(color: onSurfaceHint),
                               ),
-                              items: const [
+                              items: [
                                 DropdownMenuItem(
-                                    value: 'high', child: Text('high')),
+                                    value: 'high', child: Text(l10n.riskHigh)),
                                 DropdownMenuItem(
-                                    value: 'mid', child: Text('mid')),
+                                    value: 'mid', child: Text(l10n.riskMid)),
                                 DropdownMenuItem(
-                                    value: 'low', child: Text('low')),
+                                    value: 'low', child: Text(l10n.riskLow)),
                               ],
                               onChanged: (v) =>
-                                  setState(() => _risk = v ?? 'low'),
+                                  setState(() => _risk = v ?? l10n.riskLow),
                             ),
                           ),
                         ],
@@ -241,8 +244,8 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
                               controller: _amount,
                               style: TextStyle(fontSize: 14, color: onSurface),
                               keyboardType: TextInputType.number,
-                              decoration: const InputDecoration(
-                                labelText: '金额',
+                              decoration: InputDecoration(
+                                labelText: l10n.analysis_confirm_field_amount,
                                 border: OutlineInputBorder(),
                               ),
                             ),
@@ -252,8 +255,8 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
                             child: TextField(
                               controller: _currency,
                               style: TextStyle(fontSize: 14, color: onSurface),
-                              decoration: const InputDecoration(
-                                labelText: '币种 (JPY/CNY)',
+                              decoration: InputDecoration(
+                                labelText: l10n.analysis_confirm_field_currency,
                                 border: OutlineInputBorder(),
                               ),
                             ),
@@ -265,7 +268,7 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
                 ),
                 const SizedBox(height: 16),
                 _Section(
-                  title: '模拟请求（参考）',
+                  title: l10n.analysis_confirm_section_request,
                   child: SelectableText(
                     widget.request.toJson().toString(),
                     style: TextStyle(fontSize: 12, color: onSurface),
@@ -281,7 +284,7 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
                           child: CircularProgressIndicator(strokeWidth: 2),
                         )
                       : const Icon(Icons.save),
-                  label: Text(_saving ? '保存中...' : '确认无误，保存'),
+                  label: Text(_saving ? l10n.analysis_confirm_saving: l10n.analysis_confirm_save),
                 ),
               ],
             ),

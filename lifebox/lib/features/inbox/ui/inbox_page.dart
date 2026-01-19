@@ -167,7 +167,7 @@ class _InboxPageState extends ConsumerState<InboxPage>
         children: [
           asyncList.when(
             loading: () => const Center(child: CircularProgressIndicator()),
-            error: (e, _) => Center(child: Text('加载失败: $e')),
+            error: (e, _) => Center(child: Text(l10n.error_loading(e.toString()))),
             data: (raw) {
               final list = _sortNewestFirst(raw);
 
@@ -189,9 +189,9 @@ class _InboxPageState extends ConsumerState<InboxPage>
                     child: TabBar(
                       controller: _tab,
                       tabs: [
-                        Tab(text: '高风险 (${highRisk.length})'),
-                        Tab(text: '待办 (${todo.length})'),
-                        Tab(text: '已完成 (${done.length})'),
+                        Tab(text: l10n.tabHigh(highRisk.length)),
+                        Tab(text: l10n.tabPending(todo.length)),
+                        Tab(text: l10n.tabDone(done.length)),
                       ],
                     ),
                   ),

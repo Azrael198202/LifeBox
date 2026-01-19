@@ -297,6 +297,46 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get analysis_confirm_title => 'Confirm & Save';
+
+  @override
+  String get analysis_confirm_section_editable => 'Parsed Result (Editable)';
+
+  @override
+  String get analysis_confirm_field_title => 'Title';
+
+  @override
+  String get analysis_confirm_field_summary => 'Content / Summary';
+
+  @override
+  String get analysis_confirm_field_due => 'Due date (YYYYMMDD)';
+
+  @override
+  String get analysis_confirm_field_risk => 'Risk';
+
+  @override
+  String get analysis_confirm_field_amount => 'Amount';
+
+  @override
+  String get analysis_confirm_field_currency => 'Currency (JPY/CNY)';
+
+  @override
+  String get analysis_confirm_section_request => 'Request (Reference)';
+
+  @override
+  String get analysis_confirm_saving => 'Saving...';
+
+  @override
+  String get analysis_confirm_save => 'Looks good, save';
+
+  @override
+  String get analysis_confirm_invalid_date =>
+      'Invalid date format. Please use YYYY-MM-DD.';
+
+  @override
+  String get analysis_confirm_untitled => 'Untitled';
+
+  @override
   String get emptyOcrResults => 'No OCR results yet';
 
   @override
@@ -553,4 +593,74 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get actionConfirmTodo =>
       'Confirm (TODO: open native calendar / copy template / open external link)';
+
+  @override
+  String error_loading(String error) {
+    return 'Failed to load:$error';
+  }
+
+  @override
+  String get setting_title => 'Settings';
+
+  @override
+  String get setting_not_logged_in => 'Not logged in';
+
+  @override
+  String get setting_cloud_title => 'Cloud Backup (Paid)';
+
+  @override
+  String get setting_cloud_on =>
+      'Cloud backup is on (will sync to the server).';
+
+  @override
+  String get setting_cloud_off =>
+      'Cloud backup is off (saved on this device only).';
+
+  @override
+  String get setting_cloud_sub_success =>
+      'Subscription successful. Cloud backup is now on.';
+
+  @override
+  String get setting_cloud_status_subscribed => 'Subscribed';
+
+  @override
+  String get setting_cloud_status_unsubscribed => 'Not subscribed';
+
+  @override
+  String setting_cloud_desc_on(Object status) {
+    return 'On: The app will call the cloud API when saving ($status).';
+  }
+
+  @override
+  String setting_cloud_desc_off(Object status) {
+    return 'Off by default: Data is saved on this device only ($status).';
+  }
+
+  @override
+  String get setting_debug_reset_sub =>
+      'DEBUG: Reset subscription to not subscribed';
+
+  @override
+  String get setting_debug_reset_done => 'Reset to not subscribed (DEBUG)';
+
+  @override
+  String get setting_privacy_saved_demo =>
+      'Saved (demo: persistence will be added later).';
+
+  @override
+  String get setting_cache_todo => 'TODO: Cache settings page.';
+
+  @override
+  String get setting_clear_confirm_title => 'Clear data?';
+
+  @override
+  String get setting_clear_confirm_desc =>
+      'This will clear local cached data (demo placeholder).';
+
+  @override
+  String get setting_clear_ok => 'Clear';
+
+  @override
+  String get setting_clear_done =>
+      'Cleared (demo: real cleanup will be added later).';
 }

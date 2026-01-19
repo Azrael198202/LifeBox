@@ -105,7 +105,7 @@ class _OcrResultsPageState extends ConsumerState<OcrResultsPage> {
             label: Text(
               _selected.isEmpty
                   ? l10n.confirmButtonPleaseSelect
-                  : '解析并确认（${_selected.length}）',
+                  : l10n.confirmButtonSelectedCount(_selected.length),
             ),
           ),
         ),

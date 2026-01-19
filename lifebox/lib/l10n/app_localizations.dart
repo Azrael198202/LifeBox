@@ -616,6 +616,84 @@ abstract class AppLocalizations {
   /// **'確定（{count}）'**
   String confirmButtonSelectedCount(int count);
 
+  /// No description provided for @analysis_confirm_title.
+  ///
+  /// In ja, this message translates to:
+  /// **'確認して保存'**
+  String get analysis_confirm_title;
+
+  /// No description provided for @analysis_confirm_section_editable.
+  ///
+  /// In ja, this message translates to:
+  /// **'解析結果（編集可）'**
+  String get analysis_confirm_section_editable;
+
+  /// No description provided for @analysis_confirm_field_title.
+  ///
+  /// In ja, this message translates to:
+  /// **'タイトル'**
+  String get analysis_confirm_field_title;
+
+  /// No description provided for @analysis_confirm_field_summary.
+  ///
+  /// In ja, this message translates to:
+  /// **'内容／要約'**
+  String get analysis_confirm_field_summary;
+
+  /// No description provided for @analysis_confirm_field_due.
+  ///
+  /// In ja, this message translates to:
+  /// **'期限（YYYYMMDD）'**
+  String get analysis_confirm_field_due;
+
+  /// No description provided for @analysis_confirm_field_risk.
+  ///
+  /// In ja, this message translates to:
+  /// **'リスク'**
+  String get analysis_confirm_field_risk;
+
+  /// No description provided for @analysis_confirm_field_amount.
+  ///
+  /// In ja, this message translates to:
+  /// **'金額'**
+  String get analysis_confirm_field_amount;
+
+  /// No description provided for @analysis_confirm_field_currency.
+  ///
+  /// In ja, this message translates to:
+  /// **'通貨（JPY/CNY）'**
+  String get analysis_confirm_field_currency;
+
+  /// No description provided for @analysis_confirm_section_request.
+  ///
+  /// In ja, this message translates to:
+  /// **'リクエスト（参考）'**
+  String get analysis_confirm_section_request;
+
+  /// No description provided for @analysis_confirm_saving.
+  ///
+  /// In ja, this message translates to:
+  /// **'保存中...'**
+  String get analysis_confirm_saving;
+
+  /// No description provided for @analysis_confirm_save.
+  ///
+  /// In ja, this message translates to:
+  /// **'問題なければ保存'**
+  String get analysis_confirm_save;
+
+  /// No description provided for @analysis_confirm_invalid_date.
+  ///
+  /// In ja, this message translates to:
+  /// **'日付形式が正しくありません。YYYY-MM-DD を使用してください。'**
+  String get analysis_confirm_invalid_date;
+
+  /// No description provided for @analysis_confirm_untitled.
+  ///
+  /// In ja, this message translates to:
+  /// **'無題'**
+  String get analysis_confirm_untitled;
+
   /// No description provided for @emptyOcrResults.
   ///
   /// In ja, this message translates to:
@@ -1065,6 +1143,120 @@ abstract class AppLocalizations {
   /// In ja, this message translates to:
   /// **'確認（TODO：端末のカレンダー呼び出し／テンプレ複製／外部リンク遷移）'**
   String get actionConfirmTodo;
+
+  /// No description provided for @error_loading.
+  ///
+  /// In ja, this message translates to:
+  /// **'読み込みに失敗しました:{error}'**
+  String error_loading(String error);
+
+  /// No description provided for @setting_title.
+  ///
+  /// In ja, this message translates to:
+  /// **'設定'**
+  String get setting_title;
+
+  /// No description provided for @setting_not_logged_in.
+  ///
+  /// In ja, this message translates to:
+  /// **'未ログイン'**
+  String get setting_not_logged_in;
+
+  /// No description provided for @setting_cloud_title.
+  ///
+  /// In ja, this message translates to:
+  /// **'クラウド保存（有料）'**
+  String get setting_cloud_title;
+
+  /// No description provided for @setting_cloud_on.
+  ///
+  /// In ja, this message translates to:
+  /// **'クラウド保存をオンにしました（サーバーに同期します）。'**
+  String get setting_cloud_on;
+
+  /// No description provided for @setting_cloud_off.
+  ///
+  /// In ja, this message translates to:
+  /// **'クラウド保存をオフにしました（端末内のみに保存されます）。'**
+  String get setting_cloud_off;
+
+  /// No description provided for @setting_cloud_sub_success.
+  ///
+  /// In ja, this message translates to:
+  /// **'購読に成功しました。クラウド保存をオンにしました。'**
+  String get setting_cloud_sub_success;
+
+  /// No description provided for @setting_cloud_status_subscribed.
+  ///
+  /// In ja, this message translates to:
+  /// **'購読中'**
+  String get setting_cloud_status_subscribed;
+
+  /// No description provided for @setting_cloud_status_unsubscribed.
+  ///
+  /// In ja, this message translates to:
+  /// **'未購読'**
+  String get setting_cloud_status_unsubscribed;
+
+  /// No description provided for @setting_cloud_desc_on.
+  ///
+  /// In ja, this message translates to:
+  /// **'オン：保存確定時にクラウドAPIを呼び出します（{status}）。'**
+  String setting_cloud_desc_on(Object status);
+
+  /// No description provided for @setting_cloud_desc_off.
+  ///
+  /// In ja, this message translates to:
+  /// **'初期設定はオフ：データは端末内のみに保存されます（{status}）。'**
+  String setting_cloud_desc_off(Object status);
+
+  /// No description provided for @setting_debug_reset_sub.
+  ///
+  /// In ja, this message translates to:
+  /// **'DEBUG：購読状態を未購読にリセット'**
+  String get setting_debug_reset_sub;
+
+  /// No description provided for @setting_debug_reset_done.
+  ///
+  /// In ja, this message translates to:
+  /// **'未購読にリセットしました（DEBUG）'**
+  String get setting_debug_reset_done;
+
+  /// No description provided for @setting_privacy_saved_demo.
+  ///
+  /// In ja, this message translates to:
+  /// **'保存しました（サンプル：後ほど永続化に対応予定）。'**
+  String get setting_privacy_saved_demo;
+
+  /// No description provided for @setting_cache_todo.
+  ///
+  /// In ja, this message translates to:
+  /// **'TODO：キャッシュ設定ページ。'**
+  String get setting_cache_todo;
+
+  /// No description provided for @setting_clear_confirm_title.
+  ///
+  /// In ja, this message translates to:
+  /// **'クリアしますか？'**
+  String get setting_clear_confirm_title;
+
+  /// No description provided for @setting_clear_confirm_desc.
+  ///
+  /// In ja, this message translates to:
+  /// **'端末内のキャッシュデータを削除します（サンプル表示）。'**
+  String get setting_clear_confirm_desc;
+
+  /// No description provided for @setting_clear_ok.
+  ///
+  /// In ja, this message translates to:
+  /// **'クリア'**
+  String get setting_clear_ok;
+
+  /// No description provided for @setting_clear_done.
+  ///
+  /// In ja, this message translates to:
+  /// **'クリアしました（サンプル：後ほど実装予定）。'**
+  String get setting_clear_done;
 }
 
 class _AppLocalizationsDelegate

@@ -285,6 +285,45 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get analysis_confirm_title => '确认并保存';
+
+  @override
+  String get analysis_confirm_section_editable => '解析结果（可编辑）';
+
+  @override
+  String get analysis_confirm_field_title => '标题';
+
+  @override
+  String get analysis_confirm_field_summary => '内容/摘要';
+
+  @override
+  String get analysis_confirm_field_due => '期限 (YYYYMMDD)';
+
+  @override
+  String get analysis_confirm_field_risk => '风险';
+
+  @override
+  String get analysis_confirm_field_amount => '金额';
+
+  @override
+  String get analysis_confirm_field_currency => '币种 (JPY/CNY)';
+
+  @override
+  String get analysis_confirm_section_request => '模拟请求（参考）';
+
+  @override
+  String get analysis_confirm_saving => '保存中...';
+
+  @override
+  String get analysis_confirm_save => '确认无误，保存';
+
+  @override
+  String get analysis_confirm_invalid_date => '日期格式不正确，请使用 YYYY-MM-DD';
+
+  @override
+  String get analysis_confirm_untitled => '未命名';
+
+  @override
   String get emptyOcrResults => '暂无 OCR 结果';
 
   @override
@@ -532,4 +571,67 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get actionConfirmTodo => '确认（TODO：调用原生日历/复制模板/外链跳转）';
+
+  @override
+  String error_loading(String error) {
+    return '加载失败:$error';
+  }
+
+  @override
+  String get setting_title => '设置';
+
+  @override
+  String get setting_not_logged_in => '未登录';
+
+  @override
+  String get setting_cloud_title => '云保存（收费）';
+
+  @override
+  String get setting_cloud_on => '云保存已开启（将同步到服务器）';
+
+  @override
+  String get setting_cloud_off => '云保存已关闭（仅本机保存）';
+
+  @override
+  String get setting_cloud_sub_success => '订阅成功，云保存已开启';
+
+  @override
+  String get setting_cloud_status_subscribed => '已订阅';
+
+  @override
+  String get setting_cloud_status_unsubscribed => '未订阅';
+
+  @override
+  String setting_cloud_desc_on(Object status) {
+    return '已开启：确认保存时会调用云端 API（$status）';
+  }
+
+  @override
+  String setting_cloud_desc_off(Object status) {
+    return '默认关闭：数据仅保存在本机（$status）';
+  }
+
+  @override
+  String get setting_debug_reset_sub => 'DEBUG: 重置订阅为未订阅';
+
+  @override
+  String get setting_debug_reset_done => '已重置为未订阅（DEBUG）';
+
+  @override
+  String get setting_privacy_saved_demo => '已保存（示例：后续接入持久化）';
+
+  @override
+  String get setting_cache_todo => 'TODO：缓存策略设置页';
+
+  @override
+  String get setting_clear_confirm_title => '确认清除？';
+
+  @override
+  String get setting_clear_confirm_desc => '这将清除本地缓存数据（示例占位）。';
+
+  @override
+  String get setting_clear_ok => '清除';
+
+  @override
+  String get setting_clear_done => '已清除（示例：后续接入真实清理逻辑）';
 }

@@ -34,8 +34,10 @@ GOOGLE_CLIENT_ID=xxxxxxxxxxxx.apps.googleusercontent.com
 # ======================
 APP_ENV=dev
 
+docker compose run --rm flyway-migrate
 
 
   # requirements
   pip install asyncpg pyjwt google-auth python-dotenv
+  pip install bcrypt
   

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lifebox/l10n/app_localizations.dart';
 
 import '../state/subscription_providers.dart';
 
@@ -20,21 +21,22 @@ class _CloudPaywallDialog extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final sub = ref.watch(subscriptionProvider);
     final notifier = ref.read(subscriptionProvider.notifier);
+    final l10n = AppLocalizations.of(context);
 
     return AlertDialog(
-      title: const Text('云保存（收费）'),
+      title: Text(l10n.cloud_paywall_title),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('开启云保存需要订阅 Pro（Mock）。'),
+          Text(l10n.cloud_paywall_desc),
           const SizedBox(height: 10),
-          _FeatureRow(icon: Icons.cloud_upload_outlined, text: '保存到服务器数据库'),
-          _FeatureRow(icon: Icons.devices_outlined, text: '多设备同步（后续）'),
-          _FeatureRow(icon: Icons.lock_outline, text: '本机仍可离线使用'),
+          _FeatureRow(icon: Icons.cloud_upload_outlined, text: l10n.cloud_feature_backup),
+          _FeatureRow(icon: Icons.devices_outlined, text: l10n.cloud_feature_sync),
+          _FeatureRow(icon: Icons.lock_outline, text: l10n.cloud_feature_offline),
           const SizedBox(height: 12),
           Text(
-            '价格：¥300/月（Mock）',
+            l10n.cloud_price_monthly,
             style: TextStyle(
               fontWeight: FontWeight.w700,
               color: Colors.black.withOpacity(0.75),
@@ -45,7 +47,7 @@ class _CloudPaywallDialog extends ConsumerWidget {
       actions: [
         TextButton(
           onPressed: sub.busy ? null : () => Navigator.pop(context, false),
-          child: const Text('取消'),
+          child: Text(l10n.common_Cancel),
         ),
         TextButton(
           onPressed: sub.busy
@@ -55,7 +57,7 @@ class _CloudPaywallDialog extends ConsumerWidget {
                   if (!context.mounted) return;
                   Navigator.pop(context, ok);
                 },
-          child: const Text('恢复购买'),
+          child: Text(l10n.subscription_restore),
         ),
         FilledButton(
           onPressed: sub.busy
@@ -71,7 +73,7 @@ class _CloudPaywallDialog extends ConsumerWidget {
                   height: 18,
                   child: CircularProgressIndicator(strokeWidth: 2),
                 )
-              : const Text('订阅并开启'),
+              : Text(l10n.subscription_subscribe),
         ),
       ],
     );

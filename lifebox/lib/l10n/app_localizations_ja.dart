@@ -63,6 +63,11 @@ class AppLocalizationsJa extends AppLocalizations {
   String get not_logged_in => '未ログイン';
 
   @override
+  String no_name(Object name) {
+    return 'ユーザー $name';
+  }
+
+  @override
   String get common_Cancel => 'キャンセル';
 
   @override
@@ -124,7 +129,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get login_with_google => 'Googleでログイン（仮）';
 
   @override
-  String get login_to_register => 'アカウントをお持ちでない方はこちら';
+  String get login_continue_google => 'Continue with Google';
+
+  @override
+  String get login_no_account => 'アカウントをお持ちでない方は';
+
+  @override
+  String get login_to_register => '新規';
 
   @override
   String get login_hit => 'ヒント：ログイン後、設定からアプリロック（Face ID／指紋／システム認証）を有効にできます。';
@@ -678,4 +689,28 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get unknown => '不明なエラーが発生しました';
+
+  @override
+  String get cloud_paywall_title => 'クラウド保存（有料）';
+
+  @override
+  String get cloud_paywall_desc => 'クラウド保存を利用するには Pro プランへの登録が必要です（Mock）。';
+
+  @override
+  String get cloud_feature_backup => 'サーバー上のデータベースに保存';
+
+  @override
+  String get cloud_feature_sync => '複数端末で同期（今後対応）';
+
+  @override
+  String get cloud_feature_offline => 'オフラインでも利用可能';
+
+  @override
+  String get cloud_price_monthly => '料金：月額 ¥300（Mock）';
+
+  @override
+  String get subscription_restore => '購入を復元';
+
+  @override
+  String get subscription_subscribe => '登録して有効化';
 }

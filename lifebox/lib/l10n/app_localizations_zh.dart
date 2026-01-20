@@ -63,6 +63,11 @@ class AppLocalizationsZh extends AppLocalizations {
   String get not_logged_in => '未登录';
 
   @override
+  String no_name(Object name) {
+    return '用户 $name';
+  }
+
+  @override
   String get common_Cancel => '取消';
 
   @override
@@ -123,7 +128,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get login_with_google => '使用 Google 登录（占位）';
 
   @override
-  String get login_to_register => '没有账号？去注册';
+  String get login_continue_google => 'Continue with Google';
+
+  @override
+  String get login_no_account => '没有账号？';
+
+  @override
+  String get login_to_register => '去注册';
 
   @override
   String get login_hit => '提示：登录后可在设置中开启应用锁（面容 / 指纹 / 系统认证）。';
@@ -673,4 +684,28 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get unknown => '发生未知错误';
+
+  @override
+  String get cloud_paywall_title => '云保存（收费）';
+
+  @override
+  String get cloud_paywall_desc => '开启云保存需要订阅 Pro（Mock）。';
+
+  @override
+  String get cloud_feature_backup => '保存到服务器数据库';
+
+  @override
+  String get cloud_feature_sync => '多设备同步（后续）';
+
+  @override
+  String get cloud_feature_offline => '本机仍可离线使用';
+
+  @override
+  String get cloud_price_monthly => '价格：¥300/月（Mock）';
+
+  @override
+  String get subscription_restore => '恢复购买';
+
+  @override
+  String get subscription_subscribe => '订阅并开启';
 }

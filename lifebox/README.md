@@ -61,3 +61,28 @@ lifebox_api/
  Uvicorn running on http://127.0.0.1:8000
 
 
+ ## icon
+
+pubspec.yaml
+ dev_dependencies:
+  flutter_launcher_icons: ^0.13.1
+  flutter_native_splash: ^2.4.0
+
+ flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/app_icon.png"
+
+flutter_native_splash:
+  color: "#FFFFFF"
+  image: assets/icon/white.png
+
+  android: true
+  ios: true
+
+flutter pub get
+flutter pub run flutter_launcher_icons
+
+flutter pub run flutter_native_splash:create
+
+

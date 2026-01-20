@@ -18,6 +18,7 @@
   "logout_QA": "Are you sure you want to log out?",
   "logout_OK": "Log out",
   "not_logged_in": "Not signed in",
+  "no_name": "User {name}",
   "version_text": "Life Inbox • v0.1.0 (MVP)",
   "app_name": "Life Inbox",
   "terms_agree_prefix": "By continuing, you agree to",
@@ -39,7 +40,9 @@
   "login_logining":"Signing in...",
   "login_with_mail":"Sign in with email",
   "login_with_google":"Sign in with Google (placeholder)",
-  "login_to_register":"Don't have an account? Sign up",
+  "login_continue_google":"Continue with Google",
+  "login_no_account":"No account?",
+  "login_to_register":"Sign up",
   "login_hit":"Tip: After signing in, you can enable App Lock in Settings (Face ID / Fingerprint / System authentication).",
   "register_title": "Create an account",
   "register_subtitle": "Sign up with email. You can link Google/Apple later and enable App Lock for extra security.",
@@ -312,5 +315,15 @@
   "conflict":"This email is already registered",
   "validationError":"Please check your input (e.g. email format)",
   "serverError":"Server error occurred. Please try again later",
-  "unknown":"An unknown error occurred"
+  "unknown":"An unknown error occurred",
+
+  "cloud_paywall_title": "Cloud Backup (Paid)",
+  "cloud_paywall_desc": "A Pro subscription is required to enable cloud backup (Mock).",
+  "cloud_feature_backup": "Back up data to the server database",
+  "cloud_feature_sync": "Sync across multiple devices (coming soon)",
+  "cloud_feature_offline": "Offline access on this device",
+  "cloud_price_monthly": "Price: ¥300 / month (Mock)",
+  "subscription_restore": "Restore Purchase",
+  "subscription_subscribe": "Subscribe & Enable"
+
 }

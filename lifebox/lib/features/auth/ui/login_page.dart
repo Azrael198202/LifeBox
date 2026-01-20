@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'package:go_router/go_router.dart';
 import '../state/auth_controller.dart';
 import 'auth_widgets.dart';
 import 'package:lifebox/l10n/app_localizations.dart';
@@ -73,13 +73,12 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 if (!_isValidEmail(s)) return l10n.input_valid_mail_format;
                 return null;
               },
-              
             ),
             const SizedBox(height: 14),
             AuthTextField(
               controller: _pwd,
               label: l10n.common_password,
-              hint: l10n.common_mail_hit,
+              hint: l10n.common_password_hit,
               icon: Icons.lock_outline,
               obscureText: _obscure,
               autovalidateMode: _submitted
@@ -103,7 +102,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               ),
             ),
             const SizedBox(height: 14),
-
             if (auth.errorKey != null) ...[
               Text(
                 auth.errorKey!.message(l10n),
@@ -111,13 +109,45 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               ),
               const SizedBox(height: 10),
             ],
-
             AuthPrimaryButton(
               label: auth.loading ? l10n.login_logining : l10n.login_with_mail,
               onPressed: auth.loading ? null : _submitLogin,
             ),
-
-            // 下面保持不变...
+            const SizedBox(height: 12),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(l10n.login_no_account),
+                TextButton(
+                  onPressed:
+                      auth.loading ? null : () => context.push('/register'),
+                  child: Text(l10n.login_to_register),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: const [
+                Expanded(child: Divider()),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 12),
+                  child: Text('or'),
+                ),
+                Expanded(child: Divider()),
+              ],
+            ),
+            const SizedBox(height: 16),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                icon: const Icon(Icons.g_mobiledata), // 你也可以换成 Google 图标资源
+                label: Text(l10n.login_with_google),
+                onPressed: () {
+                  ref.read(authControllerProvider.notifier).loginWithGoogle();
+                  // 不用手动跳转：authState 变成已登录后，你 router 会 redirect 到 /inbox
+                },
+              ),
+            ),
           ],
         ),
       ),

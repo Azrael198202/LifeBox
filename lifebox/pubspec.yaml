@@ -46,6 +46,9 @@ dependencies:
   flutter_slidable: ^3.0.1
   http: ^1.6.0
   google_sign_in: ^6.0.0
+
+  flutter_launcher_icons: ^0.13.1
+  flutter_native_splash: ^2.4.0
   
 dev_dependencies:
   flutter_test:
@@ -56,5 +59,17 @@ flutter:
   uses-material-design: true
   generate: true
   assets:
-    - assets/images/logo-b.png
+    - assets/images/
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/white.png"
+
+flutter_native_splash:
+  color: "#FFFFFF"
+  image: assets/icon/splash_logo.png
+
+  android: true
+  ios: true
 

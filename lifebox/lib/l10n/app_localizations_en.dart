@@ -66,6 +66,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get not_logged_in => 'Not signed in';
 
   @override
+  String no_name(Object name) {
+    return 'User $name';
+  }
+
+  @override
   String get common_Cancel => 'Cancel';
 
   @override
@@ -127,7 +132,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get login_with_google => 'Sign in with Google (placeholder)';
 
   @override
-  String get login_to_register => 'Don\'t have an account? Sign up';
+  String get login_continue_google => 'Continue with Google';
+
+  @override
+  String get login_no_account => 'No account?';
+
+  @override
+  String get login_to_register => 'Sign up';
 
   @override
   String get login_hit =>
@@ -702,4 +713,29 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get unknown => 'An unknown error occurred';
+
+  @override
+  String get cloud_paywall_title => 'Cloud Backup (Paid)';
+
+  @override
+  String get cloud_paywall_desc =>
+      'A Pro subscription is required to enable cloud backup (Mock).';
+
+  @override
+  String get cloud_feature_backup => 'Back up data to the server database';
+
+  @override
+  String get cloud_feature_sync => 'Sync across multiple devices (coming soon)';
+
+  @override
+  String get cloud_feature_offline => 'Offline access on this device';
+
+  @override
+  String get cloud_price_monthly => 'Price: ¥300 / month (Mock)';
+
+  @override
+  String get subscription_restore => 'Restore Purchase';
+
+  @override
+  String get subscription_subscribe => 'Subscribe & Enable';
 }

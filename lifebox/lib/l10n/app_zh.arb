@@ -18,6 +18,7 @@
   "logout_QA": "确定要退出当前账号吗？",
   "logout_OK": "退出登录",
   "not_logged_in": "未登录",
+  "no_name": "用户 {name}",
   "app_name": "Life Inbox",
   "terms_agree_prefix": "继续即表示同意",
   "open_terms_action": "TODO：打开服务条款",
@@ -38,7 +39,9 @@
   "login_logining":"登录中...",
   "login_with_mail":"邮箱登录",
   "login_with_google":"使用 Google 登录（占位）",
-  "login_to_register":"没有账号？去注册",
+  "login_continue_google":"Continue with Google",
+  "login_no_account":"没有账号？",
+  "login_to_register":"去注册",
   "login_hit":"提示：登录后可在设置中开启应用锁（面容 / 指纹 / 系统认证）。",
   "register_title": "创建账号",
   "register_subtitle": "用邮箱注册，后续可绑定 Google/Apple，并开启应用锁增强安全。",
@@ -310,5 +313,14 @@
   "conflict":"该邮箱已被注册",
   "validationError":"请检查输入内容（如邮箱格式）",
   "serverError":"服务器发生错误，请稍后再试",
-  "unknown":"发生未知错误"
+  "unknown":"发生未知错误",
+
+  "cloud_paywall_title": "云保存（收费）",
+  "cloud_paywall_desc": "开启云保存需要订阅 Pro（Mock）。",
+  "cloud_feature_backup": "保存到服务器数据库",
+  "cloud_feature_sync": "多设备同步（后续）",
+  "cloud_feature_offline": "本机仍可离线使用",
+  "cloud_price_monthly": "价格：¥300/月（Mock）",
+  "subscription_restore": "恢复购买",
+  "subscription_subscribe": "订阅并开启"
 }

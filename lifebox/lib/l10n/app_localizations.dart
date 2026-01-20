@@ -208,6 +208,12 @@ abstract class AppLocalizations {
   /// **'未ログイン'**
   String get not_logged_in;
 
+  /// No description provided for @no_name.
+  ///
+  /// In ja, this message translates to:
+  /// **'ユーザー {name}'**
+  String no_name(Object name);
+
   /// No description provided for @common_Cancel.
   ///
   /// In ja, this message translates to:
@@ -328,10 +334,22 @@ abstract class AppLocalizations {
   /// **'Googleでログイン（仮）'**
   String get login_with_google;
 
+  /// No description provided for @login_continue_google.
+  ///
+  /// In ja, this message translates to:
+  /// **'Continue with Google'**
+  String get login_continue_google;
+
+  /// No description provided for @login_no_account.
+  ///
+  /// In ja, this message translates to:
+  /// **'アカウントをお持ちでない方は'**
+  String get login_no_account;
+
   /// No description provided for @login_to_register.
   ///
   /// In ja, this message translates to:
-  /// **'アカウントをお持ちでない方はこちら'**
+  /// **'新規'**
   String get login_to_register;
 
   /// No description provided for @login_hit.
@@ -1335,6 +1353,54 @@ abstract class AppLocalizations {
   /// In ja, this message translates to:
   /// **'不明なエラーが発生しました'**
   String get unknown;
+
+  /// No description provided for @cloud_paywall_title.
+  ///
+  /// In ja, this message translates to:
+  /// **'クラウド保存（有料）'**
+  String get cloud_paywall_title;
+
+  /// No description provided for @cloud_paywall_desc.
+  ///
+  /// In ja, this message translates to:
+  /// **'クラウド保存を利用するには Pro プランへの登録が必要です（Mock）。'**
+  String get cloud_paywall_desc;
+
+  /// No description provided for @cloud_feature_backup.
+  ///
+  /// In ja, this message translates to:
+  /// **'サーバー上のデータベースに保存'**
+  String get cloud_feature_backup;
+
+  /// No description provided for @cloud_feature_sync.
+  ///
+  /// In ja, this message translates to:
+  /// **'複数端末で同期（今後対応）'**
+  String get cloud_feature_sync;
+
+  /// No description provided for @cloud_feature_offline.
+  ///
+  /// In ja, this message translates to:
+  /// **'オフラインでも利用可能'**
+  String get cloud_feature_offline;
+
+  /// No description provided for @cloud_price_monthly.
+  ///
+  /// In ja, this message translates to:
+  /// **'料金：月額 ¥300（Mock）'**
+  String get cloud_price_monthly;
+
+  /// No description provided for @subscription_restore.
+  ///
+  /// In ja, this message translates to:
+  /// **'購入を復元'**
+  String get subscription_restore;
+
+  /// No description provided for @subscription_subscribe.
+  ///
+  /// In ja, this message translates to:
+  /// **'登録して有効化'**
+  String get subscription_subscribe;
 }
 
 class _AppLocalizationsDelegate

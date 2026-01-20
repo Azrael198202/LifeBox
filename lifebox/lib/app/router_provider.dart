@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lifebox/features/settings/ui/add_member_app_account_page.dart';
+import 'package:lifebox/features/settings/ui/join_group_page.dart';
 
 import '../core/services/app_lock.dart';
 import '../features/auth/state/auth_controller.dart';
@@ -15,6 +17,10 @@ import '../features/inbox/ui/inbox_detail_page.dart';
 import '../features/capture/ui/import_page.dart';
 import '../features/actions/ui/action_page.dart';
 import '../features/settings/ui/settings_page.dart';
+
+import '../features/settings/ui/personal_info_page.dart';
+import '../features/settings/ui/group_management_page.dart';
+import '../features/settings/ui/group_settings_page.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   // ✅ 状态
@@ -85,7 +91,8 @@ final routerProvider = Provider<GoRouter>((ref) {
         routes: [
           GoRoute(
             path: 'detail/:id',
-            builder: (_, state) => InboxDetailPage(id: state.pathParameters['id']!),
+            builder: (_, state) =>
+                InboxDetailPage(id: state.pathParameters['id']!),
           ),
         ],
       ),
@@ -100,6 +107,40 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
 
       GoRoute(path: '/settings', builder: (_, __) => const SettingsPage()),
+
+      GoRoute(
+        path: '/settings',
+        builder: (_, __) => const SettingsPage(),
+        routes: [
+          GoRoute(
+            path: 'profile',
+            builder: (_, __) => const PersonalInfoPage(),
+          ),
+          GoRoute(
+            path: 'groups',
+            builder: (_, __) => const GroupManagementPage(),
+            routes: [
+              GoRoute(
+                path: 'create',
+                builder: (_, __) => const GroupSettingsPage(), // groupId = null
+              ),
+              GoRoute(
+                path: 'join',
+                builder: (_, __) => const JoinGroupPage(),
+              ),
+              GoRoute(
+                path: ':id',
+                builder: (_, state) =>
+                    GroupSettingsPage(groupId: state.pathParameters['id']),
+              ),
+              GoRoute(
+                path: 'add-member/app',
+                builder: (_, __) => const AddMemberAppAccountPage(),
+              ),
+            ],
+          ),
+        ],
+      ),
     ],
   );
 });

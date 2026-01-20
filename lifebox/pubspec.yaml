@@ -60,6 +60,7 @@ flutter:
   generate: true
   assets:
     - assets/images/
+    - assets/icon/
 
 flutter_icons:
   android: true

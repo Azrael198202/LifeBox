@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lifebox/l10n/app_localizations.dart';
+import 'avatar_picker.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/i18n/locale_controller.dart';
 import '../../../core/widgets/app_scaffold.dart';
@@ -27,6 +29,12 @@ class SettingsPage extends ConsumerWidget {
     // ✅ 云保存开关（默认 false，已持久化到本机）
     final cloudEnabled = ref.watch(cloudEnabledProvider);
 
+    final profile = ref.watch(userProfileProvider);
+
+    final titleName = profile.nickname.isNotEmpty
+        ? profile.nickname
+        : (auth.user?.displayName ?? l10n.not_logged_in);
+
     return AppScaffold(
       title: l10n.settings_title,
       body: ListView(
@@ -35,9 +43,27 @@ class SettingsPage extends ConsumerWidget {
           // ====== 账号信息（简版）======
           Card(
             child: ListTile(
-              leading: const Icon(Icons.account_circle_outlined),
-              title: Text(auth.user?.displayName ?? l10n.not_logged_in),
+              leading: AvatarCircle(
+                avatarId: profile.avatarId,
+                imageUrl: auth.user?.avatarUrl,
+                radius: 20,
+              ),
+              title: Text(titleName),
               subtitle: Text(auth.user?.email ?? ''),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => context.push('/settings/profile'),
+            ),
+          ),
+
+          const SizedBox(height: 12),
+
+          // グループの管理
+          Card(
+            child: ListTile(
+              leading: const Icon(Icons.home_outlined),
+              title: const Text('グループの管理'),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => context.push('/settings/groups'),
             ),
           ),
 
@@ -94,10 +120,13 @@ class SettingsPage extends ConsumerWidget {
               subtitle: Consumer(
                 builder: (context, ref, _) {
                   final sub = ref.watch(subscriptionProvider);
-                  final status = sub.subscribed ? l10n.setting_cloud_status_subscribed : l10n.setting_cloud_status_unsubscribed;
+                  final status = sub.subscribed
+                      ? l10n.setting_cloud_status_subscribed
+                      : l10n.setting_cloud_status_unsubscribed;
                   return Text(
                     cloudEnabled
-                        ? l10n.setting_cloud_desc_on (status): l10n.setting_cloud_desc_off(status),
+                        ? l10n.setting_cloud_desc_on(status)
+                        : l10n.setting_cloud_desc_off(status),
                   );
                 },
               ),
@@ -186,8 +215,8 @@ class SettingsPage extends ConsumerWidget {
                 final ok = await showDialog<bool>(
                   context: context,
                   builder: (ctx) => AlertDialog(
-                    title:  Text(l10n.setting_clear_confirm_title),
-                    content:  Text(l10n.setting_clear_confirm_desc),
+                    title: Text(l10n.setting_clear_confirm_title),
+                    content: Text(l10n.setting_clear_confirm_desc),
                     actions: [
                       TextButton(
                         onPressed: () => Navigator.pop(ctx, false),
@@ -195,7 +224,7 @@ class SettingsPage extends ConsumerWidget {
                       ),
                       FilledButton(
                         onPressed: () => Navigator.pop(ctx, true),
-                        child:  Text(l10n.setting_clear_ok),
+                        child: Text(l10n.setting_clear_ok),
                       ),
                     ],
                   ),

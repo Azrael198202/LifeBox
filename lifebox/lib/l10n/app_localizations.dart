@@ -112,6 +112,66 @@ abstract class AppLocalizations {
   /// **'言語'**
   String get language_title;
 
+  /// No description provided for @language_jp.
+  ///
+  /// In ja, this message translates to:
+  /// **'日本語'**
+  String get language_jp;
+
+  /// No description provided for @language_zh.
+  ///
+  /// In ja, this message translates to:
+  /// **'中国語'**
+  String get language_zh;
+
+  /// No description provided for @language_en.
+  ///
+  /// In ja, this message translates to:
+  /// **'英語'**
+  String get language_en;
+
+  /// No description provided for @clear.
+  ///
+  /// In ja, this message translates to:
+  /// **'クリア'**
+  String get clear;
+
+  /// No description provided for @delete.
+  ///
+  /// In ja, this message translates to:
+  /// **'削除'**
+  String get delete;
+
+  /// No description provided for @cancel.
+  ///
+  /// In ja, this message translates to:
+  /// **'キャンセル'**
+  String get cancel;
+
+  /// No description provided for @save.
+  ///
+  /// In ja, this message translates to:
+  /// **'保存'**
+  String get save;
+
+  /// No description provided for @finish.
+  ///
+  /// In ja, this message translates to:
+  /// **'終了'**
+  String get finish;
+
+  /// No description provided for @deleteConfirm.
+  ///
+  /// In ja, this message translates to:
+  /// **'本当に削除しますか？'**
+  String get deleteConfirm;
+
+  /// No description provided for @deleteConfirmTitle.
+  ///
+  /// In ja, this message translates to:
+  /// **'削除確認'**
+  String get deleteConfirmTitle;
+
   /// No description provided for @language_subtitle.
   ///
   /// In ja, this message translates to:
@@ -178,12 +238,6 @@ abstract class AppLocalizations {
   /// **'ローカル削除 / クラウド削除（API予約）'**
   String get clear_content;
 
-  /// No description provided for @clear_OK.
-  ///
-  /// In ja, this message translates to:
-  /// **'削除'**
-  String get clear_OK;
-
   /// No description provided for @logout_title.
   ///
   /// In ja, this message translates to:
@@ -214,11 +268,17 @@ abstract class AppLocalizations {
   /// **'ユーザー {name}'**
   String no_name(Object name);
 
-  /// No description provided for @common_Cancel.
+  /// No description provided for @no_title.
   ///
   /// In ja, this message translates to:
-  /// **'キャンセル'**
-  String get common_Cancel;
+  /// **'(タイトルなし)\' '**
+  String get no_title;
+
+  /// No description provided for @another.
+  ///
+  /// In ja, this message translates to:
+  /// **'その他 '**
+  String get another;
 
   /// No description provided for @version_text.
   ///
@@ -796,12 +856,6 @@ abstract class AppLocalizations {
   /// **'月'**
   String get monthLabel;
 
-  /// No description provided for @cancel.
-  ///
-  /// In ja, this message translates to:
-  /// **'キャンセル'**
-  String get cancel;
-
   /// No description provided for @confirm.
   ///
   /// In ja, this message translates to:
@@ -1276,6 +1330,12 @@ abstract class AppLocalizations {
   /// **'クリアしました（サンプル：後ほど実装予定）。'**
   String get setting_clear_done;
 
+  /// No description provided for @setting_group.
+  ///
+  /// In ja, this message translates to:
+  /// **'グループの管理（有料）'**
+  String get setting_group;
+
   /// No description provided for @input_valid_mail_must.
   ///
   /// In ja, this message translates to:
@@ -1401,6 +1461,372 @@ abstract class AppLocalizations {
   /// In ja, this message translates to:
   /// **'登録して有効化'**
   String get subscription_subscribe;
+
+  /// No description provided for @paywallTitle.
+  ///
+  /// In ja, this message translates to:
+  /// **'プレミアム（有料）'**
+  String get paywallTitle;
+
+  /// No description provided for @paywallDesc.
+  ///
+  /// In ja, this message translates to:
+  /// **'グループ管理・クラウド保存などの機能を利用するには\nプレミアム登録が必要です。'**
+  String get paywallDesc;
+
+  /// No description provided for @loadingText.
+  ///
+  /// In ja, this message translates to:
+  /// **'読み込み中...'**
+  String get loadingText;
+
+  /// No description provided for @planMonthly.
+  ///
+  /// In ja, this message translates to:
+  /// **'月額プラン'**
+  String get planMonthly;
+
+  /// No description provided for @planYearly.
+  ///
+  /// In ja, this message translates to:
+  /// **'年額プラン'**
+  String get planYearly;
+
+  /// No description provided for @restorePurchase.
+  ///
+  /// In ja, this message translates to:
+  /// **'購入を復元（Restore）'**
+  String get restorePurchase;
+
+  /// No description provided for @cancelGuideTitle.
+  ///
+  /// In ja, this message translates to:
+  /// **'解約はApp Store / Google Playのサブスク管理から'**
+  String get cancelGuideTitle;
+
+  /// No description provided for @cancelGuideSubtitle.
+  ///
+  /// In ja, this message translates to:
+  /// **'アプリ内では解約できません'**
+  String get cancelGuideSubtitle;
+
+  /// No description provided for @notNow.
+  ///
+  /// In ja, this message translates to:
+  /// **'今はしない'**
+  String get notNow;
+
+  /// No description provided for @personalInfoTitle.
+  ///
+  /// In ja, this message translates to:
+  /// **'個人情報'**
+  String get personalInfoTitle;
+
+  /// No description provided for @profileImage.
+  ///
+  /// In ja, this message translates to:
+  /// **'プロフィール画像'**
+  String get profileImage;
+
+  /// No description provided for @nickname.
+  ///
+  /// In ja, this message translates to:
+  /// **'ニックネーム'**
+  String get nickname;
+
+  /// No description provided for @joinGroupTitle.
+  ///
+  /// In ja, this message translates to:
+  /// **'グループに入る'**
+  String get joinGroupTitle;
+
+  /// No description provided for @joinGroupHelp.
+  ///
+  /// In ja, this message translates to:
+  /// **'グループのオーナーに連絡して招待を出してもらってください\n（グループの設定＞メンバーを追加）'**
+  String get joinGroupHelp;
+
+  /// No description provided for @joinGroupHint.
+  ///
+  /// In ja, this message translates to:
+  /// **'招待コードを入力してください'**
+  String get joinGroupHint;
+
+  /// No description provided for @joinGroupCodeEmpty.
+  ///
+  /// In ja, this message translates to:
+  /// **'招待コードを入力してください'**
+  String get joinGroupCodeEmpty;
+
+  /// No description provided for @joinGroupJoined.
+  ///
+  /// In ja, this message translates to:
+  /// **'参加しました'**
+  String get joinGroupJoined;
+
+  /// No description provided for @groupCreateTitle.
+  ///
+  /// In ja, this message translates to:
+  /// **'グループ作成'**
+  String get groupCreateTitle;
+
+  /// No description provided for @groupSettingsTitle.
+  ///
+  /// In ja, this message translates to:
+  /// **'グループ設定'**
+  String get groupSettingsTitle;
+
+  /// No description provided for @groupMembers.
+  ///
+  /// In ja, this message translates to:
+  /// **'グループメンバー'**
+  String get groupMembers;
+
+  /// No description provided for @groupOwnerLabel.
+  ///
+  /// In ja, this message translates to:
+  /// **'グループの所有者'**
+  String get groupOwnerLabel;
+
+  /// No description provided for @groupMemberLabel.
+  ///
+  /// In ja, this message translates to:
+  /// **'普通メンバー'**
+  String get groupMemberLabel;
+
+  /// No description provided for @ownerOnlyCanChange.
+  ///
+  /// In ja, this message translates to:
+  /// **'オーナーのみ変更できます'**
+  String get ownerOnlyCanChange;
+
+  /// No description provided for @ownerOnlyCanAdd.
+  ///
+  /// In ja, this message translates to:
+  /// **'オーナーのみ追加できます'**
+  String get ownerOnlyCanAdd;
+
+  /// No description provided for @ownerOnlyCanDelete.
+  ///
+  /// In ja, this message translates to:
+  /// **'オーナーのみ削除できます'**
+  String get ownerOnlyCanDelete;
+
+  /// No description provided for @groupNameInputTitleCreate.
+  ///
+  /// In ja, this message translates to:
+  /// **'グループ名を入力'**
+  String get groupNameInputTitleCreate;
+
+  /// No description provided for @groupNameInputTitleEdit.
+  ///
+  /// In ja, this message translates to:
+  /// **'グループ名称'**
+  String get groupNameInputTitleEdit;
+
+  /// No description provided for @groupNameEmpty.
+  ///
+  /// In ja, this message translates to:
+  /// **'グループ名を入力してください'**
+  String get groupNameEmpty;
+
+  /// No description provided for @groupCreated.
+  ///
+  /// In ja, this message translates to:
+  /// **'グループを作成しました'**
+  String get groupCreated;
+
+  /// No description provided for @addMember.
+  ///
+  /// In ja, this message translates to:
+  /// **'メンバーを追加'**
+  String get addMember;
+
+  /// No description provided for @inviteSmsNotImplemented.
+  ///
+  /// In ja, this message translates to:
+  /// **'SMSで招待（未実装）'**
+  String get inviteSmsNotImplemented;
+
+  /// No description provided for @inviteEmailNotImplemented.
+  ///
+  /// In ja, this message translates to:
+  /// **'メールで招待（未実装）'**
+  String get inviteEmailNotImplemented;
+
+  /// No description provided for @deleteGroupTitle.
+  ///
+  /// In ja, this message translates to:
+  /// **'グループの削除'**
+  String get deleteGroupTitle;
+
+  /// No description provided for @noPermission.
+  ///
+  /// In ja, this message translates to:
+  /// **'権限がありません'**
+  String get noPermission;
+
+  /// No description provided for @memberTransferOwner.
+  ///
+  /// In ja, this message translates to:
+  /// **'オーナーに移管'**
+  String get memberTransferOwner;
+
+  /// No description provided for @memberRemove.
+  ///
+  /// In ja, this message translates to:
+  /// **'メンバーを削除'**
+  String get memberRemove;
+
+  /// No description provided for @memberRemoved.
+  ///
+  /// In ja, this message translates to:
+  /// **'削除しました'**
+  String get memberRemoved;
+
+  /// No description provided for @ownerTransferred.
+  ///
+  /// In ja, this message translates to:
+  /// **'オーナーを移管しました'**
+  String get ownerTransferred;
+
+  /// No description provided for @deleteApiNotConnected.
+  ///
+  /// In ja, this message translates to:
+  /// **'削除API未接続'**
+  String get deleteApiNotConnected;
+
+  /// No description provided for @swipeMarkDone.
+  ///
+  /// In ja, this message translates to:
+  /// **'完了にする'**
+  String get swipeMarkDone;
+
+  /// No description provided for @swipeRestore.
+  ///
+  /// In ja, this message translates to:
+  /// **'未完了に戻す'**
+  String get swipeRestore;
+
+  /// No description provided for @groupManage.
+  ///
+  /// In ja, this message translates to:
+  /// **'グループ管理'**
+  String get groupManage;
+
+  /// No description provided for @nogroup.
+  ///
+  /// In ja, this message translates to:
+  /// **'まだグループがありません'**
+  String get nogroup;
+
+  /// No description provided for @joinGroup.
+  ///
+  /// In ja, this message translates to:
+  /// **'まグループに入る'**
+  String get joinGroup;
+
+  /// No description provided for @inviteChooseMethodTitle.
+  ///
+  /// In ja, this message translates to:
+  /// **'誘う方法を選択'**
+  String get inviteChooseMethodTitle;
+
+  /// No description provided for @inviteMethodAccount.
+  ///
+  /// In ja, this message translates to:
+  /// **'アプリアカウント'**
+  String get inviteMethodAccount;
+
+  /// No description provided for @inviteMethodSms.
+  ///
+  /// In ja, this message translates to:
+  /// **'SMS'**
+  String get inviteMethodSms;
+
+  /// No description provided for @inviteMethodEmail.
+  ///
+  /// In ja, this message translates to:
+  /// **'電子メール'**
+  String get inviteMethodEmail;
+
+  /// No description provided for @inviteMethodCode.
+  ///
+  /// In ja, this message translates to:
+  /// **'招待コード'**
+  String get inviteMethodCode;
+
+  /// No description provided for @inviteCodeCopied.
+  ///
+  /// In ja, this message translates to:
+  /// **'招待コードをコピーしました'**
+  String get inviteCodeCopied;
+
+  /// No description provided for @account.
+  ///
+  /// In ja, this message translates to:
+  /// **'アカウント'**
+  String get account;
+
+  /// No description provided for @inputAccount.
+  ///
+  /// In ja, this message translates to:
+  /// **'アカウント番号を入力してください'**
+  String get inputAccount;
+
+  /// No description provided for @inputName.
+  ///
+  /// In ja, this message translates to:
+  /// **'メンバーの名前を入力'**
+  String get inputName;
+
+  /// No description provided for @displayname.
+  ///
+  /// In ja, this message translates to:
+  /// **'名前'**
+  String get displayname;
+
+  /// No description provided for @speechSavedToLocalInbox.
+  ///
+  /// In ja, this message translates to:
+  /// **'ローカルInboxに保存しました'**
+  String get speechSavedToLocalInbox;
+
+  /// No description provided for @speechAnalyzeFailed.
+  ///
+  /// In ja, this message translates to:
+  /// **'音声解析に失敗しました：{error}'**
+  String speechAnalyzeFailed(Object error);
+
+  /// No description provided for @speechMockTitle.
+  ///
+  /// In ja, this message translates to:
+  /// **'音声テキスト（模擬）'**
+  String get speechMockTitle;
+
+  /// No description provided for @speechMockCustomInputLabel.
+  ///
+  /// In ja, this message translates to:
+  /// **'カスタム入力（優先）'**
+  String get speechMockCustomInputLabel;
+
+  /// No description provided for @speechMockUseInput.
+  ///
+  /// In ja, this message translates to:
+  /// **'入力を使用'**
+  String get speechMockUseInput;
+
+  /// No description provided for @speechParsing.
+  ///
+  /// In ja, this message translates to:
+  /// **'解析中...'**
+  String get speechParsing;
+
+  /// No description provided for @speechMockTooltip.
+  ///
+  /// In ja, this message translates to:
+  /// **'音声テキスト（模擬）'**
+  String get speechMockTooltip;
 }
 
 class _AppLocalizationsDelegate

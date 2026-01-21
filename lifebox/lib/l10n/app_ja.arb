@@ -2,6 +2,16 @@
   "@@locale": "ja",
   "settings_title": "設定",
   "language_title": "言語",
+  "language_jp": "日本語",
+  "language_zh": "中国語",
+  "language_en": "英語",
+  "clear": "クリア",
+  "delete": "削除",
+  "cancel": "キャンセル",
+  "save":"保存",
+  "finish":"終了",
+  "deleteConfirm": "本当に削除しますか？",
+  "deleteConfirmTitle": "削除確認",
   "language_subtitle": "表示言語を切り替えます",
   "upload_policy_title": "OCRテキストのみアップロード（既定：ON）",
   "upload_policy_subtitle": "プライバシー優先：画像はアップロードしません（後で設定可）",
@@ -13,13 +23,15 @@
   "clear_data_subtitle": "ローカル削除 / クラウド削除（API予約）",
   "clear_QA": "ローカル削除 / クラウド削除（API予約）",
   "clear_content": "ローカル削除 / クラウド削除（API予約）",
-  "clear_OK": "削除",
   "logout_title": "ログアウト",
   "logout_QA": "現在のアカウントからログアウトしますか？",
   "logout_OK": "ログアウト",
   "not_logged_in": "未ログイン",
   "no_name": "ユーザー {name}",
-  "common_Cancel": "キャンセル",
+
+  "no_title": "(タイトルなし)' ",
+  "another": "その他 ",
+
   "version_text": "Life Inbox • v0.1.0 (MVP)",
   "app_name": "Life Inbox",
   "terms_agree_prefix": "続行すると、以下に同意したものとみなされます。",
@@ -301,6 +313,7 @@
   "setting_clear_confirm_desc": "端末内のキャッシュデータを削除します（サンプル表示）。",
   "setting_clear_ok": "クリア",
   "setting_clear_done": "クリアしました（サンプル：後ほど実装予定）。",
+  "setting_group": "グループの管理（有料）",
 
   "input_valid_mail_must":"メールを入力してください",
   "input_valid_mail_format":"正しいメールアドレスを入力してください",
@@ -324,5 +337,81 @@
   "cloud_feature_offline": "オフラインでも利用可能",
   "cloud_price_monthly": "料金：月額 ¥300（Mock）",
   "subscription_restore": "購入を復元",
-  "subscription_subscribe": "登録して有効化"
+  "subscription_subscribe": "登録して有効化",
+
+  "paywallTitle": "プレミアム（有料）",
+  "paywallDesc": "グループ管理・クラウド保存などの機能を利用するには\nプレミアム登録が必要です。",
+  "loadingText": "読み込み中...",
+  "planMonthly": "月額プラン",
+  "planYearly": "年額プラン",
+  "restorePurchase": "購入を復元（Restore）",
+  "cancelGuideTitle": "解約はApp Store / Google Playのサブスク管理から",
+  "cancelGuideSubtitle": "アプリ内では解約できません",
+  "notNow": "今はしない",
+
+  "personalInfoTitle": "個人情報",
+  "profileImage": "プロフィール画像",
+  "nickname": "ニックネーム",
+
+  "joinGroupTitle": "グループに入る",
+  "joinGroupHelp": "グループのオーナーに連絡して招待を出してもらってください\n（グループの設定＞メンバーを追加）",
+  "joinGroupHint": "招待コードを入力してください",
+  "joinGroupCodeEmpty": "招待コードを入力してください",
+  "joinGroupJoined": "参加しました",
+
+  "groupCreateTitle": "グループ作成",
+  "groupSettingsTitle": "グループ設定",
+  "groupMembers": "グループメンバー",
+  "groupOwnerLabel": "グループの所有者",
+  "groupMemberLabel": "普通メンバー",
+
+  "ownerOnlyCanChange": "オーナーのみ変更できます",
+  "ownerOnlyCanAdd": "オーナーのみ追加できます",
+  "ownerOnlyCanDelete": "オーナーのみ削除できます",
+
+  "groupNameInputTitleCreate": "グループ名を入力",
+  "groupNameInputTitleEdit": "グループ名称",
+  "groupNameEmpty": "グループ名を入力してください",
+  "groupCreated": "グループを作成しました",
+  "addMember": "メンバーを追加",
+
+  "inviteSmsNotImplemented": "SMSで招待（未実装）",
+  "inviteEmailNotImplemented": "メールで招待（未実装）",
+
+  "deleteGroupTitle": "グループの削除",
+
+  "noPermission": "権限がありません",
+
+  "memberTransferOwner": "オーナーに移管",
+  "memberRemove": "メンバーを削除",
+  "memberRemoved": "削除しました",
+  "ownerTransferred": "オーナーを移管しました",
+  "deleteApiNotConnected": "削除API未接続",
+
+  "swipeMarkDone": "完了にする",
+  "swipeRestore": "未完了に戻す",
+  
+  "groupManage": "グループ管理",
+  "nogroup": "まだグループがありません",
+  "joinGroup": "まグループに入る",
+
+  "inviteChooseMethodTitle": "誘う方法を選択",
+  "inviteMethodAccount": "アプリアカウント",
+  "inviteMethodSms": "SMS",
+  "inviteMethodEmail": "電子メール",
+  "inviteMethodCode": "招待コード",
+  "inviteCodeCopied": "招待コードをコピーしました",
+
+  "account": "アカウント",
+  "inputAccount": "アカウント番号を入力してください",
+  "inputName": "メンバーの名前を入力",
+  "displayname": "名前",
+
+  "speechSavedToLocalInbox": "ローカルInboxに保存しました",
+  "speechAnalyzeFailed": "音声解析に失敗しました：{error}",
+  "speechMockTitle": "音声テキスト（模擬）",
+  "speechMockCustomInputLabel": "カスタム入力（優先）",
+  "speechMockUseInput": "入力を使用",
+  "speechParsing": "解析中...",
+  "speechMockTooltip": "音声テキスト（模擬）"
 }

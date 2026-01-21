@@ -125,7 +125,7 @@ class _InboxCalendarPageState extends ConsumerState<InboxCalendarPage> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text(l10n.common_Cancel),
+              child: Text(l10n.cancel),
             ),
             FilledButton(
               onPressed: () => Navigator.pop(context, DateTime(year, month, 1)),

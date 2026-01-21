@@ -15,6 +15,36 @@ class AppLocalizationsJa extends AppLocalizations {
   String get language_title => '言語';
 
   @override
+  String get language_jp => '日本語';
+
+  @override
+  String get language_zh => '中国語';
+
+  @override
+  String get language_en => '英語';
+
+  @override
+  String get clear => 'クリア';
+
+  @override
+  String get delete => '削除';
+
+  @override
+  String get cancel => 'キャンセル';
+
+  @override
+  String get save => '保存';
+
+  @override
+  String get finish => '終了';
+
+  @override
+  String get deleteConfirm => '本当に削除しますか？';
+
+  @override
+  String get deleteConfirmTitle => '削除確認';
+
+  @override
   String get language_subtitle => '表示言語を切り替えます';
 
   @override
@@ -48,9 +78,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get clear_content => 'ローカル削除 / クラウド削除（API予約）';
 
   @override
-  String get clear_OK => '削除';
-
-  @override
   String get logout_title => 'ログアウト';
 
   @override
@@ -68,7 +95,10 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String get common_Cancel => 'キャンセル';
+  String get no_title => '(タイトルなし)\' ';
+
+  @override
+  String get another => 'その他 ';
 
   @override
   String get version_text => 'Life Inbox • v0.1.0 (MVP)';
@@ -382,9 +412,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get monthLabel => '月';
 
   @override
-  String get cancel => 'キャンセル';
-
-  @override
   String get confirm => '確定';
 
   @override
@@ -652,6 +679,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get setting_clear_done => 'クリアしました（サンプル：後ほど実装予定）。';
 
   @override
+  String get setting_group => 'グループの管理（有料）';
+
+  @override
   String get input_valid_mail_must => 'メールを入力してください';
 
   @override
@@ -713,4 +743,189 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get subscription_subscribe => '登録して有効化';
+
+  @override
+  String get paywallTitle => 'プレミアム（有料）';
+
+  @override
+  String get paywallDesc => 'グループ管理・クラウド保存などの機能を利用するには\nプレミアム登録が必要です。';
+
+  @override
+  String get loadingText => '読み込み中...';
+
+  @override
+  String get planMonthly => '月額プラン';
+
+  @override
+  String get planYearly => '年額プラン';
+
+  @override
+  String get restorePurchase => '購入を復元（Restore）';
+
+  @override
+  String get cancelGuideTitle => '解約はApp Store / Google Playのサブスク管理から';
+
+  @override
+  String get cancelGuideSubtitle => 'アプリ内では解約できません';
+
+  @override
+  String get notNow => '今はしない';
+
+  @override
+  String get personalInfoTitle => '個人情報';
+
+  @override
+  String get profileImage => 'プロフィール画像';
+
+  @override
+  String get nickname => 'ニックネーム';
+
+  @override
+  String get joinGroupTitle => 'グループに入る';
+
+  @override
+  String get joinGroupHelp => 'グループのオーナーに連絡して招待を出してもらってください\n（グループの設定＞メンバーを追加）';
+
+  @override
+  String get joinGroupHint => '招待コードを入力してください';
+
+  @override
+  String get joinGroupCodeEmpty => '招待コードを入力してください';
+
+  @override
+  String get joinGroupJoined => '参加しました';
+
+  @override
+  String get groupCreateTitle => 'グループ作成';
+
+  @override
+  String get groupSettingsTitle => 'グループ設定';
+
+  @override
+  String get groupMembers => 'グループメンバー';
+
+  @override
+  String get groupOwnerLabel => 'グループの所有者';
+
+  @override
+  String get groupMemberLabel => '普通メンバー';
+
+  @override
+  String get ownerOnlyCanChange => 'オーナーのみ変更できます';
+
+  @override
+  String get ownerOnlyCanAdd => 'オーナーのみ追加できます';
+
+  @override
+  String get ownerOnlyCanDelete => 'オーナーのみ削除できます';
+
+  @override
+  String get groupNameInputTitleCreate => 'グループ名を入力';
+
+  @override
+  String get groupNameInputTitleEdit => 'グループ名称';
+
+  @override
+  String get groupNameEmpty => 'グループ名を入力してください';
+
+  @override
+  String get groupCreated => 'グループを作成しました';
+
+  @override
+  String get addMember => 'メンバーを追加';
+
+  @override
+  String get inviteSmsNotImplemented => 'SMSで招待（未実装）';
+
+  @override
+  String get inviteEmailNotImplemented => 'メールで招待（未実装）';
+
+  @override
+  String get deleteGroupTitle => 'グループの削除';
+
+  @override
+  String get noPermission => '権限がありません';
+
+  @override
+  String get memberTransferOwner => 'オーナーに移管';
+
+  @override
+  String get memberRemove => 'メンバーを削除';
+
+  @override
+  String get memberRemoved => '削除しました';
+
+  @override
+  String get ownerTransferred => 'オーナーを移管しました';
+
+  @override
+  String get deleteApiNotConnected => '削除API未接続';
+
+  @override
+  String get swipeMarkDone => '完了にする';
+
+  @override
+  String get swipeRestore => '未完了に戻す';
+
+  @override
+  String get groupManage => 'グループ管理';
+
+  @override
+  String get nogroup => 'まだグループがありません';
+
+  @override
+  String get joinGroup => 'まグループに入る';
+
+  @override
+  String get inviteChooseMethodTitle => '誘う方法を選択';
+
+  @override
+  String get inviteMethodAccount => 'アプリアカウント';
+
+  @override
+  String get inviteMethodSms => 'SMS';
+
+  @override
+  String get inviteMethodEmail => '電子メール';
+
+  @override
+  String get inviteMethodCode => '招待コード';
+
+  @override
+  String get inviteCodeCopied => '招待コードをコピーしました';
+
+  @override
+  String get account => 'アカウント';
+
+  @override
+  String get inputAccount => 'アカウント番号を入力してください';
+
+  @override
+  String get inputName => 'メンバーの名前を入力';
+
+  @override
+  String get displayname => '名前';
+
+  @override
+  String get speechSavedToLocalInbox => 'ローカルInboxに保存しました';
+
+  @override
+  String speechAnalyzeFailed(Object error) {
+    return '音声解析に失敗しました：$error';
+  }
+
+  @override
+  String get speechMockTitle => '音声テキスト（模擬）';
+
+  @override
+  String get speechMockCustomInputLabel => 'カスタム入力（優先）';
+
+  @override
+  String get speechMockUseInput => '入力を使用';
+
+  @override
+  String get speechParsing => '解析中...';
+
+  @override
+  String get speechMockTooltip => '音声テキスト（模擬）';
 }

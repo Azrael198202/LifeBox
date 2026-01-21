@@ -15,6 +15,36 @@ class AppLocalizationsZh extends AppLocalizations {
   String get language_title => '语言';
 
   @override
+  String get language_jp => '日文';
+
+  @override
+  String get language_zh => '中文';
+
+  @override
+  String get language_en => '英文';
+
+  @override
+  String get clear => '清除';
+
+  @override
+  String get delete => '删除';
+
+  @override
+  String get cancel => '取消';
+
+  @override
+  String get save => '保存';
+
+  @override
+  String get finish => '完成';
+
+  @override
+  String get deleteConfirm => '确定要删除吗？';
+
+  @override
+  String get deleteConfirmTitle => '确定删除';
+
+  @override
   String get language_subtitle => '切换显示语言';
 
   @override
@@ -48,9 +78,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get clear_content => '这将清除本地缓存数据（示例占位）。';
 
   @override
-  String get clear_OK => '清除';
-
-  @override
   String get logout_title => '退出登录';
 
   @override
@@ -68,7 +95,10 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get common_Cancel => '取消';
+  String get no_title => '(无标题)\' ';
+
+  @override
+  String get another => '其他 ';
 
   @override
   String get version_text => 'Life Inbox • v0.1.0 (MVP)';
@@ -377,9 +407,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get monthLabel => '月';
 
   @override
-  String get cancel => 'キャンセル';
-
-  @override
   String get confirm => '确定';
 
   @override
@@ -647,6 +674,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get setting_clear_done => '已清除（示例：后续接入真实清理逻辑）';
 
   @override
+  String get setting_group => '组管理（收费）';
+
+  @override
   String get input_valid_mail_must => '请输入邮箱。';
 
   @override
@@ -708,4 +738,189 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get subscription_subscribe => '订阅并开启';
+
+  @override
+  String get paywallTitle => '高级版（付费）';
+
+  @override
+  String get paywallDesc => '使用群组管理、云端保存等功能\n需要开通高级版。';
+
+  @override
+  String get loadingText => '加载中...';
+
+  @override
+  String get planMonthly => '月度套餐';
+
+  @override
+  String get planYearly => '年度套餐';
+
+  @override
+  String get restorePurchase => '恢复购买（Restore）';
+
+  @override
+  String get cancelGuideTitle => '取消订阅请到 App Store / Google Play 的订阅管理';
+
+  @override
+  String get cancelGuideSubtitle => '应用内无法取消订阅';
+
+  @override
+  String get notNow => '暂不';
+
+  @override
+  String get personalInfoTitle => '个人信息';
+
+  @override
+  String get profileImage => '头像';
+
+  @override
+  String get nickname => '昵称';
+
+  @override
+  String get joinGroupTitle => '加入群组';
+
+  @override
+  String get joinGroupHelp => '请联系群组管理员发送邀请\n（群组设置 ＞ 添加成员）';
+
+  @override
+  String get joinGroupHint => '请输入邀请码';
+
+  @override
+  String get joinGroupCodeEmpty => '请输入邀请码';
+
+  @override
+  String get joinGroupJoined => '已加入';
+
+  @override
+  String get groupCreateTitle => '创建群组';
+
+  @override
+  String get groupSettingsTitle => '群组设置';
+
+  @override
+  String get groupMembers => '群组成员';
+
+  @override
+  String get groupOwnerLabel => '群主';
+
+  @override
+  String get groupMemberLabel => '普通成员';
+
+  @override
+  String get ownerOnlyCanChange => '仅群主可修改';
+
+  @override
+  String get ownerOnlyCanAdd => '仅群主可添加成员';
+
+  @override
+  String get ownerOnlyCanDelete => '仅群主可删除';
+
+  @override
+  String get groupNameInputTitleCreate => '请输入群组名称';
+
+  @override
+  String get groupNameInputTitleEdit => '群组名称';
+
+  @override
+  String get groupNameEmpty => '请输入群组名称';
+
+  @override
+  String get groupCreated => '已创建群组';
+
+  @override
+  String get addMember => '添加成员';
+
+  @override
+  String get inviteSmsNotImplemented => '通过短信邀请（未实现）';
+
+  @override
+  String get inviteEmailNotImplemented => '通过邮件邀请（未实现）';
+
+  @override
+  String get deleteGroupTitle => '删除群组';
+
+  @override
+  String get noPermission => '没有权限';
+
+  @override
+  String get memberTransferOwner => '转让群主';
+
+  @override
+  String get memberRemove => '移除成员';
+
+  @override
+  String get memberRemoved => '已移除';
+
+  @override
+  String get ownerTransferred => '已转让群主';
+
+  @override
+  String get deleteApiNotConnected => '删除 API 未接入';
+
+  @override
+  String get swipeMarkDone => '标记完成';
+
+  @override
+  String get swipeRestore => '恢复待办';
+
+  @override
+  String get groupManage => '群组管理';
+
+  @override
+  String get nogroup => '还没有群组';
+
+  @override
+  String get joinGroup => '加入群组';
+
+  @override
+  String get inviteChooseMethodTitle => '选择邀请方式';
+
+  @override
+  String get inviteMethodAccount => '应用账号';
+
+  @override
+  String get inviteMethodSms => '短信';
+
+  @override
+  String get inviteMethodEmail => '电子邮件';
+
+  @override
+  String get inviteMethodCode => '邀请码';
+
+  @override
+  String get inviteCodeCopied => '已复制邀请码';
+
+  @override
+  String get account => '账号';
+
+  @override
+  String get inputAccount => '请输入账号邮箱';
+
+  @override
+  String get inputName => '请输入成员显示名';
+
+  @override
+  String get displayname => '显示名';
+
+  @override
+  String get speechSavedToLocalInbox => '已保存到本地 Inbox';
+
+  @override
+  String speechAnalyzeFailed(Object error) {
+    return '语音解析失败：$error';
+  }
+
+  @override
+  String get speechMockTitle => '模拟语音文本';
+
+  @override
+  String get speechMockCustomInputLabel => '自定义输入（优先）';
+
+  @override
+  String get speechMockUseInput => '使用输入';
+
+  @override
+  String get speechParsing => '解析中...';
+
+  @override
+  String get speechMockTooltip => '模拟语音文本';
 }

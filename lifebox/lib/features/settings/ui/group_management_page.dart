@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-
+import 'package:lifebox/l10n/app_localizations.dart';
 import '../../../core/widgets/app_scaffold.dart';
 import '../../auth/state/auth_controller.dart';
 
@@ -11,9 +11,10 @@ class GroupManagementPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final auth = ref.watch(authControllerProvider);
+    final l10n = AppLocalizations.of(context);
 
     return AppScaffold(
-      title: 'グループの管理',
+      title: l10n.groupManage,
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -38,23 +39,23 @@ class GroupManagementPage extends ConsumerWidget {
               ),
             )
           else
-            const Padding(
+            Padding(
               padding: EdgeInsets.only(top: 12),
-              child: Text('まだグループがありません'),
+              child: Text(l10n.nogroup),
             ),
 
           const SizedBox(height: 12),
 
           Card(
             child: ListTile(
-              title: const Text('グループを作る'),
+              title: Text(l10n.groupCreateTitle),
               onTap: () => context.push('/settings/groups/create'),
             ),
           ),
           const SizedBox(height: 12),
           Card(
             child: ListTile(
-              title: const Text('グループに入る'),
+              title: Text(l10n.joinGroup),
               onTap: () => context.push('/settings/groups/join'),
             ),
           ),

@@ -66,7 +66,7 @@ class SettingsPage extends ConsumerWidget {
           Card(
             child: ListTile(
               leading: const Icon(Icons.home_outlined),
-              title: const Text('グループの管理'),
+              title: Text(l10n.setting_group),
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -256,7 +256,7 @@ class SettingsPage extends ConsumerWidget {
                     actions: [
                       TextButton(
                         onPressed: () => Navigator.pop(ctx, false),
-                        child: Text(l10n.common_Cancel),
+                        child: Text(l10n.cancel),
                       ),
                       FilledButton(
                         onPressed: () => Navigator.pop(ctx, true),
@@ -288,11 +288,11 @@ class SettingsPage extends ConsumerWidget {
               trailing: DropdownButtonHideUnderline(
                 child: DropdownButton<Locale>(
                   value: locale,
-                  items: const [
-                    DropdownMenuItem(value: Locale('ja'), child: Text('日本語')),
-                    DropdownMenuItem(value: Locale('zh'), child: Text('中文')),
+                  items: [
+                    DropdownMenuItem(value: Locale('ja'), child: Text(l10n.language_jp)),
+                    DropdownMenuItem(value: Locale('zh'), child: Text(l10n.language_zh)),
                     DropdownMenuItem(
-                        value: Locale('en'), child: Text('English')),
+                        value: Locale('en'), child: Text(l10n.language_en)),
                   ],
                   onChanged: (v) {
                     if (v == null) return;
@@ -319,7 +319,7 @@ class SettingsPage extends ConsumerWidget {
                     actions: [
                       TextButton(
                         onPressed: () => Navigator.pop(ctx, false),
-                        child: Text(l10n.common_Cancel),
+                        child: Text(l10n.cancel),
                       ),
                       FilledButton(
                         onPressed: () => Navigator.pop(ctx, true),

@@ -38,6 +38,8 @@ class _SpeechFloatingBarState extends ConsumerState<SpeechFloatingBar> {
 
   Future<void> _handleFinalText(BuildContext context, String text) async {
     final trimmed = text.trim();
+    final l10n = AppLocalizations.of(context);
+
     widget.onFinalText(trimmed);
 
     if (trimmed.isEmpty) return;
@@ -64,14 +66,14 @@ class _SpeechFloatingBarState extends ConsumerState<SpeechFloatingBar> {
 
       if (ok == true && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('已保存到本地 Inbox')),
+          SnackBar(content: Text(l10n.speechSavedToLocalInbox)),
         );
         ref.invalidate(localInboxListProvider);
       }
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('语音解析失败：$e')),
+        SnackBar(content: Text(l10n.speechAnalyzeFailed(e))),
       );
     } finally {
       if (mounted) setState(() => _busy = false);
@@ -81,11 +83,13 @@ class _SpeechFloatingBarState extends ConsumerState<SpeechFloatingBar> {
   // ✅ 模拟语音：选择/输入
   Future<void> _openMockDialog(BuildContext context) async {
     final controller = TextEditingController();
+    final l10n = AppLocalizations.of(context);  
+
     final picked = await showDialog<String>(
       context: context,
       builder: (_) {
         return AlertDialog(
-          title: const Text('模拟语音文本'),
+          title: Text(l10n.speechMockTitle),
           content: SizedBox(
             width: double.maxFinite,
             child: Column(
@@ -94,8 +98,8 @@ class _SpeechFloatingBarState extends ConsumerState<SpeechFloatingBar> {
                 TextField(
                   controller: controller,
                   maxLines: 3,
-                  decoration: const InputDecoration(
-                    labelText: '自定义输入（优先）',
+                  decoration: InputDecoration(
+                    labelText: l10n.speechMockCustomInputLabel,
                     border: OutlineInputBorder(),
                   ),
                 ),
@@ -120,14 +124,14 @@ class _SpeechFloatingBarState extends ConsumerState<SpeechFloatingBar> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('取消'),
+              child: Text(l10n.cancel),
             ),
             FilledButton(
               onPressed: () {
                 final t = controller.text.trim();
                 Navigator.pop(context, t.isEmpty ? null : t);
               },
-              child: const Text('使用输入'),
+              child: Text(l10n.speechMockUseInput),
             ),
           ],
         );
@@ -166,7 +170,7 @@ class _SpeechFloatingBarState extends ConsumerState<SpeechFloatingBar> {
             Expanded(
               child: Text(
                 _busy
-                    ? '解析中...'
+                    ? l10n.speechParsing
                     : (widget.lastText.isEmpty
                         ? l10n.speechBarHintHoldToTalk
                         : l10n.speechBarRecentPrefix(widget.lastText)),
@@ -183,7 +187,7 @@ class _SpeechFloatingBarState extends ConsumerState<SpeechFloatingBar> {
             if (widget.enableMock) ...[
               const SizedBox(width: 8),
               IconButton(
-                tooltip: '模拟语音文本',
+                tooltip: l10n.speechMockTooltip,
                 onPressed: _busy ? null : () => _openMockDialog(context),
                 icon: const Icon(Icons.bug_report_outlined, size: 20),
               ),

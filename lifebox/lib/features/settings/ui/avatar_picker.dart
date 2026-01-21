@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lifebox/l10n/app_localizations.dart';
 
 class DefaultAvatar {
   final String id;
@@ -47,6 +48,7 @@ class AvatarCircle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     if (imageUrl != null && imageUrl!.isNotEmpty) {
       return CircleAvatar(
         radius: radius,
@@ -73,6 +75,7 @@ Future<String?> showAvatarPickerSheet(
     showDragHandle: true,
     builder: (ctx) {
       final bottom = MediaQuery.of(ctx).viewInsets.bottom;
+      final l10n = AppLocalizations.of(context);
 
       return SafeArea(
         child: SingleChildScrollView(
@@ -82,16 +85,16 @@ Future<String?> showAvatarPickerSheet(
             children: [
               Row(
                 children: [
-                  const Expanded(
+                  Expanded(
                     child: Text(
-                      'プロフィール画像',
+                      l10n.profileImage,
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                     ),
                   ),
                   TextButton(
                     onPressed: () => Navigator.pop(ctx),
-                    child: const Text('終了'),
+                    child: Text(l10n.finish),
                   ),
                 ],
               ),

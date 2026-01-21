@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'package:lifebox/l10n/app_localizations.dart';
 import '../../../core/widgets/app_scaffold.dart';
 import '../../auth/state/auth_controller.dart';
 import '../state/settings_providers.dart';
@@ -14,12 +14,14 @@ class PersonalInfoPage extends ConsumerWidget {
     final auth = ref.watch(authControllerProvider);
     final profile = ref.watch(userProfileProvider);
 
+    final l10n = AppLocalizations.of(context);
+
     final displayName = (profile.nickname.isNotEmpty)
         ? profile.nickname
         : (auth.user?.displayName ?? '---');
 
     return AppScaffold(
-      title: '個人情報',
+      title: l10n.personalInfoTitle,
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -27,7 +29,7 @@ class PersonalInfoPage extends ConsumerWidget {
             child: Column(
               children: [
                 ListTile(
-                  title: const Text('プロフィール画像'),
+                  title: Text(l10n.profileImage),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -53,7 +55,7 @@ class PersonalInfoPage extends ConsumerWidget {
                 ),
                 const Divider(height: 1),
                 ListTile(
-                  title: const Text('ニックネーム'),
+                  title: Text(l10n.nickname),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -66,7 +68,7 @@ class PersonalInfoPage extends ConsumerWidget {
                   onTap: () async {
                     final v = await _showEditTextDialog(
                       context,
-                      title: 'ニックネーム',
+                      title: l10n.nickname,
                       initialValue: profile.nickname.isNotEmpty
                           ? profile.nickname
                           : (auth.user?.displayName ?? ''),
@@ -91,6 +93,8 @@ class PersonalInfoPage extends ConsumerWidget {
     required String initialValue,
   }) async {
     final c = TextEditingController(text: initialValue);
+    final l10n = AppLocalizations.of(context);
+
     return showDialog<String>(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -99,15 +103,15 @@ class PersonalInfoPage extends ConsumerWidget {
           controller: c,
           autofocus: true,
           style: const TextStyle(
-            color: Colors.black87, // ✅ 输入文字颜色
+            color: Colors.black87,
           ),
         ),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(ctx), child: const Text('キャンセル')),
+              onPressed: () => Navigator.pop(ctx), child: Text(l10n.cancel)),
           FilledButton(
             onPressed: () => Navigator.pop(ctx, c.text),
-            child: const Text('保存'),
+            child: Text(l10n.save),
           ),
         ],
       ),

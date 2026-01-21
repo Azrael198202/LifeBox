@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'package:lifebox/l10n/app_localizations.dart';
 import '../../../core/widgets/app_scaffold.dart';
 
 class JoinGroupPage extends ConsumerStatefulWidget {
@@ -22,8 +22,10 @@ class _JoinGroupPageState extends ConsumerState<JoinGroupPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return AppScaffold(
-      title: 'グループに入る',
+      title: l10n.joinGroupTitle,
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -31,8 +33,8 @@ class _JoinGroupPageState extends ConsumerState<JoinGroupPage> {
             const SizedBox(height: 24),
             const Icon(Icons.home, size: 72, color: Colors.orange),
             const SizedBox(height: 16),
-            const Text(
-              'グループのオーナーに連絡して誘いを出してください\n（グループの設定＞メンバーを追加）',
+            Text(
+              l10n.joinGroupHelp,
               textAlign: TextAlign.center,
               style: TextStyle(color: Colors.black54, height: 1.4),
             ),
@@ -42,7 +44,7 @@ class _JoinGroupPageState extends ConsumerState<JoinGroupPage> {
               controller: _code,
               textInputAction: TextInputAction.done,
               decoration: InputDecoration(
-                hintText: '誘いコードを入力してください',
+                hintText: l10n.joinGroupHint,
                 filled: true,
                 fillColor: Colors.black12.withOpacity(0.05),
                 border: OutlineInputBorder(
@@ -64,9 +66,11 @@ class _JoinGroupPageState extends ConsumerState<JoinGroupPage> {
 
   Future<void> _join() async {
     final code = _code.text.trim();
+    final l10n = AppLocalizations.of(context);
+    
     if (code.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('招待コードを入力してください')),
+        SnackBar(content: Text(l10n.joinGroupCodeEmpty)),
       );
       return;
     }
@@ -79,7 +83,7 @@ class _JoinGroupPageState extends ConsumerState<JoinGroupPage> {
 
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('参加しました（仮）')),
+        SnackBar(content: Text(l10n.joinGroupJoined)),
       );
       Navigator.pop(context);
     } finally {

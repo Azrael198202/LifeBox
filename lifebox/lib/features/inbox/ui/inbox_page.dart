@@ -26,6 +26,7 @@ class InboxPage extends ConsumerStatefulWidget {
 class _InboxPageState extends ConsumerState<InboxPage>
     with SingleTickerProviderStateMixin {
   late final TabController _tab;
+
   String _lastSpeechText = '';
 
   @override
@@ -71,6 +72,7 @@ class _InboxPageState extends ConsumerState<InboxPage>
     // 这里把 record 的 status/risk 映射进去
     final isDone = r.status == 'done';
     final isHighRisk = r.risk == 'high';
+    final l10n = AppLocalizations.of(context);
 
     final status = isDone
         ? InboxStatus.done
@@ -78,14 +80,14 @@ class _InboxPageState extends ConsumerState<InboxPage>
 
     return InboxItem(
       id: r.id,
-      title: r.title.isEmpty ? '(No title)' : r.title,
+      title: r.title.isEmpty ? l10n.no_title: r.title,
       dueAt: _parseDueAt(r.dueAt),
       risk: _mapRisk(r.risk),
       summary: r.summary,
       amount: r.amount,
       currency: r.currency,
       rawText: r.rawText,
-      source: r.sourceHint.isEmpty ? '其他' : r.sourceHint,
+      source: r.sourceHint.isEmpty ? l10n.another : r.sourceHint,
       status: status,
       locale: r.locale,
     );

@@ -2,6 +2,16 @@
   "@@locale": "en",
   "settings_title": "Settings",
   "language_title": "Language",
+  "language_jp": "Japanese",
+  "language_zh": "Chinese",
+  "language_en": "English",
+  "clear": "Clear",
+  "delete": "Delete",
+  "cancel": "Delete",
+  "save":"Save",
+  "finish":"Finish",
+  "deleteConfirm": "Are you sure you want to delete it?",
+  "deleteConfirmTitle": "Delete Confirm",
   "language_subtitle": "Change display language",
   "upload_policy_title": "Upload OCR text only (default ON)",
   "upload_policy_subtitle": "Privacy-first: images are not uploaded (configurable later)",
@@ -13,12 +23,16 @@
   "clear_data_subtitle": "Clear local / clear cloud (API reserved)",
   "clear_QA": "Confirm clearing?",
   "clear_content": "This will clear locally cached data (sample placeholder).",
-  "clear_OK": "Clear",
   "logout_title": "Log out",
   "logout_QA": "Are you sure you want to log out?",
   "logout_OK": "Log out",
   "not_logged_in": "Not signed in",
   "no_name": "User {name}",
+
+  "no_title": "(No title)' ",
+  "another": "Other",
+
+
   "version_text": "Life Inbox • v0.1.0 (MVP)",
   "app_name": "Life Inbox",
   "terms_agree_prefix": "By continuing, you agree to",
@@ -27,7 +41,6 @@
   "terms_and": " and ",
   "open_privacy_action": "TODO: Open Privacy Policy",
   "privacy_title": "Privacy Policy",
-  "common_Cancel": "Cancel",
   "common_mail": "Mail",
   "common_mail_hit": "example@email.com",
   "common_password": "Password",
@@ -106,7 +119,7 @@
     }
   },
 
-    "analysis_confirm_title": "Confirm & Save",
+  "analysis_confirm_title": "Confirm & Save",
   "analysis_confirm_section_editable": "Parsed Result (Editable)",
   "analysis_confirm_field_title": "Title",
   "analysis_confirm_field_summary": "Content / Summary",
@@ -140,7 +153,6 @@
   "pickYearMonthTitle": "Select year & month",
   "yearLabel": "Year",
   "monthLabel": "Month",
-  "cancel": "Cancel",
   "confirm": "Confirm",
 
   "speechSheetTitle": "Speech recognition text",
@@ -301,6 +313,7 @@
   "setting_clear_confirm_desc": "This will clear local cached data (demo placeholder).",
   "setting_clear_ok": "Clear",
   "setting_clear_done": "Cleared (demo: real cleanup will be added later).",
+  "setting_group": "Group & Share(Paid)",
 
   "input_valid_mail_must":"Please enter the email address",
   "input_valid_mail_format":"Please enter a valid email address",
@@ -324,6 +337,81 @@
   "cloud_feature_offline": "Offline access on this device",
   "cloud_price_monthly": "Price: ¥300 / month (Mock)",
   "subscription_restore": "Restore Purchase",
-  "subscription_subscribe": "Subscribe & Enable"
+  "subscription_subscribe": "Subscribe & Enable",
+
+  "paywallTitle": "Premium (Paid)",
+  "paywallDesc": "To use features like group management and cloud backup,\nPremium subscription is required.",
+  "loadingText": "Loading...",
+  "planMonthly": "Monthly plan",
+  "planYearly": "Yearly plan",
+  "restorePurchase": "Restore purchase",
+  "cancelGuideTitle": "Manage cancellations in App Store / Google Play subscriptions",
+  "cancelGuideSubtitle": "You can’t cancel inside the app",
+  "notNow": "Not now",
+
+  "personalInfoTitle": "Personal info",
+  "profileImage": "Profile photo",
+  "nickname": "Nickname",
+
+  "joinGroupTitle": "Join a group",
+  "joinGroupHelp": "Contact the group owner to send you an invitation\n(Group settings > Add members)",
+  "joinGroupHint": "Enter invitation code",
+  "joinGroupCodeEmpty": "Please enter an invitation code",
+  "joinGroupJoined": "Joined",
+
+  "groupCreateTitle": "Create group",
+  "groupSettingsTitle": "Group settings",
+  "groupMembers": "Group members",
+  "groupOwnerLabel": "Owner",
+  "groupMemberLabel": "Member",
+
+  "ownerOnlyCanChange": "Only the owner can change this",
+  "ownerOnlyCanAdd": "Only the owner can add members",
+  "ownerOnlyCanDelete": "Only the owner can delete the group",
+
+  "groupNameInputTitleCreate": "Enter group name",
+  "groupNameInputTitleEdit": "Group name",
+  "groupNameEmpty": "Please enter a group name",
+  "groupCreated": "Group created",
+  "addMember": "Add member",
+
+  "inviteSmsNotImplemented": "Invite via SMS (not implemented)",
+  "inviteEmailNotImplemented": "Invite via email (not implemented)",
+
+  "deleteGroupTitle": "Delete group",
+  "noPermission": "No permission",
+
+  "memberTransferOwner": "Transfer ownership",
+  "memberRemove": "Remove member",
+  "memberRemoved": "Removed",
+  "ownerTransferred": "Ownership transferred",
+  "deleteApiNotConnected": "Delete API not connected",
+
+  "swipeMarkDone": "Mark done",
+  "swipeRestore": "Restore",
+
+  "groupManage": "Group & Share",
+  "nogroup": "No group yet",
+  "joinGroup": "Join a group",
+
+  "inviteChooseMethodTitle": "Choose an invite method",
+  "inviteMethodAccount": "App account",
+  "inviteMethodSms": "SMS",
+  "inviteMethodEmail": "Email",
+  "inviteMethodCode": "Invite code",
+  "inviteCodeCopied": "Invite code copied",
+
+  "account": "Account",
+  "inputAccount": "Enter account email",
+  "inputName": "Enter member display name",
+  "displayname": "Display name",
+
+  "speechSavedToLocalInbox": "Saved to local Inbox",
+  "speechAnalyzeFailed": "Speech analysis failed: {error}",
+  "speechMockTitle": "Mock speech text",
+  "speechMockCustomInputLabel": "Custom input (preferred)",
+  "speechMockUseInput": "Use input",
+  "speechParsing": "Parsing...",
+  "speechMockTooltip": "Mock speech text"
 
 }

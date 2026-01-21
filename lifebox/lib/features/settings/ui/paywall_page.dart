@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lifebox/l10n/app_localizations.dart';
 import '../state/subscription_providers.dart';
 
 class PaywallPage extends ConsumerWidget {
@@ -9,6 +10,7 @@ class PaywallPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final sub = ref.watch(subscriptionProvider);
     final store = ref.watch(subscriptionStoreProvider);
+    final l10n = AppLocalizations.of(context);
 
     final products = sub.products;
     final monthly = products.where((p) => p.id == 'lifebox_premium_monthly').toList();
@@ -23,15 +25,15 @@ class PaywallPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('プレミアム（有料）'),
+        title: Text(l10n.paywallTitle),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
             const SizedBox(height: 8),
-            const Text(
-              'グループ管理・クラウド保存などの機能を利用するには\nプレミアム登録が必要です。',
+            Text(
+              l10n.paywallDesc,
               textAlign: TextAlign.center,
               style: TextStyle(color: Colors.black54),
             ),
@@ -50,20 +52,20 @@ class PaywallPage extends ConsumerWidget {
               child: ListView(
                 children: [
                   _planCard(
-                    title: '月額プラン',
+                    title: l10n.planMonthly,
                     subtitle: monthly.isNotEmpty
                         ? monthly.first.price
-                        : '読み込み中...',
+                        : l10n.loadingText,
                     onTap: monthly.isEmpty || sub.loading
                         ? null
                         : () => store.purchase(monthly.first),
                   ),
                   const SizedBox(height: 12),
                   _planCard(
-                    title: '年額プラン',
+                    title: l10n.planYearly,
                     subtitle: yearly.isNotEmpty
                         ? yearly.first.price
-                        : '読み込み中...',
+                        : l10n.loadingText,
                     onTap: yearly.isEmpty || sub.loading
                         ? null
                         : () => store.purchase(yearly.first),
@@ -72,7 +74,7 @@ class PaywallPage extends ConsumerWidget {
                   Card(
                     child: ListTile(
                       leading: const Icon(Icons.restore),
-                      title: const Text('購入を復元（Restore）'),
+                      title: Text(l10n.restorePurchase),
                       onTap: sub.loading ? null : () => store.restore(),
                     ),
                   ),
@@ -81,8 +83,8 @@ class PaywallPage extends ConsumerWidget {
                   Card(
                     child: ListTile(
                       leading: const Icon(Icons.help_outline),
-                      title: const Text('解約はApp Store / Google Playのサブスク管理から'),
-                      subtitle: const Text('アプリ内では解約できません'),
+                      title: Text(l10n.cancelGuideTitle),
+                      subtitle: Text(l10n.cancelGuideSubtitle),
                     ),
                   ),
                 ],
@@ -93,7 +95,7 @@ class PaywallPage extends ConsumerWidget {
               width: double.infinity,
               child: TextButton(
                 onPressed: () => Navigator.pop(context, false),
-                child: const Text('今はしない'),
+                child: Text(l10n.notNow),
               ),
             ),
           ],

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lifebox/features/auth/domain/app_user.dart';
 import 'package:lifebox/features/settings/data/group_store.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lifebox/l10n/app_localizations.dart';
 
 import '../../../core/widgets/app_scaffold.dart';
 import '../../auth/state/auth_controller.dart';
@@ -47,6 +48,7 @@ class _GroupSettingsPageState extends ConsumerState<GroupSettingsPage> {
   Widget build(BuildContext context) {
     final auth = ref.watch(authControllerProvider);
     final profile = ref.watch(userProfileProvider);
+    final l10n = AppLocalizations.of(context);
 
     GroupBrief? group;
     if (_isCreateMode) {
@@ -90,7 +92,7 @@ class _GroupSettingsPageState extends ConsumerState<GroupSettingsPage> {
     }
 
     return AppScaffold(
-      title: _isCreateMode ? 'グループ作成' : 'グループ設定',
+      title: _isCreateMode ? l10n.groupCreateTitle : l10n.groupSettingsTitle,
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -113,11 +115,14 @@ class _GroupSettingsPageState extends ConsumerState<GroupSettingsPage> {
   /// =============================
 
   Widget _buildFamilyInfoCard(BuildContext context, dynamic group) {
+
+    final l10n = AppLocalizations.of(context);
+
     return Card(
       child: Column(
         children: [
           ListTile(
-            title: Text(_isCreateMode ? 'グループ作成' : 'グループ設定'),
+            title: Text(_isCreateMode ? l10n.groupCreateTitle : l10n.groupSettingsTitle),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -131,13 +136,13 @@ class _GroupSettingsPageState extends ConsumerState<GroupSettingsPage> {
             ),
             onTap: () async {
               if (!_isOwner) {
-                _toast(context, 'オーナーのみ変更できます');
+                _toast(context, l10n.ownerOnlyCanChange);
                 return;
               }
 
               final name = await _showEditTextDialog(
                 context,
-                title: _isCreateMode ? 'グループ名を入力' : 'グループ名称',
+                title: _isCreateMode ? l10n.groupNameInputTitleCreate : l10n.groupNameInputTitleEdit,
                 initialValue: group?.name ?? '',
               );
               if (name == null || name.trim().isEmpty) return;
@@ -210,12 +215,14 @@ class _GroupSettingsPageState extends ConsumerState<GroupSettingsPage> {
   }
 
   Widget _buildAddMember(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Card(
       child: ListTile(
-        title: const Text('メンバーを追加', style: TextStyle(color: Colors.blue)),
+        title: Text(l10n.addMember, style: TextStyle(color: Colors.blue)),
         onTap: () async {
           if (!_isOwner) {
-            _toast(context, 'オーナーのみ追加できます');
+            _toast(context, l10n.ownerOnlyCanAdd);
             return;
           }
 
@@ -240,12 +247,12 @@ class _GroupSettingsPageState extends ConsumerState<GroupSettingsPage> {
 
             case 'sms':
               // TODO: 后续用 url_launcher 打开系统短信并带上 inviteCode
-              _toast(context, 'SMSで招待（未実装）');
+              _toast(context, l10n.inviteSmsNotImplemented);
               return;
 
             case 'email':
               // TODO: 后续用 url_launcher 打开系统邮件并带上 inviteCode
-              _toast(context, 'メールで招待（未実装）');
+              _toast(context, l10n.inviteEmailNotImplemented);
               return;
 
             default:
@@ -257,14 +264,16 @@ class _GroupSettingsPageState extends ConsumerState<GroupSettingsPage> {
   }
 
   Widget _buildCreateGroup(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Card(
       child: ListTile(
-        title: const Center(
-          child: Text('グループを作成', style: TextStyle(color: Colors.blue)),
+        title: Center(
+          child: Text(l10n.groupCreateTitle, style: TextStyle(color: Colors.blue)),
         ),
         onTap: () async {
           if ((_familyName ?? '').isEmpty) {
-            _toast(context, 'グループ名を入力してください');
+            _toast(context, l10n.groupNameEmpty);
             return;
           }
 
@@ -272,7 +281,7 @@ class _GroupSettingsPageState extends ConsumerState<GroupSettingsPage> {
           // final groupId = uuid.v4();
           // await groupStore.createGroup(...)
 
-          _toast(context, 'グループを作成しました（仮）');
+          _toast(context, l10n.groupCreated);
           Navigator.pop(context); // 或 push 到详情
         },
       ),
@@ -280,35 +289,37 @@ class _GroupSettingsPageState extends ConsumerState<GroupSettingsPage> {
   }
 
   Widget _buildDeleteGroup(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Card(
       child: ListTile(
-        title: const Center(
-          child: Text('グループの削除', style: TextStyle(color: Colors.red)),
+        title: Center(
+          child: Text(l10n.deleteGroupTitle, style: TextStyle(color: Colors.red)),
         ),
         onTap: () async {
           if (!_isOwner) {
-            _toast(context, 'オーナーのみ削除できます');
+            _toast(context, l10n.ownerOnlyCanDelete);
             return;
           }
 
           final ok = await showDialog<bool>(
             context: context,
             builder: (ctx) => AlertDialog(
-              title: const Text('グループの削除'),
-              content: const Text('本当に削除しますか？'),
+              title: Text(l10n.deleteGroupTitle),
+              content: Text(l10n.deleteConfirm),
               actions: [
                 TextButton(
                     onPressed: () => Navigator.pop(ctx, false),
-                    child: const Text('キャンセル')),
+                    child: Text(l10n.cancel)),
                 FilledButton(
                     onPressed: () => Navigator.pop(ctx, true),
-                    child: const Text('削除')),
+                    child: Text(l10n.delete)),
               ],
             ),
           );
 
           if (ok == true) {
-            _toast(context, '削除API未接続');
+            _toast(context, l10n.deleteApiNotConnected);
           }
         },
       ),
@@ -335,6 +346,8 @@ class _GroupSettingsPageState extends ConsumerState<GroupSettingsPage> {
 
   Future<String?> _showMemberActionSheet(
       BuildContext context, GroupMember target) async {
+    
+    final l10n = AppLocalizations.of(context);
     final isMe = target.id == _currentUserId;
 
     // 非 owner：不能操作
@@ -345,7 +358,7 @@ class _GroupSettingsPageState extends ConsumerState<GroupSettingsPage> {
         builder: (_) => SafeArea(
           child: ListTile(
             title: Text(target.name),
-            subtitle: const Text('権限がありません'),
+            subtitle: Text(l10n.noPermission),
           ),
         ),
       );
@@ -363,14 +376,14 @@ class _GroupSettingsPageState extends ConsumerState<GroupSettingsPage> {
             if (!isMe && target.role == 'member')
               ListTile(
                 leading: const Icon(Icons.swap_horiz),
-                title: const Text('オーナーに移管'),
+                title: Text(l10n.memberTransferOwner),
                 onTap: () => Navigator.pop(context, 'transfer_owner'),
               ),
             if (!isMe && target.role == 'member')
               ListTile(
                 leading: const Icon(Icons.delete_outline),
                 title:
-                    const Text('メンバーを削除', style: TextStyle(color: Colors.red)),
+                    Text(l10n.memberRemove, style: TextStyle(color: Colors.red)),
                 onTap: () => Navigator.pop(context, 'remove'),
               ),
             const SizedBox(height: 8),
@@ -381,13 +394,17 @@ class _GroupSettingsPageState extends ConsumerState<GroupSettingsPage> {
   }
 
   void _removeMember(BuildContext context, GroupMember target) {
+    final l10n = AppLocalizations.of(context);
+
     setState(() {
       _members.removeWhere((m) => m.id == target.id);
     });
-    _toast(context, '削除しました（仮）');
+    _toast(context, l10n.memberRemoved);
   }
 
   void _transferOwner(BuildContext context, GroupMember target) {
+    final l10n = AppLocalizations.of(context);
+
     setState(() {
       _members = _members.map((m) {
         if (m.id == target.id) {
@@ -399,7 +416,7 @@ class _GroupSettingsPageState extends ConsumerState<GroupSettingsPage> {
         return m;
       }).toList();
     });
-    _toast(context, 'オーナーを移管しました（仮）');
+    _toast(context, l10n.ownerTransferred);
   }
 
   /// =============================
@@ -412,6 +429,8 @@ class _GroupSettingsPageState extends ConsumerState<GroupSettingsPage> {
     required String initialValue,
   }) async {
     final c = TextEditingController(text: initialValue);
+    final l10n = AppLocalizations.of(context);  
+
     return showDialog<String>(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -425,10 +444,10 @@ class _GroupSettingsPageState extends ConsumerState<GroupSettingsPage> {
         ),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(ctx), child: const Text('キャンセル')),
+              onPressed: () => Navigator.pop(ctx), child: Text(l10n.cancel)),
           FilledButton(
               onPressed: () => Navigator.pop(ctx, c.text),
-              child: const Text('保存')),
+              child: Text(l10n.save)),
         ],
       ),
     );

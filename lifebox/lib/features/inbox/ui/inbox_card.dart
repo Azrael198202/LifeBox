@@ -49,16 +49,16 @@ class InboxCard extends ConsumerWidget {
       final ok = await showDialog<bool>(
         context: context,
         builder: (_) => AlertDialog(
-          title: const Text('确认删除'),
-          content: const Text('确定要删除这条记录吗？'),
+          title: Text(l10n.deleteConfirmTitle),
+          content: Text(l10n.deleteConfirm),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, false),
-              child: Text(l10n.common_Cancel),
+              child: Text(l10n.cancel),
             ),
             FilledButton(
               onPressed: () => Navigator.pop(context, true),
-              child: const Text('删除'),
+              child: Text(l10n.delete),
             ),
           ],
         ),
@@ -93,14 +93,14 @@ class InboxCard extends ConsumerWidget {
 
       background: _SwipeBackground(
         left: true,
-        label: _isDone ? '恢复待办' : '标记完成',
+        label: _isDone ? l10n.swipeRestore : l10n.swipeMarkDone,
         icon: _isDone ? Icons.undo : Icons.check_circle_outline,
         color: Colors.green,
       ),
 
       secondaryBackground: _SwipeBackground(
         left: false,
-        label: '删除',
+        label: l10n.delete,
         icon: Icons.delete_outline,
         color: Colors.red,
       ),

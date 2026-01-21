@@ -15,6 +15,36 @@ class AppLocalizationsEn extends AppLocalizations {
   String get language_title => 'Language';
 
   @override
+  String get language_jp => 'Japanese';
+
+  @override
+  String get language_zh => 'Chinese';
+
+  @override
+  String get language_en => 'English';
+
+  @override
+  String get clear => 'Clear';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
+  String get cancel => 'Delete';
+
+  @override
+  String get save => 'Save';
+
+  @override
+  String get finish => 'Finish';
+
+  @override
+  String get deleteConfirm => 'Are you sure you want to delete it?';
+
+  @override
+  String get deleteConfirmTitle => 'Delete Confirm';
+
+  @override
   String get language_subtitle => 'Change display language';
 
   @override
@@ -51,9 +81,6 @@ class AppLocalizationsEn extends AppLocalizations {
       'This will clear locally cached data (sample placeholder).';
 
   @override
-  String get clear_OK => 'Clear';
-
-  @override
   String get logout_title => 'Log out';
 
   @override
@@ -71,7 +98,10 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get common_Cancel => 'Cancel';
+  String get no_title => '(No title)\' ';
+
+  @override
+  String get another => 'Other';
 
   @override
   String get version_text => 'Life Inbox • v0.1.0 (MVP)';
@@ -390,9 +420,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get monthLabel => 'Month';
 
   @override
-  String get cancel => 'Cancel';
-
-  @override
   String get confirm => 'Confirm';
 
   @override
@@ -676,6 +703,9 @@ class AppLocalizationsEn extends AppLocalizations {
       'Cleared (demo: real cleanup will be added later).';
 
   @override
+  String get setting_group => 'Group & Share(Paid)';
+
+  @override
   String get input_valid_mail_must => 'Please enter the email address';
 
   @override
@@ -738,4 +768,192 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get subscription_subscribe => 'Subscribe & Enable';
+
+  @override
+  String get paywallTitle => 'Premium (Paid)';
+
+  @override
+  String get paywallDesc =>
+      'To use features like group management and cloud backup,\nPremium subscription is required.';
+
+  @override
+  String get loadingText => 'Loading...';
+
+  @override
+  String get planMonthly => 'Monthly plan';
+
+  @override
+  String get planYearly => 'Yearly plan';
+
+  @override
+  String get restorePurchase => 'Restore purchase';
+
+  @override
+  String get cancelGuideTitle =>
+      'Manage cancellations in App Store / Google Play subscriptions';
+
+  @override
+  String get cancelGuideSubtitle => 'You can’t cancel inside the app';
+
+  @override
+  String get notNow => 'Not now';
+
+  @override
+  String get personalInfoTitle => 'Personal info';
+
+  @override
+  String get profileImage => 'Profile photo';
+
+  @override
+  String get nickname => 'Nickname';
+
+  @override
+  String get joinGroupTitle => 'Join a group';
+
+  @override
+  String get joinGroupHelp =>
+      'Contact the group owner to send you an invitation\n(Group settings > Add members)';
+
+  @override
+  String get joinGroupHint => 'Enter invitation code';
+
+  @override
+  String get joinGroupCodeEmpty => 'Please enter an invitation code';
+
+  @override
+  String get joinGroupJoined => 'Joined';
+
+  @override
+  String get groupCreateTitle => 'Create group';
+
+  @override
+  String get groupSettingsTitle => 'Group settings';
+
+  @override
+  String get groupMembers => 'Group members';
+
+  @override
+  String get groupOwnerLabel => 'Owner';
+
+  @override
+  String get groupMemberLabel => 'Member';
+
+  @override
+  String get ownerOnlyCanChange => 'Only the owner can change this';
+
+  @override
+  String get ownerOnlyCanAdd => 'Only the owner can add members';
+
+  @override
+  String get ownerOnlyCanDelete => 'Only the owner can delete the group';
+
+  @override
+  String get groupNameInputTitleCreate => 'Enter group name';
+
+  @override
+  String get groupNameInputTitleEdit => 'Group name';
+
+  @override
+  String get groupNameEmpty => 'Please enter a group name';
+
+  @override
+  String get groupCreated => 'Group created';
+
+  @override
+  String get addMember => 'Add member';
+
+  @override
+  String get inviteSmsNotImplemented => 'Invite via SMS (not implemented)';
+
+  @override
+  String get inviteEmailNotImplemented => 'Invite via email (not implemented)';
+
+  @override
+  String get deleteGroupTitle => 'Delete group';
+
+  @override
+  String get noPermission => 'No permission';
+
+  @override
+  String get memberTransferOwner => 'Transfer ownership';
+
+  @override
+  String get memberRemove => 'Remove member';
+
+  @override
+  String get memberRemoved => 'Removed';
+
+  @override
+  String get ownerTransferred => 'Ownership transferred';
+
+  @override
+  String get deleteApiNotConnected => 'Delete API not connected';
+
+  @override
+  String get swipeMarkDone => 'Mark done';
+
+  @override
+  String get swipeRestore => 'Restore';
+
+  @override
+  String get groupManage => 'Group & Share';
+
+  @override
+  String get nogroup => 'No group yet';
+
+  @override
+  String get joinGroup => 'Join a group';
+
+  @override
+  String get inviteChooseMethodTitle => 'Choose an invite method';
+
+  @override
+  String get inviteMethodAccount => 'App account';
+
+  @override
+  String get inviteMethodSms => 'SMS';
+
+  @override
+  String get inviteMethodEmail => 'Email';
+
+  @override
+  String get inviteMethodCode => 'Invite code';
+
+  @override
+  String get inviteCodeCopied => 'Invite code copied';
+
+  @override
+  String get account => 'Account';
+
+  @override
+  String get inputAccount => 'Enter account email';
+
+  @override
+  String get inputName => 'Enter member display name';
+
+  @override
+  String get displayname => 'Display name';
+
+  @override
+  String get speechSavedToLocalInbox => 'Saved to local Inbox';
+
+  @override
+  String speechAnalyzeFailed(Object error) {
+    return 'Speech analysis failed: $error';
+  }
+
+  @override
+  String get speechMockTitle => 'Mock speech text';
+
+  @override
+  String get speechMockCustomInputLabel => 'Custom input (preferred)';
+
+  @override
+  String get speechMockUseInput => 'Use input';
+
+  @override
+  String get speechParsing => 'Parsing...';
+
+  @override
+  String get speechMockTooltip => 'Mock speech text';
 }

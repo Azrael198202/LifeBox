@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/widgets/app_scaffold.dart';
+import '../../../l10n/app_localizations.dart';
 
 class AddMemberAppAccountResult {
   final String name;
@@ -33,8 +34,9 @@ class _AddMemberAppAccountPageState
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return AppScaffold(
-      title: 'メンバーを追加',
+      title: l10n.addMember,
       // 如果你的 AppScaffold 不支持 actions，就用普通 Scaffold+AppBar
       body: ListView(
         padding: const EdgeInsets.all(16),
@@ -44,7 +46,7 @@ class _AddMemberAppAccountPageState
             children: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text('取り消し'),
+                child: Text(l10n.cancel),
               ),
               const Spacer(),
               TextButton(
@@ -59,7 +61,7 @@ class _AddMemberAppAccountPageState
                         );
                       }
                     : null,
-                child: const Text('保存'),
+                child: Text(l10n.save),
               ),
             ],
           ),
@@ -71,9 +73,9 @@ class _AddMemberAppAccountPageState
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
               child: TextField(
                 controller: _name,
-                decoration: const InputDecoration(
-                  labelText: '名前',
-                  hintText: '家族メンバーの名前を入力',
+                decoration: InputDecoration(
+                  labelText: l10n.displayname,
+                  hintText: l10n.inputName,
                   border: InputBorder.none,
                 ),
                 onChanged: (_) => setState(() {}),
@@ -88,9 +90,9 @@ class _AddMemberAppAccountPageState
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
               child: TextField(
                 controller: _account,
-                decoration: const InputDecoration(
-                  labelText: 'アカウント',
-                  hintText: 'アカウント番号を入力してください',
+                decoration: InputDecoration(
+                  labelText: l10n.account,
+                  hintText: l10n.inputAccount,
                   border: InputBorder.none,
                 ),
                 onChanged: (_) => setState(() {}),

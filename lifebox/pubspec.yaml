@@ -55,7 +55,6 @@ dependencies:
   in_app_purchase: ^3.2.0
   device_calendar: ^4.3.3
   timezone: ^0.9.4
-  flutter_native_timezone: ^2.0.0
   
 dev_dependencies:
   flutter_test:

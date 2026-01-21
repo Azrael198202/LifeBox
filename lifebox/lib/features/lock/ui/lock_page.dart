@@ -35,8 +35,7 @@ class LockPage extends ConsumerWidget {
                   final target =
                       from != null ? Uri.decodeComponent(from!) : '/inbox';
 
-                  await Future<void>.delayed(Duration.zero);
-                  context.push(target);
+                  context.go(target);
                 },
                 icon: const Icon(Icons.lock_open),
                 label: Text(l10n.unlock),

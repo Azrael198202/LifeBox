@@ -1,7 +1,6 @@
 import 'package:device_calendar/device_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
@@ -30,14 +29,7 @@ class _AddToDeviceCalendarPageState
     _init();
   }
 
-  Future<void> _initTimezone() async {
-    tz.initializeTimeZones();
-    final String name = await FlutterNativeTimezone.getLocalTimezone();
-    tz.setLocalLocation(tz.getLocation(name));
-  }
-
   Future<void> _init() async {
-    await _initTimezone();
 
     setState(() {
       _loading = true;
@@ -102,14 +94,7 @@ class _AddToDeviceCalendarPageState
     }
 
     // 期限日：終日イベントとして登録（必要なら時間も付けられる）
-    final start = tz.TZDateTime(
-      tz.local,
-      due.year,
-      due.month,
-      due.day,
-      9,
-      0,
-    );
+    final start = tz.TZDateTime(tz.local, due.year, due.month, due.day, 9, 0);
     final end = start.add(const Duration(hours: 1));
 
     final groupLabel = (r.groupId == null) ? '個人' : 'Group';

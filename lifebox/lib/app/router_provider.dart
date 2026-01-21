@@ -2,8 +2,10 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lifebox/features/inbox/ui/add_to_device_calendar_page.dart';
 import 'package:lifebox/features/settings/ui/add_member_app_account_page.dart';
 import 'package:lifebox/features/settings/ui/join_group_page.dart';
+import 'package:lifebox/features/settings/ui/paywall_page.dart';
 
 import '../core/services/app_lock.dart';
 import '../features/auth/state/auth_controller.dart';
@@ -98,6 +100,13 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
 
       GoRoute(
+        path: '/inbox/add_to_calendar/:id',
+        builder: (_, state) => AddToDeviceCalendarPage(
+          recordId: state.pathParameters['id']!,
+        ),
+      ),
+
+      GoRoute(
         path: '/action',
         builder: (_, state) {
           final type = state.uri.queryParameters['type'] ?? 'calendar';
@@ -107,6 +116,11 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
 
       GoRoute(path: '/settings', builder: (_, __) => const SettingsPage()),
+
+      GoRoute(
+        path: '/paywall',
+        builder: (_, __) => const PaywallPage(),
+      ),
 
       GoRoute(
         path: '/settings',

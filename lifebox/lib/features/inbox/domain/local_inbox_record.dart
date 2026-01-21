@@ -11,6 +11,9 @@ class LocalInboxRecord {
   final String? currency;
   final String risk; // high/mid/low
 
+  final String? groupId; // null = 個人
+  final int colorValue; // ARGB int, e.g. 0xFF2196F3
+
   final String status; // pending/done etc
   final DateTime createdAt;
 
@@ -27,6 +30,8 @@ class LocalInboxRecord {
     required this.risk,
     required this.status,
     required this.createdAt,
+    required this.groupId,
+    required this.colorValue,
   });
 
   Map<String, dynamic> toMap() => {
@@ -42,6 +47,8 @@ class LocalInboxRecord {
         "risk": risk,
         "status": status,
         "created_at": createdAt.toIso8601String(),
+        "group_id": groupId,
+        "color_value": colorValue,
       };
 
   static LocalInboxRecord fromMap(Map<String, dynamic> m) => LocalInboxRecord(
@@ -58,5 +65,7 @@ class LocalInboxRecord {
         status: (m["status"] as String?) ?? "pending",
         createdAt: DateTime.tryParse((m["created_at"] as String?) ?? "") ??
             DateTime.now(),
+        groupId: m["group_id"] as String?,
+        colorValue: (m["color_value"] as int?) ?? 0xFF2196F3
       );
 }

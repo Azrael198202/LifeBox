@@ -139,7 +139,7 @@ class InboxDetailPage extends ConsumerWidget {
                       _kvRow('状态', r.status),
                       const SizedBox(height: 12),
                       FilledButton(
-                        onPressed: () => context.push('/action?type=calendar&id=$id'),
+                        onPressed: () => context.push('/inbox/add_to_calendar/$id'),
                         child: Text(l10n.inboxDetailPrimaryActionAddCalendar),
                       ),
                       const SizedBox(height: 8),

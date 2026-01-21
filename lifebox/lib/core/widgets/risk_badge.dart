@@ -5,14 +5,14 @@ import 'package:lifebox/l10n/app_localizations.dart';
 /// 原来的风险等级（三档）——保留
 enum RiskLevel { high, mid, low }
 
-/// 新增：通用信息徽章类型（用于提示/成功/警告/错误/信息）
+/// 通用信息徽章类型（用于提示/成功/警告/错误/信息）
 enum BadgeTone { info, success, warning, danger }
 
 class RiskBadge extends StatelessWidget {
-  /// 兼容旧用法：RiskBadge(risk: RiskLevel.high)
+  /// RiskBadge(risk: RiskLevel.high)
   final RiskLevel? risk;
 
-  /// 新用法：RiskBadge.text(...)
+  /// RiskBadge.text(...)
   final String? label;
   final BadgeTone? tone;
 

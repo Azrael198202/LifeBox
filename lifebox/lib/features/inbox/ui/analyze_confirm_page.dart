@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lifebox/core/utils/date_tools.dart';
+import 'package:lifebox/features/auth/state/auth_controller.dart';
 import 'package:lifebox/features/inbox/state/cloud_inbox_service_provider.dart';
+import 'package:lifebox/features/settings/state/subscription_providers.dart';
 import 'package:uuid/uuid.dart';
 import 'package:lifebox/l10n/app_localizations.dart';
 
@@ -31,9 +34,50 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
   late final TextEditingController _dueAt;
   late final TextEditingController _amount;
   late final TextEditingController _currency;
+
+  String _groupId = 'personal'; // personal or real group id
+  int _colorValue = 0xFF607D8B; // 默认颜色（蓝灰）
   String _risk = 'low';
 
   AnalyzeResponse? _resp;
+
+  static const List<int> _colorOptions = [
+    0xFF607D8B, // blueGrey
+    0xFF2196F3, // blue
+    0xFF4CAF50, // green
+    0xFFFF9800, // orange
+    0xFFE91E63, // pink
+    0xFF9C27B0, // purple
+    0xFFF44336, // red
+  ];
+
+  String _colorName(int c) {
+    switch (c) {
+      case 0xFF607D8B:
+        return 'ブルーグレー';
+      case 0xFF2196F3:
+        return 'ブルー';
+      case 0xFF4CAF50:
+        return 'グリーン';
+      case 0xFFFF9800:
+        return 'オレンジ';
+      case 0xFFE91E63:
+        return 'ピンク';
+      case 0xFF9C27B0:
+        return 'パープル';
+      case 0xFFF44336:
+        return 'レッド';
+      default:
+        return 'カラー';
+    }
+  }
+
+  /// groupId
+  /// personal も含めて deterministic にする
+  int _defaultColorForGroup(String groupId) {
+    final base = groupId.hashCode.abs() % _colorOptions.length;
+    return _colorOptions[base];
+  }
 
   @override
   void initState() {
@@ -57,10 +101,9 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
     // );
 
     final req = AnalyzeRequest(
-      text: "銀行より：クレジットカードのお支払い期限は1/20です。金額3万円。",
-      locale: "ja",
-      sourceHint: "銀行"
-    );
+        text: "銀行より：クレジットカードのお支払い期限は1/20です。金額3万円。",
+        locale: "ja",
+        sourceHint: "銀行");
 
     // 2) 调用接口，拿到返回（AnalyzeResponse）
     final resp = await svc.analyze(req);
@@ -72,7 +115,7 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
       _risk = resp.risk;
       _title.text = resp.title;
       _summary.text = resp.notes ?? '';
-      _dueAt.text = resp.dueAt ?? '';
+      _dueAt.text = DateTools.normalizeDateToYMD(resp.dueAt) ?? '';
       _amount.text = resp.amount?.toString() ?? '';
       _currency.text = resp.currency ?? '';
     });
@@ -104,7 +147,11 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
     if (_saving) return;
     setState(() => _saving = true);
 
-    final l10n = AppLocalizations.of(context);  
+    final l10n = AppLocalizations.of(context);
+
+    final auth = ref.read(authControllerProvider);
+    final sub = ref.read(subscriptionProvider);
+
     final due = _dueAt.text.trim();
     if (due.isNotEmpty && !_isValidDate(due)) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -122,12 +169,17 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
         sourceHint: widget.request.sourceHint,
         title: _title.text.trim().isEmpty ? 'Untitled' : _title.text.trim(),
         summary: _summary.text.trim(),
-        dueAt: _dueAt.text.trim().isEmpty ? null : _dueAt.text.trim(),
+        dueAt: DateTools.normalizeDateToYMD(_dueAt.text),
         amount: int.tryParse(_amount.text.trim()),
         currency: _currency.text.trim().isEmpty ? null : _currency.text.trim(),
         risk: _risk,
         status: 'pending',
         createdAt: DateTime.now(),
+        groupId:
+            (sub.subscribed && auth.groups.isNotEmpty && _groupId != 'personal')
+                ? _groupId
+                : null,
+        colorValue: _colorValue,
       );
 
       // ✅ 保存到本地 DB
@@ -158,6 +210,12 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
     final onSurface = cs.onSurface;
     final onSurfaceHint = cs.onSurface.withOpacity(0.7);
     final l10n = AppLocalizations.of(context);
+
+    final auth = ref.watch(authControllerProvider);
+    final sub = ref.watch(subscriptionProvider);
+
+    final groups = auth.groups;
+    final canSelectGroup = sub.subscribed && groups.isNotEmpty;
 
     return Scaffold(
       appBar: AppBar(
@@ -263,6 +321,97 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
                           ),
                         ],
                       ),
+
+                      const SizedBox(height: 12),
+
+                      // ====== Group 選択（有料 / groupなしなら個人固定）======
+                      Row(
+                        children: [
+                          Expanded(
+                            child: DropdownButtonFormField<String>(
+                              value: canSelectGroup ? _groupId : 'personal',
+                              decoration: InputDecoration(
+                                labelText: 'グループ',
+                                border: const OutlineInputBorder(),
+                              ),
+                              items: [
+                                const DropdownMenuItem(
+                                  value: 'personal',
+                                  child: Text('個人'),
+                                ),
+                                if (canSelectGroup)
+                                  ...groups.map((g) {
+                                    return DropdownMenuItem(
+                                      value: g.id as String,
+                                      child: Text(g.name as String),
+                                    );
+                                  }),
+                              ],
+                              onChanged: canSelectGroup
+                                  ? (v) {
+                                      if (v == null) return;
+                                      setState(() {
+                                        _groupId = v;
+                                        // ✅ group 选择变化时：自动给一个默认颜色（也可不自动）
+                                        _colorValue = _defaultColorForGroup(v);
+                                      });
+                                    }
+                                  : null, // ✅ 禁用
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+
+                          // ====== Color（Calendar 用）======
+                          Expanded(
+                            child: DropdownButtonFormField<int>(
+                              value: _colorValue,
+                              decoration: const InputDecoration(
+                                labelText: '色（カレンダー）',
+                                border: OutlineInputBorder(),
+                              ),
+                              items: _colorOptions.map((c) {
+                                return DropdownMenuItem(
+                                  value: c,
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        width: 14,
+                                        height: 14,
+                                        decoration: BoxDecoration(
+                                          color: Color(c),
+                                          borderRadius:
+                                              BorderRadius.circular(3),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Text(_colorName(c),
+                                          style: TextStyle(fontSize: 12)),
+                                    ],
+                                  ),
+                                );
+                              }).toList(),
+                              onChanged: (v) {
+                                if (v == null) return;
+                                setState(() => _colorValue = v);
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      if (!canSelectGroup) ...[
+                        const SizedBox(height: 8),
+                        Text(
+                          'グループ管理は有料です（未契約 / グループなしのため「個人」に固定）',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onSurface
+                                .withOpacity(0.6),
+                          ),
+                        ),
+                      ],
                     ],
                   ),
                 ),
@@ -284,7 +433,9 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
                           child: CircularProgressIndicator(strokeWidth: 2),
                         )
                       : const Icon(Icons.save),
-                  label: Text(_saving ? l10n.analysis_confirm_saving: l10n.analysis_confirm_save),
+                  label: Text(_saving
+                      ? l10n.analysis_confirm_saving
+                      : l10n.analysis_confirm_save),
                 ),
               ],
             ),

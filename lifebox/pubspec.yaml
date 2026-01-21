@@ -49,6 +49,13 @@ dependencies:
 
   flutter_launcher_icons: ^0.13.1
   flutter_native_splash: ^2.4.0
+
+  holiday_jp: ^0.0.8
+
+  in_app_purchase: ^3.2.0
+  device_calendar: ^4.3.3
+  timezone: ^0.9.4
+  flutter_native_timezone: ^2.0.0
   
 dev_dependencies:
   flutter_test:

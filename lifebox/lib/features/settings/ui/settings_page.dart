@@ -10,13 +10,19 @@ import '../../../core/services/app_lock.dart';
 import '../../auth/state/auth_controller.dart';
 
 import '../state/subscription_providers.dart';
-import '../ui/paywall_dialog.dart';
 
-// ✅ 云保存开关的 provider
 import '../state/settings_providers.dart';
 
 class SettingsPage extends ConsumerWidget {
   const SettingsPage({super.key});
+
+  Future<bool> requireSubscribed(BuildContext context, WidgetRef ref) async {
+    final sub = ref.read(subscriptionProvider);
+    if (sub.subscribed) return true;
+
+    final ok = await context.push<bool>('/paywall') ?? false;
+    return ok;
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -57,19 +63,36 @@ class SettingsPage extends ConsumerWidget {
 
           const SizedBox(height: 12),
 
-          // グループの管理
           Card(
             child: ListTile(
               leading: const Icon(Icons.home_outlined),
               title: const Text('グループの管理'),
-              trailing: const Icon(Icons.chevron_right),
-              onTap: () => context.push('/settings/groups'),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Consumer(builder: (_, ref, __) {
+                    final sub = ref.watch(subscriptionProvider);
+                    return sub.subscribed
+                        ? const SizedBox.shrink()
+                        : const Icon(Icons.lock_outline,
+                            size: 18, color: Colors.black45);
+                  }),
+                  const SizedBox(width: 6),
+                  const Icon(Icons.chevron_right),
+                ],
+              ),
+              onTap: () async {
+                final ok = await requireSubscribed(context, ref);
+                if (!ok) return;
+                if (!context.mounted) return;
+                context.push('/settings/groups');
+              },
             ),
           ),
 
           const SizedBox(height: 12),
 
-          // ====== 云保存（收费）======
+          // ====== 云保存======
           Card(
             child: SwitchListTile(
               value: cloudEnabled,
@@ -100,9 +123,8 @@ class SettingsPage extends ConsumerWidget {
                 }
 
                 // 未订阅：弹付费墙
-                final ok = await showCloudPaywallDialog(context);
+                final ok = await requireSubscribed(context, ref);
                 if (!ok) {
-                  // 用户取消 or 失败：保持关闭
                   await ref
                       .read(cloudEnabledProvider.notifier)
                       .setEnabled(false);
@@ -116,20 +138,34 @@ class SettingsPage extends ConsumerWidget {
                   SnackBar(content: Text(l10n.setting_cloud_sub_success)),
                 );
               },
-              title: Text(l10n.setting_cloud_title),
-              subtitle: Consumer(
-                builder: (context, ref, _) {
-                  final sub = ref.watch(subscriptionProvider);
-                  final status = sub.subscribed
-                      ? l10n.setting_cloud_status_subscribed
-                      : l10n.setting_cloud_status_unsubscribed;
-                  return Text(
-                    cloudEnabled
-                        ? l10n.setting_cloud_desc_on(status)
-                        : l10n.setting_cloud_desc_off(status),
-                  );
-                },
+              // title: Text(l10n.setting_cloud_title),
+              // subtitle: Consumer(
+              //   builder: (context, ref, _) {
+              //     final sub = ref.watch(subscriptionProvider);
+              //     final status = sub.subscribed
+              //         ? l10n.setting_cloud_status_subscribed
+              //         : l10n.setting_cloud_status_unsubscribed;
+              //     return Text(
+              //       cloudEnabled
+              //           ? l10n.setting_cloud_desc_on(status)
+              //           : l10n.setting_cloud_desc_off(status),
+              //     );
+              //   },
+              // ),
+              title: Row(
+                children: [
+                  Text(l10n.setting_cloud_title),
+                  const SizedBox(width: 8),
+                  Consumer(builder: (_, ref, __) {
+                    final sub = ref.watch(subscriptionProvider);
+                    return sub.subscribed
+                        ? const SizedBox.shrink()
+                        : const Icon(Icons.lock_outline,
+                            size: 16, color: Colors.black45);
+                  }),
+                ],
               ),
+
               secondary: const Icon(Icons.cloud_outlined),
             ),
           ),
@@ -166,8 +202,8 @@ class SettingsPage extends ConsumerWidget {
                   SnackBar(content: Text(l10n.setting_privacy_saved_demo)),
                 );
               },
-              title: Text(l10n.upload_policy_title),
-              subtitle: Text(l10n.upload_policy_subtitle),
+              title: Text(l10n.upload_policy_title, style: const TextStyle(fontSize: 14)),
+              subtitle: Text(l10n.upload_policy_subtitle, style: const TextStyle(fontSize: 12)),
               secondary: const Icon(Icons.privacy_tip_outlined),
             ),
           ),
@@ -180,8 +216,8 @@ class SettingsPage extends ConsumerWidget {
               value: lock.enabled,
               onChanged: (v) =>
                   ref.read(appLockProvider.notifier).setEnabled(v),
-              title: Text(l10n.app_lock_title),
-              subtitle: Text(l10n.app_lock_subtitle),
+              title: Text(l10n.app_lock_title, style: const TextStyle(fontSize: 14)),
+              subtitle: Text(l10n.app_lock_subtitle, style: const TextStyle(fontSize: 12)),
               secondary: const Icon(Icons.lock_outline),
             ),
           ),

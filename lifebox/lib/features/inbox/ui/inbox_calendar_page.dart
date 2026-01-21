@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lifebox/core/widgets/risk_badge.dart';
 import 'package:lifebox/l10n/app_localizations.dart';
 
 import '../domain/inbox_item.dart';
-import '../state/local_inbox_providers.dart';
 import '../domain/local_inbox_record.dart';
+import '../state/local_inbox_providers.dart';
 
 import 'inbox_card.dart';
 import 'inbox_speech_bar.dart';
-import '../../../core/widgets/risk_badge.dart';
 
 class InboxCalendarPage extends ConsumerStatefulWidget {
   const InboxCalendarPage({super.key});
@@ -202,8 +202,7 @@ class _InboxCalendarPageState extends ConsumerState<InboxCalendarPage> {
                         Navigator.pop(context);
 
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                              content: Text(l10n.receivedSnack(finalText))),
+                          SnackBar(content: Text(l10n.receivedSnack(finalText))),
                         );
                       },
                       icon: const Icon(Icons.check),
@@ -222,7 +221,6 @@ class _InboxCalendarPageState extends ConsumerState<InboxCalendarPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-
     final asyncList = ref.watch(localInboxListProvider);
 
     return Scaffold(
@@ -445,8 +443,9 @@ class _MonthGrid extends StatelessWidget {
         itemCount: totalCells,
         itemBuilder: (context, index) {
           final dayNum = index - firstWeekday + 1;
-          if (dayNum < 1 || dayNum > daysInMonth)
+          if (dayNum < 1 || dayNum > daysInMonth) {
             return const SizedBox.shrink();
+          }
 
           final d = DateTime(month.year, month.month, dayNum);
           final key = DateTime(d.year, d.month, d.day);
@@ -567,6 +566,7 @@ class _SelectedDayList extends StatelessWidget {
       );
     }
 
+    // ✅ 这里已经用 InboxCard（inbox_card.dart）
     return ListView.separated(
       padding: const EdgeInsets.all(12),
       itemCount: items.length,
@@ -576,17 +576,7 @@ class _SelectedDayList extends StatelessWidget {
         return InboxCard(
           item: item,
           onTap: () => context.push('/inbox/detail/${item.id}'),
-          onPrimaryAction: () =>
-              context.push('/action?type=calendar&id=${item.id}'),
-          // onDelete: () async {
-          //   // TODO: 调用 db.delete(item.id) 然后 ref.invalidate(localInboxListProvider)
-          // },
-          // onMarkDone: () async {
-          //   // TODO: db.upsert(status='done') 然后 invalidate
-          // },
-          // onMarkTodo: () async {
-          //   // TODO: db.upsert(status='pending') 然后 invalidate
-          // },
+          onPrimaryAction: () => context.push('/action?type=calendar&id=${item.id}'),
         );
       },
     );

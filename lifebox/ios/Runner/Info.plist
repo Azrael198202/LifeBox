@@ -60,5 +60,7 @@
 		</dict>
 		<key>UIStatusBarHidden</key>
 		<false/>
+		<key>NSCalendarsUsageDescription</key>
+		<string>予定をカレンダーに追加するために使用します。</string>
 	</dict>
 </plist>

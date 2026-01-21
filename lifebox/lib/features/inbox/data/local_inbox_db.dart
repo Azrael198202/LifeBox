@@ -16,7 +16,7 @@ class LocalInboxDb {
 
     _db = await openDatabase(
       path,
-      version: 1,
+      version: 2, // ✅ bump version
       onCreate: (db, _) async {
         await db.execute('''
 CREATE TABLE $_table (
@@ -31,11 +31,27 @@ CREATE TABLE $_table (
   currency TEXT NULL,
   risk TEXT NOT NULL,
   status TEXT NOT NULL,
-  created_at TEXT NOT NULL
+  created_at TEXT NOT NULL,
+
+  -- ✅ new columns
+  group_id TEXT NULL,
+  color_value INTEGER NULL
 );
 ''');
         await db.execute('CREATE INDEX idx_inbox_status ON $_table(status);');
         await db.execute('CREATE INDEX idx_inbox_risk ON $_table(risk);');
+        await db.execute('CREATE INDEX idx_inbox_group_id ON $_table(group_id);');
+      },
+      onUpgrade: (db, oldVersion, newVersion) async {
+        if (oldVersion < 2) {
+          // ✅ for existing installed users
+          await db.execute('ALTER TABLE $_table ADD COLUMN group_id TEXT NULL;');
+          await db.execute(
+              'ALTER TABLE $_table ADD COLUMN color_value INTEGER NULL;');
+
+
+          await db.execute('CREATE INDEX IF NOT EXISTS idx_inbox_group_id ON $_table(group_id);');
+        }
       },
     );
     return _db!;
@@ -60,8 +76,8 @@ CREATE TABLE $_table (
   }
 
   Future<List<LocalInboxRecord>> list({
-    String? status, // 'pending' / 'done' 等
-    String? risk, // 'high' / 'mid' / 'low'
+    String? status,
+    String? risk,
     int? limit,
     int? offset,
   }) async {
@@ -91,7 +107,6 @@ CREATE TABLE $_table (
     return rows.map(LocalInboxRecord.fromMap).toList();
   }
 
-  /// ✅按 id 获取
   Future<LocalInboxRecord?> getById(String id) async {
     final db = await _open();
     final rows = await db.query(
@@ -104,7 +119,6 @@ CREATE TABLE $_table (
     return LocalInboxRecord.fromMap(rows.first);
   }
 
-  /// ✅ 批量 upsert（OCR 多条/队列很常用）
   Future<void> upsertMany(List<LocalInboxRecord> items) async {
     if (items.isEmpty) return;
     final db = await _open();
@@ -121,13 +135,11 @@ CREATE TABLE $_table (
     });
   }
 
-  /// ✅ 删除（用于 Swipe 删除）
   Future<int> deleteById(String id) async {
     final db = await _open();
     return db.delete(_table, where: 'id = ?', whereArgs: [id]);
   }
 
-  /// ✅ 批量删除
   Future<int> deleteMany(List<String> ids) async {
     if (ids.isEmpty) return 0;
     final db = await _open();
@@ -135,7 +147,6 @@ CREATE TABLE $_table (
     return db.delete(_table, where: 'id IN ($placeholders)', whereArgs: ids);
   }
 
-  /// ✅ 更新 status（pending/done）
   Future<int> updateStatus(String id, String status) async {
     final db = await _open();
     return db.update(
@@ -146,7 +157,6 @@ CREATE TABLE $_table (
     );
   }
 
-  /// ✅ 更新风险（high/mid/low）
   Future<int> updateRisk(String id, String risk) async {
     final db = await _open();
     return db.update(
@@ -157,7 +167,6 @@ CREATE TABLE $_table (
     );
   }
 
-  /// ✅ 更新 due_at（yyyy-mm-dd 或 null）
   Future<int> updateDueAt(String id, String? dueAt) async {
     final db = await _open();
     return db.update(
@@ -168,19 +177,30 @@ CREATE TABLE $_table (
     );
   }
 
-  /// ✅ 清空已完成（用于“整理/释放空间”）
+  // ✅ 更新 group_id / color_value
+  Future<int> updateGroupAndColor(String id, {String? groupId, int? colorValue}) async {
+    final db = await _open();
+    return db.update(
+      _table,
+      {
+        'group_id': groupId,
+        'color_value': colorValue,
+      },
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
   Future<int> purgeDone() async {
     final db = await _open();
     return db.delete(_table, where: 'status = ?', whereArgs: ['done']);
   }
 
-  /// ✅ 全部清空（调试用）
   Future<int> clearAll() async {
     final db = await _open();
     return db.delete(_table);
   }
 
-  /// ✅ 统计（给 Tab 数字用）
   Future<Map<String, int>> countByStatus() async {
     final db = await _open();
     final rows = await db.rawQuery('''
@@ -195,7 +215,6 @@ GROUP BY status
     return map;
   }
 
-  /// ✅ 事务工具（需要时可用）
   Future<T> transaction<T>(Future<T> Function(Transaction txn) action) async {
     final db = await _open();
     return db.transaction(action);
@@ -206,6 +225,4 @@ GROUP BY status
     _db = null;
     await db?.close();
   }
-
-  
 }

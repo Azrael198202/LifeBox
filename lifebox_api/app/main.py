@@ -15,7 +15,7 @@ from typing import Optional
 from .ollama_client import ollama_chat
 from .task_extractor import SYSTEM_PROMPT, build_user_prompt, normalize_to_schema
 
-# ✅ 使用统一的 DB pool（db.py）
+# DB Pool
 from .db import init_db, close_db
 
 # routers

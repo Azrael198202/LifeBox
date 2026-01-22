@@ -9,3 +9,6 @@ lifebox_api/app/__pycache__/auth_routes.cpython-312.pyc
 lifebox_api/app/__pycache__/auth_routes.cpython-312.pyc
 lifebox_api/app/__pycache__/auth_routes.cpython-312.pyc
 lifebox_api/app/__pycache__/schemas_cloud.cpython-312.pyc
+lifebox_api/app/__pycache__/billing_models.cpython-312.pyc
+lifebox_api/app/__pycache__/billing_routes.cpython-312.pyc
+lifebox_api/app/__pycache__/billing_service.cpython-312.pyc

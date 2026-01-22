@@ -19,6 +19,7 @@ class AppConfig {
 
   // ===== API endpoints =====
   static String get aiAnalyze => '$baseUrl/api/ai/analyze';
+  static String get cloudRecord => '$baseUrl/api/cloud/records';
   static String get cloudSaveRecord => '$baseUrl/api/cloud/records';
 
   static String get authGoogle => '$baseUrl/api/auth/google';

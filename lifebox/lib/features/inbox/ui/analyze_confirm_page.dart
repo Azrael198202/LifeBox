@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lifebox/core/network/api_error_l10n.dart';
+import 'package:lifebox/core/network/api_exception.dart';
 import 'package:lifebox/core/utils/date_tools.dart';
 import 'package:lifebox/features/auth/state/auth_controller.dart';
 import 'package:lifebox/features/inbox/data/mock_speech_texts.dart';
@@ -301,6 +302,7 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
       await db.upsert(record);
 
       // ✅ 若开启云保存，则调用云保存 API
+      await ref.read(cloudEnabledProvider.notifier).setEnabled(true);
       final cloudEnabled = ref.read(cloudEnabledProvider);
 
       if (cloudEnabled) {
@@ -323,6 +325,23 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
 
       if (!mounted) return;
       Navigator.of(context).popUntil((route) => route.isFirst);
+    } catch (e) {
+      String message;
+
+      if (e is ApiException) {
+        message = e.errorKey.message(l10n);
+      } else {
+        message = l10n.serverError; // 兜底
+      }
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(message),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     } finally {
       if (mounted) setState(() => _saving = false);
     }
@@ -508,8 +527,8 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
                                 if (canSelectGroup)
                                   ...groups.map((g) {
                                     return DropdownMenuItem(
-                                      value: g.id as String,
-                                      child: Text(g.name as String),
+                                      value: g.id,
+                                      child: Text(g.name),
                                     );
                                   }),
                               ],

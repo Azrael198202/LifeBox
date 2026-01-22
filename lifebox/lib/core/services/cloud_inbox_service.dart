@@ -21,7 +21,7 @@ class CloudInboxService {
     final payload = record.toJson();
 
     final res = await _client.post(
-      Uri.parse(AppConfig.cloudSaveRecord), // ✅ 方案 B
+      Uri.parse(AppConfig.cloudSaveRecord), 
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $accessToken', // ✅ 认证

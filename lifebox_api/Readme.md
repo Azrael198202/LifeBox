@@ -42,3 +42,6 @@ docker compose run --rm flyway-migrate
   pip install bcrypt
   pip install "pydantic[email]"
   pip install email-validator
+
+
+  git pull --rebase origin main

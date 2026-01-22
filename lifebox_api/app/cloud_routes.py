@@ -1,7 +1,8 @@
 from __future__ import annotations
 
+from altair import Dict
 from fastapi import APIRouter, Depends, HTTPException, Query
-from typing import Optional, List
+from typing import Optional, List, Any
 from uuid import UUID, uuid4
 
 from .db import get_pool
@@ -48,6 +49,7 @@ def _build_normalized(req: CloudSaveRequest) -> Dict[str, Any]:
         n["risk"] = req.risk
     if req.status is not None and not n.get("status"):
         n["status"] = req.status
+    n["colorValue"] = req.color_value        
 
     # 这些如果没传就给默认
     n.setdefault("phones", [])
@@ -131,7 +133,7 @@ async def save_record(
                   normalized,
                   color_value
                 ) values (
-                  $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21
+                  $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22
                 )
                 """,
                 record_id,

@@ -25,6 +25,7 @@ class CloudSaveRequest(BaseModel):
     currency: Optional[str] = None
     risk: Optional[Literal["high", "mid", "low"]] = None
     status: Optional[Literal["pending", "done"]] = None
+    color_value: Optional[int] = None
 
     # ---------- AI related (可选) ----------
     model: Optional[str] = None

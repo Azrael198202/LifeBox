@@ -42,9 +42,9 @@ class BillingService:
             if platform:
                 rows = await conn.fetch(
                     """
-                    select id, platform, title, tier, duration_days, enabled, sort_order
+                    select id, title, tier, duration_days, enabled, sort_order
                     from public.plans
-                    where enabled=true and platform=$1
+                    where enabled=true
                     order by sort_order asc, id asc
                     """,
                     platform,
@@ -52,10 +52,10 @@ class BillingService:
             else:
                 rows = await conn.fetch(
                     """
-                    select id, platform, title, tier, duration_days, enabled, sort_order
+                    select id, title, tier, duration_days, enabled, sort_order
                     from public.plans
                     where enabled=true
-                    order by platform asc, sort_order asc, id asc
+                    order by sort_order asc, id asc
                     """
                 )
         return [PlanOut(**dict(r)) for r in rows]
@@ -163,9 +163,8 @@ class BillingService:
             async with conn.transaction():
                 # 1) plan 检查（必须存在且启用）
                 plan = await conn.fetchrow(
-                    "select id, enabled from public.plans where id=$1 and platform=$2",
-                    req.product_id,
-                    req.platform,
+                    "select id, enabled from public.plans where id=$1",
+                    req.product_id
                 )
                 if not plan or not plan["enabled"]:
                     raise ValueError("Plan not found or disabled")

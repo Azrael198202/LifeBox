@@ -7,3 +7,5 @@ lifebox_api/.env
 lifebox_api/app/__pycache__/auth_routes.cpython-312.pyc
 lifebox_api/app/__pycache__/auth_routes.cpython-312.pyc
 lifebox_api/app/__pycache__/auth_routes.cpython-312.pyc
+lifebox_api/app/__pycache__/auth_routes.cpython-312.pyc
+lifebox_api/app/__pycache__/schemas_cloud.cpython-312.pyc

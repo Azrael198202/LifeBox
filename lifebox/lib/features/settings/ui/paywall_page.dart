@@ -56,7 +56,7 @@ class PaywallPage extends ConsumerWidget {
                     subtitle: monthly.isNotEmpty
                         ? monthly.first.price
                         : l10n.loadingText,
-                    onTap: monthly.isEmpty || sub.loading
+                    onTap: monthly.isEmpty || sub.loading || sub.busy
                         ? null
                         : () => store.purchase(monthly.first),
                   ),

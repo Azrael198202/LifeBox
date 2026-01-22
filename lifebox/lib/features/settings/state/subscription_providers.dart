@@ -58,8 +58,6 @@ class SubscriptionState {
   }
 }
 
-/// 维持你现在的用法：
-/// final sub = ref.watch(subscriptionProvider);
 final subscriptionProvider =
     StateNotifierProvider<SubscriptionNotifier, SubscriptionState>(
   (ref) => SubscriptionNotifier(ref),

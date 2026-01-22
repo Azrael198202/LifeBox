@@ -160,6 +160,66 @@ abstract class AppLocalizations {
   /// **'終了'**
   String get finish;
 
+  /// No description provided for @select.
+  ///
+  /// In ja, this message translates to:
+  /// **'選択'**
+  String get select;
+
+  /// No description provided for @colorBlueGrey.
+  ///
+  /// In ja, this message translates to:
+  /// **'ブルーグレー'**
+  String get colorBlueGrey;
+
+  /// No description provided for @colorBlue.
+  ///
+  /// In ja, this message translates to:
+  /// **'ブルー'**
+  String get colorBlue;
+
+  /// No description provided for @colorGreen.
+  ///
+  /// In ja, this message translates to:
+  /// **'グリーン'**
+  String get colorGreen;
+
+  /// No description provided for @colorOrange.
+  ///
+  /// In ja, this message translates to:
+  /// **'オレンジ'**
+  String get colorOrange;
+
+  /// No description provided for @colorPink.
+  ///
+  /// In ja, this message translates to:
+  /// **'ピンク'**
+  String get colorPink;
+
+  /// No description provided for @colorPurple.
+  ///
+  /// In ja, this message translates to:
+  /// **'パープル'**
+  String get colorPurple;
+
+  /// No description provided for @colorRed.
+  ///
+  /// In ja, this message translates to:
+  /// **'レッド'**
+  String get colorRed;
+
+  /// No description provided for @colorGeneric.
+  ///
+  /// In ja, this message translates to:
+  /// **'カラー'**
+  String get colorGeneric;
+
+  /// No description provided for @colorTitle.
+  ///
+  /// In ja, this message translates to:
+  /// **'色（カレンダー）'**
+  String get colorTitle;
+
   /// No description provided for @deleteConfirm.
   ///
   /// In ja, this message translates to:
@@ -1827,6 +1887,42 @@ abstract class AppLocalizations {
   /// In ja, this message translates to:
   /// **'音声テキスト（模擬）'**
   String get speechMockTooltip;
+
+  /// No description provided for @group_desc.
+  ///
+  /// In ja, this message translates to:
+  /// **'グループ管理は有料機能です（未契約／グループ未作成のため「個人」に固定されています）'**
+  String get group_desc;
+
+  /// No description provided for @group.
+  ///
+  /// In ja, this message translates to:
+  /// **'グループ'**
+  String get group;
+
+  /// No description provided for @personal.
+  ///
+  /// In ja, this message translates to:
+  /// **'個人'**
+  String get personal;
+
+  /// No description provided for @holidayShort.
+  ///
+  /// In ja, this message translates to:
+  /// **'祝'**
+  String get holidayShort;
+
+  /// No description provided for @holidayLabel.
+  ///
+  /// In ja, this message translates to:
+  /// **'祝日'**
+  String get holidayLabel;
+
+  /// No description provided for @holidaysLoading.
+  ///
+  /// In ja, this message translates to:
+  /// **'祝日を読み込み中…'**
+  String get holidaysLoading;
 }
 
 class _AppLocalizationsDelegate

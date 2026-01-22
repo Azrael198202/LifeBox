@@ -39,6 +39,36 @@ class AppLocalizationsZh extends AppLocalizations {
   String get finish => '完成';
 
   @override
+  String get select => '选择';
+
+  @override
+  String get colorBlueGrey => '蓝灰色';
+
+  @override
+  String get colorBlue => '蓝色';
+
+  @override
+  String get colorGreen => '绿色';
+
+  @override
+  String get colorOrange => '橙色';
+
+  @override
+  String get colorPink => '粉色';
+
+  @override
+  String get colorPurple => '紫色';
+
+  @override
+  String get colorRed => '红色';
+
+  @override
+  String get colorGeneric => '颜色';
+
+  @override
+  String get colorTitle => '颜色（日历）';
+
+  @override
   String get deleteConfirm => '确定要删除吗？';
 
   @override
@@ -923,4 +953,22 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get speechMockTooltip => '模拟语音文本';
+
+  @override
+  String get group_desc => '分组管理为付费功能（未订阅 / 尚未创建分组，因此固定为「个人」）';
+
+  @override
+  String get group => '群组';
+
+  @override
+  String get personal => '个人';
+
+  @override
+  String get holidayShort => '休';
+
+  @override
+  String get holidayLabel => '假期';
+
+  @override
+  String get holidaysLoading => '正在加载假期…';
 }

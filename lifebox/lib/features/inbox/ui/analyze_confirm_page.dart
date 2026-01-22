@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lifebox/core/utils/date_tools.dart';
 import 'package:lifebox/features/auth/state/auth_controller.dart';
+import 'package:lifebox/features/inbox/data/mock_speech_texts.dart';
 import 'package:lifebox/features/inbox/state/cloud_inbox_service_provider.dart';
 import 'package:lifebox/features/settings/state/subscription_providers.dart';
 import 'package:uuid/uuid.dart';
@@ -12,7 +13,6 @@ import '../domain/analyze_models.dart';
 import '../domain/local_inbox_record.dart';
 import '../state/local_inbox_providers.dart';
 import '../../settings/state/settings_providers.dart';
-import '../../../core/input_formatters/date_input_formatter.dart';
 
 class AnalyzeConfirmPage extends ConsumerStatefulWidget {
   const AnalyzeConfirmPage({
@@ -41,6 +41,10 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
 
   AnalyzeResponse? _resp;
 
+  late AnalyzeRequest _req;
+
+  bool _analyzing = false;
+
   static const List<int> _colorOptions = [
     0xFF607D8B, // blueGrey
     0xFF2196F3, // blue
@@ -51,24 +55,26 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
     0xFFF44336, // red
   ];
 
-  String _colorName(int c) {
+  String _colorName(BuildContext context, int c) {
+    final l10n = AppLocalizations.of(context);
+
     switch (c) {
       case 0xFF607D8B:
-        return 'ブルーグレー';
+        return l10n.colorBlueGrey;
       case 0xFF2196F3:
-        return 'ブルー';
+        return l10n.colorBlue;
       case 0xFF4CAF50:
-        return 'グリーン';
+        return l10n.colorGreen;
       case 0xFFFF9800:
-        return 'オレンジ';
+        return l10n.colorOrange;
       case 0xFFE91E63:
-        return 'ピンク';
+        return l10n.colorPink;
       case 0xFF9C27B0:
-        return 'パープル';
+        return l10n.colorPurple;
       case 0xFFF44336:
-        return 'レッド';
+        return l10n.colorRed;
       default:
-        return 'カラー';
+        return l10n.colorGeneric;
     }
   }
 
@@ -87,11 +93,42 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
     _dueAt = TextEditingController();
     _amount = TextEditingController();
     _currency = TextEditingController();
-    _bootstrap();
+
+    _req = widget.request;
+    _bootstrap(_req);
   }
 
-  Future<void> _bootstrap() async {
-    final svc = ref.read(analyzeServiceProvider);
+  Future<void> _bootstrap(AnalyzeRequest req) async {
+    if (_analyzing) return;
+    setState(() {
+      _analyzing = true;
+      _resp = null;
+    });
+
+    try {
+      final svc = ref.read(analyzeServiceProvider);
+      final resp = await svc.analyze(req);
+
+      if (!mounted) return;
+      setState(() {
+        _resp = resp;
+        _risk = resp.risk;
+        _title.text = resp.title;
+        _summary.text = resp.notes ?? '';
+        _dueAt.text = DateTools.normalizeDateToYMD(resp.dueAt) ?? '';
+        _amount.text = resp.amount?.toString() ?? '';
+        _currency.text = resp.currency ?? '';
+      });
+    } catch (e) {
+      if (!mounted) return;
+      final l10n = AppLocalizations.of(context);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.speechAnalyzeFailed(e))),
+      );
+    } finally {
+      if (mounted) setState(() => _analyzing = false);
+    }
+    // final svc = ref.read(analyzeServiceProvider);
 
     // 1) 组装请求（AnalyzeRequest）
     // final req = AnalyzeRequest(
@@ -100,25 +137,70 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
     //   sourceHint: widget.request.sourceHint,
     // );
 
-    final req = AnalyzeRequest(
-        text: "銀行より：クレジットカードのお支払い期限は1/20です。金額3万円。",
-        locale: "ja",
-        sourceHint: "銀行");
+    // final req = AnalyzeRequest(
+    //     text: "銀行より：クレジットカードのお支払い期限は1/20です。金額3万円。",
+    //     locale: "ja",
+    //     sourceHint: "銀行");
 
-    // 2) 调用接口，拿到返回（AnalyzeResponse）
-    final resp = await svc.analyze(req);
+    // // 2) 调用接口，拿到返回（AnalyzeResponse）
+    // final resp = await svc.analyze(req);
 
-    if (!mounted) return;
+    // if (!mounted) return;
 
-    setState(() {
-      _resp = resp; // ✅ _resp 应该是 AnalyzeResponse 类型
-      _risk = resp.risk;
-      _title.text = resp.title;
-      _summary.text = resp.notes ?? '';
-      _dueAt.text = DateTools.normalizeDateToYMD(resp.dueAt) ?? '';
-      _amount.text = resp.amount?.toString() ?? '';
-      _currency.text = resp.currency ?? '';
-    });
+    // setState(() {
+    //   _resp = resp; // ✅ _resp 应该是 AnalyzeResponse 类型
+    //   _risk = resp.risk;
+    //   _title.text = resp.title;
+    //   _summary.text = resp.notes ?? '';
+    //   _dueAt.text = DateTools.normalizeDateToYMD(resp.dueAt) ?? '';
+    //   _amount.text = resp.amount?.toString() ?? '';
+    //   _currency.text = resp.currency ?? '';
+    // });
+  }
+
+  Future<void> _openMockSamplesInConfirm() async {
+    final l10n = AppLocalizations.of(context);
+
+    final picked = await showDialog<String>(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text(l10n.speechMockTitle),
+        content: SizedBox(
+          width: double.maxFinite,
+          child: ListView.separated(
+            shrinkWrap: true,
+            itemCount: MockSpeechTexts.samples.length,
+            separatorBuilder: (_, __) => const Divider(height: 1),
+            itemBuilder: (_, i) {
+              final t = MockSpeechTexts.samples[i];
+              return ListTile(
+                title: Text(t, maxLines: 2, overflow: TextOverflow.ellipsis),
+                onTap: () => Navigator.pop(context, t),
+              );
+            },
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(l10n.cancel),
+          ),
+        ],
+      ),
+    );
+
+    final trimmed = picked?.trim();
+    if (trimmed == null || trimmed.isEmpty) return;
+
+    // ✅ 用选中的 mock 文本替换当前 request，并重新分析
+    final next = AnalyzeRequest(
+      text: trimmed,
+      locale: _req.locale,
+      sourceHint: _req.sourceHint,
+    );
+
+    setState(() => _req = next);
+    await _bootstrap(_req);
   }
 
   @override
@@ -143,6 +225,37 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
     }
   }
 
+  Future<void> _pickDueDate() async {
+    // 现有值如果是 yyyy-MM-dd，就用它做初始日期
+    DateTime initial = DateTime.now();
+    final current = _dueAt.text.trim();
+    if (current.isNotEmpty) {
+      try {
+        final normalized = DateTools.normalizeDateToYMD(current);
+        if (normalized != null) initial = DateTime.parse(normalized);
+      } catch (_) {}
+    }
+
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: initial,
+      firstDate: DateTime(2000, 1, 1),
+      lastDate: DateTime(2100, 12, 31),
+      // ✅ 如果你希望 DatePicker 跟随 app 语言，可以用 AppLocalizations 的 locale
+      // locale: Localizations.localeOf(context),
+    );
+
+    if (picked == null) return;
+
+    final y = picked.year.toString().padLeft(4, '0');
+    final m = picked.month.toString().padLeft(2, '0');
+    final d = picked.day.toString().padLeft(2, '0');
+
+    setState(() {
+      _dueAt.text = '$y-$m-$d';
+    });
+  }
+
   Future<void> _onSave() async {
     if (_saving) return;
     setState(() => _saving = true);
@@ -157,6 +270,7 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(l10n.analysis_confirm_invalid_date)),
       );
+      if (mounted) setState(() => _saving = false);
       return;
     }
 
@@ -164,9 +278,9 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
       final id = const Uuid().v4();
       final record = LocalInboxRecord(
         id: id,
-        rawText: widget.request.text,
-        locale: widget.request.locale,
-        sourceHint: widget.request.sourceHint,
+        rawText: _req.text,
+        locale: _req.locale,
+        sourceHint: _req.sourceHint,
         title: _title.text.trim().isEmpty ? 'Untitled' : _title.text.trim(),
         summary: _summary.text.trim(),
         dueAt: DateTools.normalizeDateToYMD(_dueAt.text),
@@ -220,6 +334,13 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.analysis_confirm_title),
+        actions: [
+          IconButton(
+            tooltip: l10n.speechMockTooltip,
+            onPressed: _analyzing ? null : _openMockSamplesInConfirm,
+            icon: const Icon(Icons.bug_report_outlined),
+          ),
+        ],
       ),
       body: resp == null
           ? const Center(child: CircularProgressIndicator())
@@ -253,32 +374,66 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
                       const SizedBox(height: 12),
                       Row(
                         children: [
-                          Expanded(
+                          // ===== 日期（占 2 份宽度）======
+                          Flexible(
+                            flex: 2, // 👈 更宽
                             child: TextField(
                               controller: _dueAt,
-                              keyboardType: TextInputType.number,
-                              inputFormatters: [
-                                FilteringTextInputFormatter
-                                    .digitsOnly, // ① 只允许数字
-                                DateInputFormatter(), // ② 自动格式 yyyy-mm-dd
-                              ],
+                              readOnly: true,
+                              onTap: _analyzing ? null : _pickDueDate,
                               style: TextStyle(fontSize: 14, color: onSurface),
                               decoration: InputDecoration(
                                 labelText: l10n.analysis_confirm_field_due,
-                                border: OutlineInputBorder(),
+                                border: const OutlineInputBorder(),
+                                suffixIcon: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    if (_dueAt.text.trim().isNotEmpty)
+                                      IconButton(
+                                        padding: EdgeInsets.zero,
+                                        constraints: const BoxConstraints(),
+                                        icon: const Icon(Icons.close, size: 18),
+                                        tooltip: l10n.clear,
+                                        onPressed: () =>
+                                            setState(() => _dueAt.clear()),
+                                      ),
+                                    IconButton(
+                                      padding: EdgeInsets.zero,
+                                      constraints: const BoxConstraints(),
+                                      icon: const Icon(
+                                          Icons.calendar_today_outlined,
+                                          size: 18),
+                                      tooltip: l10n.select,
+                                      onPressed:
+                                          _analyzing ? null : _pickDueDate,
+                                    ),
+                                    const SizedBox(width: 6),
+                                  ],
+                                ),
+                                suffixIconConstraints: const BoxConstraints(
+                                  minWidth: 72,
+                                  minHeight: 48,
+                                ),
                               ),
                             ),
                           ),
+
                           const SizedBox(width: 12),
-                          Expanded(
+
+                          // ===== Risk（占 1 份宽度）======
+                          Flexible(
+                            flex: 1, // 👈 更短
                             child: DropdownButtonFormField<String>(
                               value: _risk,
                               dropdownColor: cs.surface,
                               style: TextStyle(color: onSurface),
+                              isDense: true, // 👈 更紧凑
                               decoration: InputDecoration(
                                 labelText: l10n.analysis_confirm_field_risk,
-                                border: OutlineInputBorder(),
+                                border: const OutlineInputBorder(),
                                 labelStyle: TextStyle(color: onSurfaceHint),
+                                contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 12),
                               ),
                               items: [
                                 DropdownMenuItem(
@@ -289,7 +444,7 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
                                     value: 'low', child: Text(l10n.riskLow)),
                               ],
                               onChanged: (v) =>
-                                  setState(() => _risk = v ?? l10n.riskLow),
+                                  setState(() => _risk = v ?? 'low'),
                             ),
                           ),
                         ],
@@ -331,13 +486,13 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
                             child: DropdownButtonFormField<String>(
                               value: canSelectGroup ? _groupId : 'personal',
                               decoration: InputDecoration(
-                                labelText: 'グループ',
+                                labelText: l10n.group,
                                 border: const OutlineInputBorder(),
                               ),
                               items: [
-                                const DropdownMenuItem(
+                                DropdownMenuItem(
                                   value: 'personal',
-                                  child: Text('個人'),
+                                  child: Text(l10n.personal),
                                 ),
                                 if (canSelectGroup)
                                   ...groups.map((g) {
@@ -365,8 +520,8 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
                           Expanded(
                             child: DropdownButtonFormField<int>(
                               value: _colorValue,
-                              decoration: const InputDecoration(
-                                labelText: '色（カレンダー）',
+                              decoration: InputDecoration(
+                                labelText: l10n.colorTitle,
                                 border: OutlineInputBorder(),
                               ),
                               items: _colorOptions.map((c) {
@@ -384,7 +539,7 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
                                         ),
                                       ),
                                       const SizedBox(width: 8),
-                                      Text(_colorName(c),
+                                      Text(_colorName(context, c),
                                           style: TextStyle(fontSize: 12)),
                                     ],
                                   ),
@@ -402,7 +557,7 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
                       if (!canSelectGroup) ...[
                         const SizedBox(height: 8),
                         Text(
-                          'グループ管理は有料です（未契約 / グループなしのため「個人」に固定）',
+                          l10n.group_desc,
                           style: TextStyle(
                             fontSize: 12,
                             color: Theme.of(context)

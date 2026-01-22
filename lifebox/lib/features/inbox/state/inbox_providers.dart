@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lifebox/core/services/holiday_service.dart';
 
 import '../domain/inbox_item.dart';
 import '../../inbox/state/local_inbox_providers.dart';
@@ -17,4 +18,14 @@ final inboxItemsProvider = FutureProvider<List<InboxItem>>((ref) async {
       if (b.dueAt == null) return -1;
       return a.dueAt!.compareTo(b.dueAt!);
     });
+});
+
+final holidayServiceProvider = Provider<HolidayService>((ref) {
+  return HolidayService();
+});
+
+final cnJpHolidaysByYearProvider =
+    FutureProvider.family<Map<DateTime, List<Holiday>>, int>((ref, year) async {
+  final svc = ref.read(holidayServiceProvider);
+  return svc.getCnJpHolidaysByDay(year: year);
 });

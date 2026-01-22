@@ -10,6 +10,16 @@
   "cancel": "Delete",
   "save":"Save",
   "finish":"Finish",
+  "select": "Select",
+  "colorBlueGrey": "Blue grey",
+  "colorBlue": "Blue",
+  "colorGreen": "Green",
+  "colorOrange": "Orange",
+  "colorPink": "Pink",
+  "colorPurple": "Purple",
+  "colorRed": "Red",
+  "colorGeneric": "Color",
+  "colorTitle": "Color(Calendar)",
   "deleteConfirm": "Are you sure you want to delete it?",
   "deleteConfirmTitle": "Delete Confirm",
   "language_subtitle": "Change display language",
@@ -412,6 +422,13 @@
   "speechMockCustomInputLabel": "Custom input (preferred)",
   "speechMockUseInput": "Use input",
   "speechParsing": "Parsing...",
-  "speechMockTooltip": "Mock speech text"
+  "speechMockTooltip": "Mock speech text",
+
+  "group_desc":"Group management is a paid feature (not subscribed or no group created, so it is fixed to Personal).",
+  "group":"Group",
+  "personal":"Personal",
+  "holidayShort":"H",
+  "holidayLabel":"Holiday",
+  "holidaysLoading": "Loading holidays…"
 
 }

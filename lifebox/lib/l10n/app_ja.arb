@@ -10,6 +10,16 @@
   "cancel": "キャンセル",
   "save":"保存",
   "finish":"終了",
+  "select": "選択",
+  "colorBlueGrey": "ブルーグレー",
+  "colorBlue": "ブルー",
+  "colorGreen": "グリーン",
+  "colorOrange": "オレンジ",
+  "colorPink": "ピンク",
+  "colorPurple": "パープル",
+  "colorRed": "レッド",
+  "colorGeneric": "カラー",
+  "colorTitle": "色（カレンダー）",
   "deleteConfirm": "本当に削除しますか？",
   "deleteConfirmTitle": "削除確認",
   "language_subtitle": "表示言語を切り替えます",
@@ -413,5 +423,12 @@
   "speechMockCustomInputLabel": "カスタム入力（優先）",
   "speechMockUseInput": "入力を使用",
   "speechParsing": "解析中...",
-  "speechMockTooltip": "音声テキスト（模擬）"
+  "speechMockTooltip": "音声テキスト（模擬）",
+
+  "group_desc":"グループ管理は有料機能です（未契約／グループ未作成のため「個人」に固定されています）",
+  "group":"グループ",
+  "personal":"個人",
+  "holidayShort":"祝",
+  "holidayLabel":"祝日",
+  "holidaysLoading": "祝日を読み込み中…"
 }

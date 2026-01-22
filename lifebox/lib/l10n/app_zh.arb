@@ -10,6 +10,16 @@
   "cancel": "取消",
   "save":"保存",
   "finish":"完成",
+  "select": "选择",
+  "colorBlueGrey": "蓝灰色",
+  "colorBlue": "蓝色",
+  "colorGreen": "绿色",
+  "colorOrange": "橙色",
+  "colorPink": "粉色",
+  "colorPurple": "紫色",
+  "colorRed": "红色",
+  "colorGeneric": "颜色",
+  "colorTitle": "颜色（日历）",
   "deleteConfirm": "确定要删除吗？",
   "deleteConfirmTitle": "确定删除",
   "language_subtitle": "切换显示语言",
@@ -411,5 +421,12 @@
   "speechMockCustomInputLabel": "自定义输入（优先）",
   "speechMockUseInput": "使用输入",
   "speechParsing": "解析中...",
-  "speechMockTooltip": "模拟语音文本"
+  "speechMockTooltip": "模拟语音文本",
+
+  "group_desc":"分组管理为付费功能（未订阅 / 尚未创建分组，因此固定为「个人」）",
+  "group":"群组",
+  "personal":"个人",
+  "holidayShort":"休",
+  "holidayLabel":"假期",
+  "holidaysLoading": "正在加载假期…"
 }

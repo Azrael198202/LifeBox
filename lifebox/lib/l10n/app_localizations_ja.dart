@@ -39,6 +39,36 @@ class AppLocalizationsJa extends AppLocalizations {
   String get finish => '終了';
 
   @override
+  String get select => '選択';
+
+  @override
+  String get colorBlueGrey => 'ブルーグレー';
+
+  @override
+  String get colorBlue => 'ブルー';
+
+  @override
+  String get colorGreen => 'グリーン';
+
+  @override
+  String get colorOrange => 'オレンジ';
+
+  @override
+  String get colorPink => 'ピンク';
+
+  @override
+  String get colorPurple => 'パープル';
+
+  @override
+  String get colorRed => 'レッド';
+
+  @override
+  String get colorGeneric => 'カラー';
+
+  @override
+  String get colorTitle => '色（カレンダー）';
+
+  @override
   String get deleteConfirm => '本当に削除しますか？';
 
   @override
@@ -928,4 +958,22 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get speechMockTooltip => '音声テキスト（模擬）';
+
+  @override
+  String get group_desc => 'グループ管理は有料機能です（未契約／グループ未作成のため「個人」に固定されています）';
+
+  @override
+  String get group => 'グループ';
+
+  @override
+  String get personal => '個人';
+
+  @override
+  String get holidayShort => '祝';
+
+  @override
+  String get holidayLabel => '祝日';
+
+  @override
+  String get holidaysLoading => '祝日を読み込み中…';
 }

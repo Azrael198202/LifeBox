@@ -39,6 +39,36 @@ class AppLocalizationsEn extends AppLocalizations {
   String get finish => 'Finish';
 
   @override
+  String get select => 'Select';
+
+  @override
+  String get colorBlueGrey => 'Blue grey';
+
+  @override
+  String get colorBlue => 'Blue';
+
+  @override
+  String get colorGreen => 'Green';
+
+  @override
+  String get colorOrange => 'Orange';
+
+  @override
+  String get colorPink => 'Pink';
+
+  @override
+  String get colorPurple => 'Purple';
+
+  @override
+  String get colorRed => 'Red';
+
+  @override
+  String get colorGeneric => 'Color';
+
+  @override
+  String get colorTitle => 'Color(Calendar)';
+
+  @override
   String get deleteConfirm => 'Are you sure you want to delete it?';
 
   @override
@@ -956,4 +986,23 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get speechMockTooltip => 'Mock speech text';
+
+  @override
+  String get group_desc =>
+      'Group management is a paid feature (not subscribed or no group created, so it is fixed to Personal).';
+
+  @override
+  String get group => 'Group';
+
+  @override
+  String get personal => 'Personal';
+
+  @override
+  String get holidayShort => 'H';
+
+  @override
+  String get holidayLabel => 'Holiday';
+
+  @override
+  String get holidaysLoading => 'Loading holidays…';
 }

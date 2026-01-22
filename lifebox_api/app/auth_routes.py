@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import random
 from fastapi import APIRouter, Depends, HTTPException
 from uuid import uuid4, UUID
 from typing import Any, List
@@ -210,10 +211,11 @@ async def register(req: EmailRegisterRequest):
             await conn.execute(
                 """
                 insert into users (id, email, email_verified, display_name, avatar_url)
-                values ($1, $2, false, null, null)
+                values ($1, $2, false, $3, null)
                 """,
                 user_id,
                 email,
+                random.randint(10_000_000, 99_999_999),  # 默认显示名为随机数字
             )
 
         # 3) 创建 password identity

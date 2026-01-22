@@ -1,16 +1,23 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 
-import '../data/subscription_store.dart';
+import '../../auth/state/auth_providers.dart'; // ✅ authControllerProvider
+import '../../../core/services/billing_service.dart'; // ✅ BillingService
+import '../data/subscription_store.dart'; // ✅ SubscriptionStore
 
-/// Store：负责 IAP 初始化、商品查询、购买、恢复、purchaseStream 监听
-final subscriptionStoreProvider = Provider<SubscriptionStore>((ref) {
-  // ✅ 你项目里已经改成 SubscriptionStore(this.billing)
-  // 这里保持你现有写法：从别处注入 billing（你已完成）
-  // 如果你这里还没注入，请把 billingServiceProvider watch 后传入。
-  throw UnimplementedError(
-    'Please wire subscriptionStoreProvider with BillingService injection as you already did.',
+/// ✅ BillingService：从 AuthState 取 accessToken（没有 authProvider 就用这个）
+final billingServiceProvider = Provider<BillingService>((ref) {
+  return BillingService(
+    getAccessToken: () async => ref.read(authControllerProvider).accessToken,
   );
+});
+
+/// ✅ Store：注入 BillingService（你现在 SubscriptionStore(this.billing)）
+final subscriptionStoreProvider = Provider<SubscriptionStore>((ref) {
+  final billing = ref.watch(billingServiceProvider);
+  final store = SubscriptionStore(billing);
+  ref.onDispose(store.dispose);
+  return store;
 });
 
 /// UI 用的状态（Paywall Page / SettingsPage 都依赖这个）
@@ -73,14 +80,13 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
 
   final Ref ref;
 
-  // 商品 ID（和商店后台一致）
   static const monthlyId = 'lifebox_premium_monthly';
   static const yearlyId = 'lifebox_premium_yearly';
 
   Future<void> _init() async {
     final store = ref.read(subscriptionStoreProvider);
 
-    // 0) 绑定回调（必须尽早，避免漏掉 purchaseStream 触发后的 setSubscribed）
+    // ✅ 先绑定回调（避免漏掉 purchaseStream 回调）
     store.onSubscribedChanged = (v) {
       state = state.copyWith(subscribed: v, busy: false, error: null);
     };
@@ -88,23 +94,21 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
       state = state.copyWith(error: msg, busy: false);
     };
 
-    // 1) 先读本地缓存（只做 UI 快速显示）
+    // 1) 读缓存（UI 快速展示）
     try {
       final cached = await store.getSubscribed();
       state = state.copyWith(subscribed: cached);
     } catch (_) {}
 
-    // 2) 刷新服务端真实订阅状态（不阻塞商品加载）
+    // 2) 刷新服务端真实订阅（不阻塞 IAP）
     () async {
       try {
         final real = await store.refreshSubscribedFromServer();
         state = state.copyWith(subscribed: real);
-      } catch (_) {
-        // 网络失败不致命：保持缓存状态
-      }
+      } catch (_) {}
     }();
 
-    // 3) 初始化 IAP + 查询商品
+    // 3) 初始化 IAP + 查询商品（prod 用；dev 不依赖 products 也没关系）
     state = state.copyWith(loading: true, error: null);
     try {
       await store.init();
@@ -115,16 +119,13 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
     }
   }
 
-  /// ✅ 购买（月付 or 年付）
   Future<bool> purchase(ProductDetails product) async {
     if (state.busy) return false;
     state = state.copyWith(busy: true, error: null);
     try {
       final store = ref.read(subscriptionStoreProvider);
       await store.purchase(product);
-
-      // ✅ 不在这里 setSubscribed(true)
-      // 真正的订阅更新由 purchaseStream -> server verify -> store.setSubscribed -> onSubscribedChanged 驱动
+      // 真正 subscribed 更新：purchaseStream -> verify -> store.setSubscribed -> onSubscribedChanged
       return true;
     } catch (e) {
       state = state.copyWith(busy: false, error: e.toString());
@@ -132,15 +133,12 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
     }
   }
 
-  /// ✅ 恢复购买
   Future<bool> restore() async {
     if (state.busy) return false;
     state = state.copyWith(busy: true, error: null);
     try {
       final store = ref.read(subscriptionStoreProvider);
       await store.restore();
-
-      // 恢复同样由 purchaseStream 驱动最终 subscribed 更新
       return true;
     } catch (e) {
       state = state.copyWith(busy: false, error: e.toString());
@@ -148,7 +146,6 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
     }
   }
 
-  /// ✅ 手动刷新（比如 Settings 页下拉刷新）
   Future<void> refresh() async {
     try {
       final store = ref.read(subscriptionStoreProvider);
@@ -159,7 +156,19 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
     }
   }
 
-  /// ✅ Debug：手动设置订阅状态（仅本地缓存）
+  /// ✅ 给 Paywall 的 DEV 路A用：临时占用 busy + 捕获异常
+  Future<void> devBusyRun(Future<void> Function() fn) async {
+    if (state.busy) return;
+    state = state.copyWith(busy: true, error: null);
+    try {
+      await fn();
+    } catch (e) {
+      state = state.copyWith(error: e.toString());
+    } finally {
+      state = state.copyWith(busy: false);
+    }
+  }
+
   Future<void> debugSetSubscribed(bool v) async {
     final store = ref.read(subscriptionStoreProvider);
     await store.debugSetSubscribed(v);

@@ -1,7 +1,6 @@
 -- 套餐定义表
 create table if not exists public.plans (
   id text primary key,                    -- product_id: lifebox_premium_monthly/yearly
-  platform text not null check (platform in ('android','ios')),
   title text null,
   tier text not null default 'premium',   -- premium/pro/enterprise...
   duration_days int null,
@@ -12,21 +11,18 @@ create table if not exists public.plans (
 );
 
 create index if not exists idx_plans_enabled on public.plans(enabled, sort_order);
-create index if not exists idx_plans_platform on public.plans(platform);
 
-insert into public.plans(id, platform, title, duration_days, sort_order)
+insert into public.plans(id, title, duration_days, sort_order)
 values
-('lifebox_premium_monthly','android','Premium Monthly',30,10),
-('lifebox_premium_yearly','android','Premium Yearly',365,20),
-('lifebox_premium_monthly','ios','Premium Monthly',30,10),
-('lifebox_premium_yearly','ios','Premium Yearly',365,20)
+('lifebox_premium_monthly','Premium Monthly',30,10),
+('lifebox_premium_yearly','Premium Yearly',365,20)
 on conflict (id) do nothing;
 
 -- 当前订阅状态表：权威读
 create table if not exists public.user_subscriptions (
   id bigserial primary key,
   user_id uuid not null references public.users(id) on delete cascade,
-  platform text not null check (platform in ('android','ios')),
+  platform text not null check (platform in ('android','ios','web')),
   product_id text not null references public.plans(id),
 
   status text not null check (status in (
@@ -50,6 +46,15 @@ create table if not exists public.user_subscriptions (
 create index if not exists idx_user_subscriptions_user on public.user_subscriptions(user_id);
 create index if not exists idx_user_subscriptions_status on public.user_subscriptions(status);
 create index if not exists idx_user_subscriptions_expires on public.user_subscriptions(expires_at);
+
+create unique index if not exists uq_user_subscriptions_tx
+on public.user_subscriptions(platform, transaction_id)
+where transaction_id is not null;
+
+create unique index if not exists uq_user_subscriptions_token
+on public.user_subscriptions(platform, purchase_token)
+where purchase_token is not null;
+
 
 
 -- 校验/审计表：只追加写入

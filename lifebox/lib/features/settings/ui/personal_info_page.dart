@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lifebox/l10n/app_localizations.dart';
 import '../../../core/widgets/app_scaffold.dart';
-import '../../auth/state/auth_controller.dart';
+import '../../auth/state/auth_providers.dart';
 import '../state/settings_providers.dart';
 import 'avatar_picker.dart';
 

@@ -27,4 +27,8 @@ class AppConfig {
   static String get authLogin => '$baseUrl/api/auth/login';
   static String get authMe => '$baseUrl/api/auth/me';
   static String get authLogout => '$baseUrl/api/auth/logout';
+
+  static String get billingSubscription => '$baseUrl/api/billing/subscription';
+  static String get billingEntitlements => '$baseUrl/api/billing/entitlements';
+  static String get billingVerify => '$baseUrl/api/billing/verify';
 }

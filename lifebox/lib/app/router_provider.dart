@@ -8,7 +8,7 @@ import 'package:lifebox/features/settings/ui/join_group_page.dart';
 import 'package:lifebox/features/settings/ui/paywall_page.dart';
 
 import '../core/services/app_lock.dart';
-import '../features/auth/state/auth_controller.dart';
+import '../features/auth/state/auth_providers.dart';
 
 import '../features/auth/ui/login_page.dart';
 import '../features/auth/ui/register_page.dart';

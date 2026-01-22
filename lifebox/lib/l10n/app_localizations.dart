@@ -586,11 +586,11 @@ abstract class AppLocalizations {
   /// **'権限を再リクエスト'**
   String get import_perm_retry;
 
-  /// No description provided for @import_action_refresh.
+  /// No description provided for @refresh.
   ///
   /// In ja, this message translates to:
   /// **'更新'**
-  String get import_action_refresh;
+  String get refresh;
 
   /// No description provided for @import_range_unlimited.
   ///

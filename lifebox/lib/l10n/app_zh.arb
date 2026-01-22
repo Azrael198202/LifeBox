@@ -85,7 +85,7 @@
   "import_perm_title": "未获得相册权限",
   "import_perm_subtitle_ios": "请到 iOS 设置 → 隐私与安全性 → 照片 中允许访问。",
   "import_perm_retry": "重新请求权限",
-  "import_action_refresh": "刷新",
+  "refresh": "刷新",
   "import_range_unlimited": "不限时间",
   "type_label": "类型",
   "import_filter_range_label": "时间段",

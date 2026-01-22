@@ -85,7 +85,7 @@
   "import_perm_title": "Photo permission not granted",
   "import_perm_subtitle_ios": "Go to iOS Settings → Privacy & Security → Photos and allow access.",
   "import_perm_retry": "Request permission again",
-  "import_action_refresh": "Refresh",
+  "refresh": "Refresh",
   "import_range_unlimited": "Any time",
   "import_filter_range_label": "Date range",
   "import_filter_clear_range": "Clear range",

@@ -84,7 +84,7 @@
   "import_perm_title": "写真へのアクセス権がありません",
   "import_perm_subtitle_ios": "iOS の「設定 → プライバシーとセキュリティ → 写真」からアクセスを許可してください。",
   "import_perm_retry": "権限を再リクエスト",
-  "import_action_refresh": "更新",
+  "refresh": "更新",
   "import_range_unlimited": "期間指定なし",
   "type_label": "種類",
   "import_filter_range_label": "期間",

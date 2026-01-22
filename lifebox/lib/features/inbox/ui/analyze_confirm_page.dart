@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lifebox/core/network/api_error_l10n.dart';
 import 'package:lifebox/core/network/api_exception.dart';
 import 'package:lifebox/core/utils/date_tools.dart';
-import 'package:lifebox/features/auth/state/auth_controller.dart';
+import 'package:lifebox/features/auth/state/auth_providers.dart';
 import 'package:lifebox/features/inbox/data/mock_speech_texts.dart';
 import 'package:lifebox/features/inbox/state/cloud_inbox_service_provider.dart';
 import 'package:lifebox/features/settings/state/subscription_providers.dart';

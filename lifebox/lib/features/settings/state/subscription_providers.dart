@@ -5,9 +5,12 @@ import '../data/subscription_store.dart';
 
 /// Store：负责 IAP 初始化、商品查询、购买、恢复、purchaseStream 监听
 final subscriptionStoreProvider = Provider<SubscriptionStore>((ref) {
-  final store = SubscriptionStore();
-  ref.onDispose(store.dispose);
-  return store;
+  // ✅ 你项目里已经改成 SubscriptionStore(this.billing)
+  // 这里保持你现有写法：从别处注入 billing（你已完成）
+  // 如果你这里还没注入，请把 billingServiceProvider watch 后传入。
+  throw UnimplementedError(
+    'Please wire subscriptionStoreProvider with BillingService injection as you already did.',
+  );
 });
 
 /// UI 用的状态（Paywall Page / SettingsPage 都依赖这个）
@@ -77,31 +80,39 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
   Future<void> _init() async {
     final store = ref.read(subscriptionStoreProvider);
 
-    // 1) 读取本地订阅状态（或你已有的持久化）
-    final subscribed = await store.getSubscribed();
-    state = state.copyWith(subscribed: subscribed);
-
-    // 2) 初始化 IAP + 查询商品
-    state = state.copyWith(loading: true, error: null);
-    try {
-      await store.init(); // 负责 purchaseStream 监听等（store 里实现）
-      final products = await store.queryProducts({monthlyId, yearlyId});
-      state = state.copyWith(loading: false, products: products);
-    } catch (e) {
-      state = state.copyWith(
-        loading: false,
-        error: e.toString(),
-      );
-    }
-
-    // 3) 订阅 store 的购买事件（当购买成功/恢复成功时，更新 subscribed）
-    store.onSubscribedChanged = (v) async {
+    // 0) 绑定回调（必须尽早，避免漏掉 purchaseStream 触发后的 setSubscribed）
+    store.onSubscribedChanged = (v) {
       state = state.copyWith(subscribed: v, busy: false, error: null);
     };
-
     store.onError = (msg) {
       state = state.copyWith(error: msg, busy: false);
     };
+
+    // 1) 先读本地缓存（只做 UI 快速显示）
+    try {
+      final cached = await store.getSubscribed();
+      state = state.copyWith(subscribed: cached);
+    } catch (_) {}
+
+    // 2) 刷新服务端真实订阅状态（不阻塞商品加载）
+    () async {
+      try {
+        final real = await store.refreshSubscribedFromServer();
+        state = state.copyWith(subscribed: real);
+      } catch (_) {
+        // 网络失败不致命：保持缓存状态
+      }
+    }();
+
+    // 3) 初始化 IAP + 查询商品
+    state = state.copyWith(loading: true, error: null);
+    try {
+      await store.init();
+      final products = await store.queryProducts({monthlyId, yearlyId});
+      state = state.copyWith(loading: false, products: products);
+    } catch (e) {
+      state = state.copyWith(loading: false, error: e.toString());
+    }
   }
 
   /// ✅ 购买（月付 or 年付）
@@ -111,7 +122,9 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
     try {
       final store = ref.read(subscriptionStoreProvider);
       await store.purchase(product);
-      // 结果通过 purchaseStream -> store 回调 -> onSubscribedChanged 反映到 state
+
+      // ✅ 不在这里 setSubscribed(true)
+      // 真正的订阅更新由 purchaseStream -> server verify -> store.setSubscribed -> onSubscribedChanged 驱动
       return true;
     } catch (e) {
       state = state.copyWith(busy: false, error: e.toString());
@@ -126,6 +139,8 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
     try {
       final store = ref.read(subscriptionStoreProvider);
       await store.restore();
+
+      // 恢复同样由 purchaseStream 驱动最终 subscribed 更新
       return true;
     } catch (e) {
       state = state.copyWith(busy: false, error: e.toString());
@@ -133,10 +148,21 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
     }
   }
 
-  /// ✅ Debug：手动设置订阅状态
+  /// ✅ 手动刷新（比如 Settings 页下拉刷新）
+  Future<void> refresh() async {
+    try {
+      final store = ref.read(subscriptionStoreProvider);
+      final real = await store.refreshSubscribedFromServer();
+      state = state.copyWith(subscribed: real);
+    } catch (e) {
+      state = state.copyWith(error: e.toString());
+    }
+  }
+
+  /// ✅ Debug：手动设置订阅状态（仅本地缓存）
   Future<void> debugSetSubscribed(bool v) async {
     final store = ref.read(subscriptionStoreProvider);
-    await store.setSubscribed(v);
+    await store.debugSetSubscribed(v);
     state = state.copyWith(subscribed: v);
   }
 }

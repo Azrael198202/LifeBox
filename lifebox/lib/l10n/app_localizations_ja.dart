@@ -257,7 +257,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get import_perm_retry => '権限を再リクエスト';
 
   @override
-  String get import_action_refresh => '更新';
+  String get refresh => '更新';
 
   @override
   String get import_range_unlimited => '期間指定なし';

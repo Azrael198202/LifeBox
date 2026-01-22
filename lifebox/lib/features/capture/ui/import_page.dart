@@ -151,7 +151,7 @@ class _ImportPageState extends ConsumerState<ImportPage> {
         IconButton(
           onPressed: () => c.reloadAssets(),
           icon: const Icon(Icons.refresh),
-          tooltip: l10n.import_action_refresh,
+          tooltip: l10n.refresh,
         ),
       ],
       body: Column(

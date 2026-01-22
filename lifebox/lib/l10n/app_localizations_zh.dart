@@ -254,7 +254,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get import_perm_retry => '重新请求权限';
 
   @override
-  String get import_action_refresh => '刷新';
+  String get refresh => '刷新';
 
   @override
   String get import_range_unlimited => '不限时间';

@@ -9,12 +9,14 @@ class PaywallPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final sub = ref.watch(subscriptionProvider);
-    final store = ref.watch(subscriptionStoreProvider);
+    final notifier = ref.read(subscriptionProvider.notifier);
     final l10n = AppLocalizations.of(context);
 
     final products = sub.products;
-    final monthly = products.where((p) => p.id == 'lifebox_premium_monthly').toList();
-    final yearly = products.where((p) => p.id == 'lifebox_premium_yearly').toList();
+    final monthly =
+        products.where((p) => p.id == SubscriptionNotifier.monthlyId).toList();
+    final yearly =
+        products.where((p) => p.id == SubscriptionNotifier.yearlyId).toList();
 
     // 已订阅：直接允许返回 true
     if (sub.subscribed) {
@@ -26,6 +28,13 @@ class PaywallPage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.paywallTitle),
+        actions: [
+          IconButton(
+            tooltip: l10n.refresh,
+            onPressed: sub.busy ? null : () => notifier.refresh(),
+            icon: const Icon(Icons.refresh),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -38,16 +47,12 @@ class PaywallPage extends ConsumerWidget {
               style: TextStyle(color: Colors.black54),
             ),
             const SizedBox(height: 16),
-
             if (sub.error != null) ...[
               Text(sub.error!, style: const TextStyle(color: Colors.red)),
               const SizedBox(height: 12),
             ],
-
             if (sub.loading) const LinearProgressIndicator(),
-
             const SizedBox(height: 12),
-
             Expanded(
               child: ListView(
                 children: [
@@ -58,7 +63,7 @@ class PaywallPage extends ConsumerWidget {
                         : l10n.loadingText,
                     onTap: monthly.isEmpty || sub.loading || sub.busy
                         ? null
-                        : () => store.purchase(monthly.first),
+                        : () => notifier.purchase(monthly.first),
                   ),
                   const SizedBox(height: 12),
                   _planCard(
@@ -68,17 +73,18 @@ class PaywallPage extends ConsumerWidget {
                         : l10n.loadingText,
                     onTap: yearly.isEmpty || sub.loading
                         ? null
-                        : () => store.purchase(yearly.first),
+                        : () => notifier.purchase(yearly.first),
                   ),
                   const SizedBox(height: 12),
                   Card(
                     child: ListTile(
                       leading: const Icon(Icons.restore),
                       title: Text(l10n.restorePurchase),
-                      onTap: sub.loading ? null : () => store.restore(),
+                      onTap: sub.loading || sub.busy
+                          ? null
+                          : () => notifier.restore(),
                     ),
                   ),
-
                   const SizedBox(height: 12),
                   Card(
                     child: ListTile(
@@ -90,7 +96,6 @@ class PaywallPage extends ConsumerWidget {
                 ],
               ),
             ),
-
             SizedBox(
               width: double.infinity,
               child: TextButton(

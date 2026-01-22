@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lifebox/l10n/app_localizations.dart';
 
 import '../../../core/widgets/app_scaffold.dart';
-import '../../auth/state/auth_controller.dart';
+import '../../auth/state/auth_providers.dart';
 import '../state/settings_providers.dart';
 import 'add_member_sheet.dart';
 import 'avatar_picker.dart';

@@ -7,7 +7,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/i18n/locale_controller.dart';
 import '../../../core/widgets/app_scaffold.dart';
 import '../../../core/services/app_lock.dart';
-import '../../auth/state/auth_controller.dart';
+import '../../auth/state/auth_providers.dart';
 
 import '../state/subscription_providers.dart';
 

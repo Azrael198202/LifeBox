@@ -264,7 +264,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get import_perm_retry => 'Request permission again';
 
   @override
-  String get import_action_refresh => 'Refresh';
+  String get refresh => 'Refresh';
 
   @override
   String get import_range_unlimited => 'Any time';

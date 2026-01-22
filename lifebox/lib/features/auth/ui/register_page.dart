@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lifebox/l10n/app_localizations.dart';
 import '../../../core/network/api_error_l10n.dart';
 
-import '../state/auth_controller.dart';
+import '../state/auth_providers.dart';
 import 'auth_widgets.dart';
 
 class RegisterPage extends ConsumerStatefulWidget {

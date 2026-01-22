@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../domain/app_user.dart';
 import '../../../core/services/auth_service.dart';
 
-// ✅ 新增：统一 API 异常 & 错误 Key
+// ✅ 统一 API 异常 & 错误 Key
 import '../../../core/network/api_exception.dart';
 
 class AuthState {
@@ -47,9 +47,7 @@ class AuthState {
 
 /// 你可以之后从 Settings 里读取 baseUrl
 final authServiceProvider = Provider<AuthService>((ref) {
-  // TODO: 把它做成可配置（SettingsPage）
-  const baseUrl = 'http://192.168.1.199:8000';
-  return AuthService(baseUrl: baseUrl);
+  return AuthService();
 });
 
 class AuthController extends StateNotifier<AuthState> {

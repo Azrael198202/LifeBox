@@ -51,6 +51,25 @@ class LocalInboxRecord {
         "color_value": colorValue,
       };
 
+    Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'raw_text': rawText,
+      'locale': locale,
+      'source_hint': sourceHint,
+      'title': title,
+      'summary': summary,
+      'due_at': dueAt,
+      'amount': amount,
+      'currency': currency,
+      'risk': risk,
+      'status': status,
+      'created_at': createdAt.toIso8601String(),
+      'group_id': groupId,
+      'color_value': colorValue,
+    };
+  }
+
   static LocalInboxRecord fromMap(Map<String, dynamic> m) => LocalInboxRecord(
         id: m["id"] as String,
         rawText: (m["raw_text"] as String?) ?? "",

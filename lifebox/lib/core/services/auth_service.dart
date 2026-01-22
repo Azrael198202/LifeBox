@@ -2,16 +2,13 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:lifebox/core/network/app_config.dart';
 
 import '../../features/auth/domain/app_user.dart';
-import '../../core/network/api_exception.dart';
+import '../network/api_exception.dart';
 
 class AuthService {
-  AuthService({
-    required this.baseUrl,
-  });
-
-  final String baseUrl;
+  AuthService();
 
   String? _accessToken;
   AuthSession? _session;
@@ -33,17 +30,25 @@ class AuthService {
   Future<AuthSession> signInWithGoogle() async {
     final account = await _googleSignIn.signIn();
     if (account == null) {
-      throw Exception('Google sign-in cancelled');
+      throw ApiException(
+        statusCode: 0,
+        errorKey: ApiErrorKey.unknown,
+        raw: 'Google sign-in cancelled',
+      );
     }
 
     final auth = await account.authentication;
     final idToken = auth.idToken;
     if (idToken == null || idToken.isEmpty) {
-      throw Exception('Google id_token not available');
+      throw ApiException(
+        statusCode: 0,
+        errorKey: ApiErrorKey.unknown,
+        raw: 'Google id_token not available',
+      );
     }
 
-    final resp = await _postJson(
-      '/api/auth/google',
+    final resp = await _postJsonUri(
+      Uri.parse(AppConfig.authGoogle),
       {'id_token': idToken},
       bearer: null,
     );
@@ -57,10 +62,9 @@ class AuthService {
   Future<AuthSession> registerWithEmail({
     required String email,
     required String password,
-    String? displayName,
   }) async {
-    final resp = await _postJson(
-      '/api/auth/register',
+    final resp = await _postJsonUri(
+      Uri.parse(AppConfig.authRegister),
       {
         'email': email,
         'password': password,
@@ -78,8 +82,8 @@ class AuthService {
     required String email,
     required String password,
   }) async {
-    final resp = await _postJson(
-      '/api/auth/login',
+    final resp = await _postJsonUri(
+      Uri.parse(AppConfig.authLogin),
       {
         'email': email,
         'password': password,
@@ -97,9 +101,14 @@ class AuthService {
   Future<AuthSession> me() async {
     final token = _accessToken;
     if (token == null) {
-      throw Exception('Not authenticated');
+      throw ApiException(
+        statusCode: 0,
+        errorKey: ApiErrorKey.unauthorized,
+        raw: 'Not authenticated',
+      );
     }
-    final resp = await _getJson('/api/auth/me', bearer: token);
+
+    final resp = await _getJsonUri(Uri.parse(AppConfig.authMe), bearer: token);
     final session = AuthSession.fromJson(resp);
     _session = session;
     _accessToken = session.accessToken; // 后端可能会刷新 token
@@ -111,7 +120,7 @@ class AuthService {
     final token = _accessToken;
     try {
       if (token != null) {
-        await _postJson('/api/auth/logout', const {}, bearer: token);
+        await _postJsonUri(Uri.parse(AppConfig.authLogout), const {}, bearer: token);
       }
     } catch (_) {
       // ignore network errors on logout
@@ -125,14 +134,13 @@ class AuthService {
   }
 
   /// ---------- Internal HTTP helpers ----------
-
-  Uri _uri(String path) => Uri.parse('$baseUrl$path');
-
-  Future<Map<String, dynamic>> _getJson(String path,
-      {required String bearer}) async {
+  Future<Map<String, dynamic>> _getJsonUri(
+    Uri uri, {
+    required String bearer,
+  }) async {
     final client = HttpClient();
     try {
-      final req = await client.getUrl(_uri(path));
+      final req = await client.getUrl(uri);
       req.headers.set(HttpHeaders.acceptHeader, 'application/json');
       req.headers.set(HttpHeaders.authorizationHeader, 'Bearer $bearer');
 
@@ -151,14 +159,14 @@ class AuthService {
     }
   }
 
-  Future<Map<String, dynamic>> _postJson(
-    String path,
+  Future<Map<String, dynamic>> _postJsonUri(
+    Uri uri,
     Map<String, dynamic> payload, {
     String? bearer,
   }) async {
     final client = HttpClient();
     try {
-      final req = await client.postUrl(_uri(path));
+      final req = await client.postUrl(uri);
       req.headers.set(HttpHeaders.contentTypeHeader, 'application/json');
       req.headers.set(HttpHeaders.acceptHeader, 'application/json');
       if (bearer != null) {
@@ -171,7 +179,10 @@ class AuthService {
       final body = await res.transform(utf8.decoder).join();
 
       if (res.statusCode < 200 || res.statusCode >= 300) {
-        throw Exception('HTTP ${res.statusCode}: $body');
+        throw ApiException.fromHttp(
+          statusCode: res.statusCode,
+          body: body,
+        );
       }
       return jsonDecode(body) as Map<String, dynamic>;
     } finally {

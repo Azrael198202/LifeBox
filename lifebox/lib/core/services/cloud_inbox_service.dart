@@ -1,32 +1,39 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-// 你项目里已有 record 类型就 import 你自己的
-// import 'package:lifebox/domain/local_inbox_record.dart';
+import 'package:lifebox/core/network/api_exception.dart';
+import 'package:lifebox/core/network/app_config.dart';
+import 'package:lifebox/features/inbox/domain/local_inbox_record.dart';
 
 class CloudInboxService {
   final http.Client _client;
-  final String baseUrl;
 
-  CloudInboxService({
-    http.Client? client,
-    this.baseUrl = 'http://192.168.1.199:8000',
-  }) : _client = client ?? http.Client();
+  CloudInboxService({http.Client? client})
+      : _client = client ?? http.Client();
 
-  Future<void> saveToCloud(dynamic record) async {
-    // TODO: record.toJson() 如果你有模型
-    final payload = record is Map<String, dynamic>
-        ? record
-        : (record.toJson() as Map<String, dynamic>);
+  /// 保存一条 inbox 记录到云端
+  /// - record: LocalInboxRecord
+  /// - accessToken: JWT（从 AuthController 传入）
+  Future<void> saveToCloud(
+    LocalInboxRecord record, {
+    required String accessToken,
+  }) async {
+    final payload = record.toJson();
 
     final res = await _client.post(
-      Uri.parse('$baseUrl/api/inbox/save'), // <= 按你真实后端路由改
-      headers: const {'Content-Type': 'application/json'},
+      Uri.parse(AppConfig.cloudSaveRecord), // ✅ 方案 B
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $accessToken', // ✅ 认证
+      },
       body: jsonEncode(payload),
     );
 
-    if (res.statusCode != 200) {
-      throw Exception('saveToCloud failed: HTTP ${res.statusCode} ${res.body}');
+    if (res.statusCode < 200 || res.statusCode >= 300) {
+      throw ApiException.fromHttp(
+        statusCode: res.statusCode,
+        body: res.body,
+      );
     }
   }
 }

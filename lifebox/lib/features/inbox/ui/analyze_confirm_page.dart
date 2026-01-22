@@ -300,11 +300,22 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
       final db = ref.read(localInboxDbProvider);
       await db.upsert(record);
 
-      // ✅ 若开启云保存，则模拟调用云保存 API（收费功能）
+      // ✅ 若开启云保存，则调用云保存 API
       final cloudEnabled = ref.read(cloudEnabledProvider);
+
       if (cloudEnabled) {
+        // final cloud = ref.read(cloudInboxServiceProvider);
+        // await cloud.saveToCloud(record);
+
         final cloud = ref.read(cloudInboxServiceProvider);
-        await cloud.saveToCloud(record);
+        final accessToken = auth.accessToken;
+
+        if (accessToken != null && accessToken.isNotEmpty) {
+          await cloud.saveToCloud(
+            record,
+            accessToken: accessToken,
+          );
+        }
       }
 
       // ✅ 刷新 inbox 列表

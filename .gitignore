@@ -12,3 +12,10 @@ lifebox_api/app/__pycache__/schemas_cloud.cpython-312.pyc
 lifebox_api/app/__pycache__/billing_models.cpython-312.pyc
 lifebox_api/app/__pycache__/billing_routes.cpython-312.pyc
 lifebox_api/app/__pycache__/billing_service.cpython-312.pyc
+lifebox_api/app/__pycache__/auth_utils.cpython-312.pyc
+lifebox_api/app/__pycache__/cloud_routes.cpython-312.pyc
+lifebox_api/app/__pycache__/db.cpython-312.pyc
+lifebox_api/app/__pycache__/group_routes.cpython-312.pyc
+lifebox_api/app/__pycache__/schemas_auth.cpython-312.pyc
+lifebox_api/app/__pycache__/schemas_groups.cpython-312.pyc
+lifebox_api/app/__pycache__/task_extractor.cpython-312.pyc

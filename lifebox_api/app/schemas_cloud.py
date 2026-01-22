@@ -21,6 +21,8 @@ class CloudSaveRequest(BaseModel):
     # Optional: save into a shared group
     group_id: Optional[UUID] = None
 
+    colorValue: Optional[str] = None
+
     normalized: dict[str, Any] = Field(default_factory=dict)
 
 
@@ -37,6 +39,7 @@ class CloudListItem(BaseModel):
     due_at: Optional[str] = None
     source_hint: Optional[str] = None
     group_id: Optional[str] = None
+    colorValue: Optional[str] = None
 
 
 class CloudDetail(BaseModel):

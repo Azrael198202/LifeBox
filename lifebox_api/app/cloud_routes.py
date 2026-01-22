@@ -1,4 +1,6 @@
 from __future__ import annotations
+import json
+import logging
 
 from altair import Dict
 from fastapi import APIRouter, Depends, HTTPException, Query
@@ -49,7 +51,8 @@ def _build_normalized(req: CloudSaveRequest) -> Dict[str, Any]:
         n["risk"] = req.risk
     if req.status is not None and not n.get("status"):
         n["status"] = req.status
-    n["colorValue"] = req.color_value        
+    n["colorValue"] = req.color_value
+        
 
     # 这些如果没传就给默认
     n.setdefault("phones", [])
@@ -86,7 +89,9 @@ async def save_record(
     risk = n.get("risk") or "low"
     status = n.get("status") or "pending"
     suggested_actions = n.get("suggested_actions") or []
-    colorValue = n.get("colorValue")
+    color_value = n.get("colorValue")
+
+    normalized_text = json.dumps(n, ensure_ascii=False)
 
     pool = get_pool()
     async with pool.acquire() as conn:
@@ -107,6 +112,7 @@ async def save_record(
             
         record_id = uuid4()
         try:
+
             await conn.execute(
                 """
                 insert into inbox_records (
@@ -156,8 +162,8 @@ async def save_record(
                 risk,
                 status,
                 suggested_actions,
-                n,
-                colorValue
+                normalized_text,
+                color_value
             )
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"DB insert failed: {e}")

@@ -215,7 +215,7 @@ async def register(req: EmailRegisterRequest):
                 """,
                 user_id,
                 email,
-                random.randint(10_000_000, 99_999_999),  # 默认显示名为随机数字
+                str(random.randint(10_000_000, 99_999_999)),  # 默认显示名为随机数字
             )
 
         # 3) 创建 password identity

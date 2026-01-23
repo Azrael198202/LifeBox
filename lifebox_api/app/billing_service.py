@@ -4,6 +4,7 @@ from datetime import datetime, timezone, timedelta
 from typing import Any, Dict, List, Optional
 
 import asyncpg
+import json
 
 from .billing_models import (
     VerifyRequest,
@@ -181,6 +182,8 @@ class BillingService:
                 )
                 old_status = old["status"] if old else None
 
+                raw_response_str = json.dumps(v.raw_response, ensure_ascii=False)
+
                 # 3) receipts append
                 await conn.execute(
                     """
@@ -199,7 +202,7 @@ class BillingService:
                     v.verified,
                     v.status,
                     v.expires_at,
-                    v.raw_response,
+                    raw_response_str,
                 )
 
                 # 4) subscriptions upsert (only when verified)
@@ -233,6 +236,8 @@ class BillingService:
                         req.purchase_token,
                     )
 
+                raw_response_str = json.dumps({"client_payload": req.client_payload, "verified": v.verified, "raw": v.raw_response}, ensure_ascii=False)
+
                 # 5) events
                 await conn.execute(
                     """
@@ -247,10 +252,12 @@ class BillingService:
                     v.status,
                     v.expires_at,
                     source,
-                    {"client_payload": req.client_payload, "verified": v.verified, "raw": v.raw_response},
+                    raw_response_str,
                 )
 
                 if v.verified and old_status != v.status:
+
+                    payloadstr = json.dumps({"note": "status changed by verify"}, ensure_ascii=False)
                     await conn.execute(
                         """
                         insert into public.subscription_events
@@ -264,7 +271,7 @@ class BillingService:
                         v.status,
                         v.expires_at,
                         source,
-                        {"note": "status changed by verify"},
+                        payloadstr,
                     )
 
                 # 6) entitlements
@@ -303,6 +310,8 @@ class BillingService:
         return await self.get_subscription(user_id)
 
     async def log_webhook(self, platform: Platform, event_id: str, event_type: str, raw_payload: Dict[str, Any]) -> None:
+        raw_payload_str = json.dumps(raw_payload, ensure_ascii=False)
+        
         async with self.pool.acquire() as conn:
             await conn.execute(
                 """
@@ -314,5 +323,5 @@ class BillingService:
                 platform,
                 event_id,
                 event_type,
-                raw_payload,
+                raw_payload_str,
             )

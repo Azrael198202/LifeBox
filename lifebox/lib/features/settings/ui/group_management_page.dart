@@ -2,45 +2,66 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lifebox/l10n/app_localizations.dart';
-import '../../../core/widgets/app_scaffold.dart';
-import '../../auth/state/auth_providers.dart';
 
-class GroupManagementPage extends ConsumerWidget {
+import '../../../core/widgets/app_scaffold.dart';
+import '../state/group_provider.dart';
+
+class GroupManagementPage extends ConsumerStatefulWidget {
   const GroupManagementPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final auth = ref.watch(authControllerProvider);
+  ConsumerState<GroupManagementPage> createState() => _GroupManagementPageState();
+}
+
+class _GroupManagementPageState extends ConsumerState<GroupManagementPage> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(groupControllerProvider.notifier).refreshGroups(); // ✅ 每次进来刷新
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final state = ref.watch(groupControllerProvider);
+    final groups = state.groups;
 
     return AppScaffold(
       title: l10n.groupManage,
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          if (auth.groups.isNotEmpty)
+          if (state.loading)
+            const Padding(
+              padding: EdgeInsets.only(bottom: 12),
+              child: LinearProgressIndicator(minHeight: 2),
+            ),
+          if ((state.error ?? '').isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: Text(state.error!, style: const TextStyle(color: Colors.red)),
+            ),
+
+          if (groups.isNotEmpty)
             Card(
               child: Column(
                 children: [
-                  for (final g in auth.groups)
-                    Column(
-                      children: [
-                        ListTile(
-                          title: Text(g.name),
-                          trailing: const Icon(Icons.chevron_right),
-                          onTap: () {
-                            context.push('/settings/groups/${g.id}');
-                          },
-                        ),
-                        if (g != auth.groups.last) const Divider(height: 1),
-                      ],
+                  for (int i = 0; i < groups.length; i++) ...[
+                    ListTile(
+                      title: Text(groups[i].name),
+                      trailing: const Icon(Icons.chevron_right),
+                      onTap: () => context.push('/settings/groups/${groups[i].id}'),
                     ),
+                    if (i != groups.length - 1) const Divider(height: 1),
+                  ],
                 ],
               ),
             )
           else
             Padding(
-              padding: EdgeInsets.only(top: 12),
+              padding: const EdgeInsets.only(top: 12),
               child: Text(l10n.nogroup),
             ),
 
@@ -49,14 +70,23 @@ class GroupManagementPage extends ConsumerWidget {
           Card(
             child: ListTile(
               title: Text(l10n.groupCreateTitle),
-              onTap: () => context.push('/settings/groups/create'),
+              onTap: () async {
+                await context.push('/settings/groups/create');
+                // ✅ 从创建页回来再刷新一次，保证立刻看到新 group
+                if (!mounted) return;
+                ref.read(groupControllerProvider.notifier).refreshGroups();
+              },
             ),
           ),
           const SizedBox(height: 12),
           Card(
             child: ListTile(
               title: Text(l10n.joinGroup),
-              onTap: () => context.push('/settings/groups/join'),
+              onTap: () async {
+                await context.push('/settings/groups/join');
+                if (!mounted) return;
+                ref.read(groupControllerProvider.notifier).refreshGroups();
+              },
             ),
           ),
         ],

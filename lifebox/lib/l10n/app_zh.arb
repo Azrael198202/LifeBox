@@ -370,6 +370,7 @@
   "joinGroupJoined": "已加入",
 
   "groupCreateTitle": "创建群组",
+  "groupName": "群组名",
   "groupSettingsTitle": "群组设置",
   "groupMembers": "群组成员",
   "groupOwnerLabel": "群主",

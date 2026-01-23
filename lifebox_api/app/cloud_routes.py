@@ -262,3 +262,50 @@ async def get_record(
         group_id=str(group_id) if group_id else None,
         normalized=row["normalized"],
     )
+    
+@router.delete("/records/{record_id}")
+async def delete_record(
+    record_id: UUID,
+    user: CurrentUser = Depends(get_current_user),
+):
+    """
+    删除一条 inbox_records
+    - group record：需要是 group member
+    - personal record：需要是 owner_user
+    """
+    pool = get_pool()
+    async with pool.acquire() as conn:
+        row = await conn.fetchrow(
+            """
+            select owner_user_id, group_id
+            from inbox_records
+            where id = $1
+            """,
+            record_id,
+        )
+
+        if not row:
+            raise HTTPException(status_code=404, detail="Not found")
+
+        owner_user_id = row["owner_user_id"]
+        group_id = row["group_id"]
+
+        # ✅ 权限判断（与 get_record 保持一致）
+        if group_id is not None:
+            await _assert_group_member(group_id=group_id, user_id=user.user_id)
+        else:
+            if owner_user_id != user.user_id:
+                raise HTTPException(status_code=403, detail="Forbidden")
+
+        # ✅ 执行删除
+        r = await conn.execute(
+            """
+            delete from inbox_records
+            where id = $1
+            """,
+            record_id,
+        )
+
+    # asyncpg 返回 "DELETE n"
+    return {"ok": True, "result": r}
+

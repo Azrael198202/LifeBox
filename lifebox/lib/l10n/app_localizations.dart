@@ -1636,6 +1636,12 @@ abstract class AppLocalizations {
   /// **'グループ作成'**
   String get groupCreateTitle;
 
+  /// No description provided for @groupName.
+  ///
+  /// In ja, this message translates to:
+  /// **'グループ名'**
+  String get groupName;
+
   /// No description provided for @groupSettingsTitle.
   ///
   /// In ja, this message translates to:

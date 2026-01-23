@@ -860,6 +860,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get groupCreateTitle => 'Create group';
 
   @override
+  String get groupName => 'Group Name';
+
+  @override
   String get groupSettingsTitle => 'Group settings';
 
   @override

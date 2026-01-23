@@ -371,6 +371,7 @@
   "joinGroupJoined": "Joined",
 
   "groupCreateTitle": "Create group",
+  "groupName": "Group Name",
   "groupSettingsTitle": "Group settings",
   "groupMembers": "Group members",
   "groupOwnerLabel": "Owner",

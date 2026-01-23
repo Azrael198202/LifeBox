@@ -371,6 +371,7 @@
   "joinGroupJoined": "参加しました",
 
   "groupCreateTitle": "グループ作成",
+  "groupName": "グループ名",
   "groupSettingsTitle": "グループ設定",
   "groupMembers": "グループメンバー",
   "groupOwnerLabel": "グループの所有者",

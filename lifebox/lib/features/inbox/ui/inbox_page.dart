@@ -123,15 +123,6 @@ class _InboxPageState extends ConsumerState<InboxPage>
           onTap: () => context.push('/inbox/detail/${item.id}'),
           onPrimaryAction: () =>
               context.push('/action?type=calendar&id=${item.id}'),
-          // onDelete: () async {
-          //   // TODO: 调用 db.delete(item.id) 然后 ref.invalidate(localInboxListProvider)
-          // },
-          // onMarkDone: () async {
-          //   // TODO: db.upsert(status='done') 然后 invalidate
-          // },
-          // onMarkTodo: () async {
-          //   // TODO: db.upsert(status='pending') 然后 invalidate
-          // },
         );
       },
     );

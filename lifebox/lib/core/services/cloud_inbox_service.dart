@@ -36,4 +36,25 @@ class CloudInboxService {
       );
     }
   }
+
+Future<void> deleteRecordCloud(
+  String recordId, {
+  required String accessToken,
+}) async {
+  final res = await _client.delete(
+    Uri.parse(AppConfig.cloudRecordDetail(recordId)),
+    headers: {
+      'Authorization': 'Bearer $accessToken',
+      'Accept': 'application/json',
+    },
+  );
+
+  if (res.statusCode < 200 || res.statusCode >= 300) {
+    throw ApiException.fromHttp(
+      statusCode: res.statusCode,
+      body: res.body,
+    );
+  }
+}
+
 }

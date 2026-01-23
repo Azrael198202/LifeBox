@@ -8,6 +8,7 @@ import 'package:lifebox/l10n/app_localizations.dart';
 import '../../../core/widgets/app_scaffold.dart';
 import '../../auth/state/auth_providers.dart';
 import '../state/settings_providers.dart';
+import '../state/group_provider.dart'; // ✅ NEW
 import 'add_member_sheet.dart';
 import 'avatar_picker.dart';
 
@@ -23,25 +24,25 @@ class GroupSettingsPage extends ConsumerStatefulWidget {
 }
 
 class _GroupSettingsPageState extends ConsumerState<GroupSettingsPage> {
-  /// mock members（后续由 API 替换）
   late List<GroupMember> _members;
-
   String? _familyName;
 
   bool get _isCreateMode => widget.groupId == null;
-
-  /// ⚠️ TODO：后续替换成 auth.user!.id
-  String get _currentUserId => 'me';
-
-  String get _viewerRole =>
-      _members.firstWhere((m) => m.id == _currentUserId).role;
-
-  bool get _isOwner => _viewerRole == 'owner';
 
   @override
   void initState() {
     super.initState();
     _members = [];
+
+    // ✅ 编辑模式：进来就拉 detail
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (!mounted) return;
+      if (!_isCreateMode && widget.groupId != null) {
+        await ref
+            .read(groupControllerProvider.notifier)
+            .loadDetail(widget.groupId!, force: true);
+      }
+    });
   }
 
   @override
@@ -49,6 +50,10 @@ class _GroupSettingsPageState extends ConsumerState<GroupSettingsPage> {
     final auth = ref.watch(authControllerProvider);
     final profile = ref.watch(userProfileProvider);
     final l10n = AppLocalizations.of(context);
+
+    final groupState = ref.watch(groupControllerProvider);
+
+    final currentUserId = auth.user?.id ?? '';
 
     GroupBrief? group;
     if (_isCreateMode) {
@@ -60,51 +65,105 @@ class _GroupSettingsPageState extends ConsumerState<GroupSettingsPage> {
           .firstOrNull;
     }
 
-    /// mock 初始化
-    if (_members.isEmpty) {
-      if (_isCreateMode) {
-        // 新建：只有自己，owner
+    // ✅ viewerRole：create=owner；edit=auth.me.groups 内的 role（若无则 member）
+    final viewerRole = _isCreateMode ? 'owner' : (group?.role ?? 'member');
+    final isOwner = viewerRole == 'owner';
+
+    // ✅ members：create=自己；edit=后端 detail.members
+    if (_isCreateMode) {
+      if (_members.isEmpty) {
         _members = [
           GroupMember(
-            id: _currentUserId,
+            id: currentUserId.isEmpty ? 'me' : currentUserId,
             name: profile.nickname.isNotEmpty
                 ? profile.nickname
                 : (auth.user?.displayName ?? '---'),
             email: auth.user?.email ?? '',
             role: 'owner',
           ),
-        ];
-      } else {
-        // 编辑：读取已有 group（现在仍然 mock，后续换成 store）
-        _members = [
-          GroupMember(
-            id: _currentUserId,
-            name: profile.nickname.isNotEmpty
-                ? profile.nickname
-                : (auth.user?.displayName ?? '---'),
-            email: auth.user?.email ?? '',
-            role: 'owner',
-          ),
-          const GroupMember(
-              id: 'mama', name: 'MAMA', email: '', role: 'member'),
         ];
       }
+    } else {
+      final gid = widget.groupId!;
+      final detail = groupState.details[gid];
+
+      // detail 还没回来时：显示 loading，但保留 UI 结构
+      if (detail == null) {
+        // 不要清空 _members，避免 build 抖动；如果第一次进来为空，就先给一条自己占位
+        if (_members.isEmpty) {
+          _members = [
+            GroupMember(
+              id: currentUserId.isEmpty ? 'me' : currentUserId,
+              name: profile.nickname.isNotEmpty
+                  ? profile.nickname
+                  : (auth.user?.displayName ?? '---'),
+              email: auth.user?.email ?? '',
+              role: viewerRole, // 先用 me 的 role
+            ),
+          ];
+        }
+      } else {
+        // ✅ 用后端 members 重建
+        _members = detail.members.map((m) {
+          final uid = m.userId;
+
+          final isMe = uid == currentUserId;
+          if (isMe) {
+            return GroupMember(
+              id: uid,
+              name: profile.nickname.isNotEmpty
+                  ? profile.nickname
+                  : (auth.user?.displayName ?? '---'),
+              email: auth.user?.email ?? '',
+              role: m.role,
+            );
+          }
+
+          // 其他人：后端暂时没有 name/email，只能用占位
+          final shortId = uid.length > 8 ? uid.substring(0, 8) : uid;
+          return GroupMember(
+            id: uid,
+            name: 'Member $shortId',
+            email: '',
+            role: m.role,
+          );
+        }).toList();
+      }
     }
+
+    // ✅ 组名显示：优先 _familyName（编辑后本地更新），否则来自 auth.groups
+    final shownGroupName =
+        _familyName ?? (_isCreateMode ? '' : (group?.name ?? '---'));
 
     return AppScaffold(
       title: _isCreateMode ? l10n.groupCreateTitle : l10n.groupSettingsTitle,
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          _buildFamilyInfoCard(context, group),
+          // 顶部 loading / error 提示（可选但很实用）
+          if (groupState.loading)
+            const Padding(
+              padding: EdgeInsets.only(bottom: 12),
+              child: LinearProgressIndicator(minHeight: 2),
+            ),
+          if ((groupState.error ?? '').isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: Text(
+                groupState.error!,
+                style: const TextStyle(color: Colors.red),
+              ),
+            ),
+
+          _buildFamilyInfoCard(context, shownGroupName, isOwner),
           const SizedBox(height: 12),
-          _buildMembersSection(context, auth, profile),
+          _buildMembersSection(context, auth, profile, currentUserId),
           const SizedBox(height: 12),
-          _buildAddMember(context),
+          _buildAddMember(context, isOwner),
           const SizedBox(height: 16),
           _isCreateMode
               ? _buildCreateGroup(context)
-              : _buildDeleteGroup(context),
+              : _buildDeleteGroup(context, isOwner),
         ],
       ),
     );
@@ -114,20 +173,23 @@ class _GroupSettingsPageState extends ConsumerState<GroupSettingsPage> {
   /// UI Blocks
   /// =============================
 
-  Widget _buildFamilyInfoCard(BuildContext context, dynamic group) {
-
+  Widget _buildFamilyInfoCard(
+    BuildContext context,
+    String shownGroupName,
+    bool isOwner,
+  ) {
     final l10n = AppLocalizations.of(context);
 
     return Card(
       child: Column(
         children: [
           ListTile(
-            title: Text(_isCreateMode ? l10n.groupCreateTitle : l10n.groupSettingsTitle),
+            title: Text(l10n.groupName),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  _familyName ?? (_isCreateMode ? '' : (group?.name ?? '---')),
+                  shownGroupName,
                   style: const TextStyle(color: Colors.black54),
                 ),
                 const SizedBox(width: 8),
@@ -135,23 +197,25 @@ class _GroupSettingsPageState extends ConsumerState<GroupSettingsPage> {
               ],
             ),
             onTap: () async {
-              if (!_isOwner) {
+              if (!isOwner) {
                 _toast(context, l10n.ownerOnlyCanChange);
                 return;
               }
 
               final name = await _showEditTextDialog(
                 context,
-                title: _isCreateMode ? l10n.groupNameInputTitleCreate : l10n.groupNameInputTitleEdit,
-                initialValue: group?.name ?? '',
+                title: _isCreateMode
+                    ? l10n.groupNameInputTitleCreate
+                    : l10n.groupNameInputTitleEdit,
+                initialValue: shownGroupName,
               );
               if (name == null || name.trim().isEmpty) return;
 
-              // TODO: API rename
               setState(() => _familyName = name.trim());
 
-              if (!_isCreateMode) {
-                // TODO: 编辑模式：PATCH group name
+              if (!_isCreateMode && widget.groupId != null) {
+                // TODO: 后端有 PATCH /api/groups/{id} 后，在这里调用：
+                // await ref.read(groupControllerProvider.notifier).renameGroup(widget.groupId!, name.trim());
               }
             },
           ),
@@ -164,6 +228,7 @@ class _GroupSettingsPageState extends ConsumerState<GroupSettingsPage> {
     BuildContext context,
     dynamic auth,
     dynamic profile,
+    String currentUserId,
   ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -177,7 +242,7 @@ class _GroupSettingsPageState extends ConsumerState<GroupSettingsPage> {
             children: [
               for (int i = 0; i < _members.length; i++) ...[
                 ListTile(
-                  leading: _members[i].id == _currentUserId
+                  leading: _members[i].id == currentUserId
                       ? AvatarCircle(
                           avatarId: profile.avatarId,
                           imageUrl: auth.user?.avatarUrl,
@@ -188,16 +253,16 @@ class _GroupSettingsPageState extends ConsumerState<GroupSettingsPage> {
                           child: Icon(Icons.person_outline),
                         ),
                   title: Text(_members[i].name),
-                  subtitle: _members[i].email.isNotEmpty
-                      ? Text(_members[i].email)
-                      : null,
+                  subtitle:
+                      _members[i].email.isNotEmpty ? Text(_members[i].email) : null,
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        _members[i].role == 'owner' ? 'グループの所有者' : '普通メンバー',
-                        style: const TextStyle(
-                            fontSize: 12, color: Colors.black54),
+                        _members[i].role == 'owner'
+                            ? 'グループの所有者'
+                            : (_members[i].role == 'admin' ? '管理者' : '普通メンバー'),
+                        style: const TextStyle(fontSize: 12, color: Colors.black54),
                       ),
                       const SizedBox(width: 8),
                       const Icon(Icons.chevron_right),
@@ -214,24 +279,41 @@ class _GroupSettingsPageState extends ConsumerState<GroupSettingsPage> {
     );
   }
 
-  Widget _buildAddMember(BuildContext context) {
+  Widget _buildAddMember(BuildContext context, bool isOwner) {
     final l10n = AppLocalizations.of(context);
 
     return Card(
       child: ListTile(
-        title: Text(l10n.addMember, style: TextStyle(color: Colors.blue)),
+        title: Text(l10n.addMember, style: const TextStyle(color: Colors.blue)),
         onTap: () async {
-          if (!_isOwner) {
+          if (!isOwner) {
             _toast(context, l10n.ownerOnlyCanAdd);
             return;
           }
 
-          // TODO: 这里用真实邀请码（后端返回 or 本地生成）
-          final inviteCode = 'ABCD-1234';
+          // ✅ 编辑模式：groupId 必须存在；创建模式：还没创建 group，不允许邀请
+          if (_isCreateMode || widget.groupId == null) {
+            _toast(context, l10n.groupCreateTitle); // 也可以换成更明确的文案
+            return;
+          }
+
+          final gid = widget.groupId!;
+
+          // ✅ 调用 API 生成真实 invite token
+          final resp = await ref
+              .read(groupControllerProvider.notifier)
+              .createInvite(groupId: gid, expiresHours: 24);
+
+          if (resp == null) {
+            _toast(context, 'create invite failed');
+            return;
+          }
+
+          final inviteCode = resp.token;
 
           final r = await showAddMemberSheet(
             context,
-            inviteCode: inviteCode, // ✅ 必须传
+            inviteCode: inviteCode,
           );
           if (r == null) return;
 
@@ -242,16 +324,13 @@ class _GroupSettingsPageState extends ConsumerState<GroupSettingsPage> {
               return;
 
             case 'copy':
-              // 已在 sheet 里复制并提示，这里不需要再做
               return;
 
             case 'sms':
-              // TODO: 后续用 url_launcher 打开系统短信并带上 inviteCode
               _toast(context, l10n.inviteSmsNotImplemented);
               return;
 
             case 'email':
-              // TODO: 后续用 url_launcher 打开系统邮件并带上 inviteCode
               _toast(context, l10n.inviteEmailNotImplemented);
               return;
 
@@ -269,35 +348,48 @@ class _GroupSettingsPageState extends ConsumerState<GroupSettingsPage> {
     return Card(
       child: ListTile(
         title: Center(
-          child: Text(l10n.groupCreateTitle, style: TextStyle(color: Colors.blue)),
+          child: Text(
+            l10n.groupCreateTitle,
+            style: const TextStyle(color: Colors.blue),
+          ),
         ),
         onTap: () async {
-          if ((_familyName ?? '').isEmpty) {
+          if ((_familyName ?? '').trim().isEmpty) {
             _toast(context, l10n.groupNameEmpty);
             return;
           }
 
-          // TODO: 调用 GroupStore / API 创建
-          // final groupId = uuid.v4();
-          // await groupStore.createGroup(...)
+          final g = await ref.read(groupControllerProvider.notifier).createGroup(
+                name: _familyName!.trim(),
+                groupType: 'family',
+              );
+
+          if (g == null) {
+            _toast(context, 'create group failed');
+            return;
+          }
 
           _toast(context, l10n.groupCreated);
-          Navigator.pop(context); // 或 push 到详情
+          if (!context.mounted) return;
+          Navigator.pop(context);
         },
       ),
     );
   }
 
-  Widget _buildDeleteGroup(BuildContext context) {
+  Widget _buildDeleteGroup(BuildContext context, bool isOwner) {
     final l10n = AppLocalizations.of(context);
 
     return Card(
       child: ListTile(
         title: Center(
-          child: Text(l10n.deleteGroupTitle, style: TextStyle(color: Colors.red)),
+          child: Text(
+            l10n.deleteGroupTitle,
+            style: const TextStyle(color: Colors.red),
+          ),
         ),
         onTap: () async {
-          if (!_isOwner) {
+          if (!isOwner) {
             _toast(context, l10n.ownerOnlyCanDelete);
             return;
           }
@@ -309,16 +401,19 @@ class _GroupSettingsPageState extends ConsumerState<GroupSettingsPage> {
               content: Text(l10n.deleteConfirm),
               actions: [
                 TextButton(
-                    onPressed: () => Navigator.pop(ctx, false),
-                    child: Text(l10n.cancel)),
+                  onPressed: () => Navigator.pop(ctx, false),
+                  child: Text(l10n.cancel),
+                ),
                 FilledButton(
-                    onPressed: () => Navigator.pop(ctx, true),
-                    child: Text(l10n.delete)),
+                  onPressed: () => Navigator.pop(ctx, true),
+                  child: Text(l10n.delete),
+                ),
               ],
             ),
           );
 
           if (ok == true) {
+            // TODO: 后端有 DELETE /api/groups/{id} 后，在这里调用
             _toast(context, l10n.deleteApiNotConnected);
           }
         },
@@ -331,7 +426,10 @@ class _GroupSettingsPageState extends ConsumerState<GroupSettingsPage> {
   /// =============================
 
   void _onTapMember(BuildContext context, GroupMember target) async {
-    final action = await _showMemberActionSheet(context, target);
+    final auth = ref.read(authControllerProvider);
+    final currentUserId = auth.user?.id ?? '';
+
+    final action = await _showMemberActionSheet(context, target, currentUserId);
     if (action == null) return;
 
     switch (action) {
@@ -345,13 +443,22 @@ class _GroupSettingsPageState extends ConsumerState<GroupSettingsPage> {
   }
 
   Future<String?> _showMemberActionSheet(
-      BuildContext context, GroupMember target) async {
-    
+    BuildContext context,
+    GroupMember target,
+    String currentUserId,
+  ) async {
     final l10n = AppLocalizations.of(context);
-    final isMe = target.id == _currentUserId;
 
-    // 非 owner：不能操作
-    if (!_isOwner) {
+    // ✅ owner 判断：优先用 auth.groups 的 role
+    final auth = ref.read(authControllerProvider);
+    final group = (!_isCreateMode && widget.groupId != null)
+        ? auth.groups.where((g) => g.id == widget.groupId).cast<GroupBrief?>().firstOrNull
+        : null;
+
+    final isOwner = _isCreateMode ? true : (group?.role == 'owner');
+    final isMe = target.id == currentUserId;
+
+    if (!isOwner) {
       return showModalBottomSheet<String>(
         context: context,
         showDragHandle: true,
@@ -382,8 +489,10 @@ class _GroupSettingsPageState extends ConsumerState<GroupSettingsPage> {
             if (!isMe && target.role == 'member')
               ListTile(
                 leading: const Icon(Icons.delete_outline),
-                title:
-                    Text(l10n.memberRemove, style: TextStyle(color: Colors.red)),
+                title: Text(
+                  l10n.memberRemove,
+                  style: const TextStyle(color: Colors.red),
+                ),
                 onTap: () => Navigator.pop(context, 'remove'),
               ),
             const SizedBox(height: 8),
@@ -396,6 +505,7 @@ class _GroupSettingsPageState extends ConsumerState<GroupSettingsPage> {
   void _removeMember(BuildContext context, GroupMember target) {
     final l10n = AppLocalizations.of(context);
 
+    // TODO: 后端有 remove member API 后，在这里调用 provider
     setState(() {
       _members.removeWhere((m) => m.id == target.id);
     });
@@ -405,14 +515,14 @@ class _GroupSettingsPageState extends ConsumerState<GroupSettingsPage> {
   void _transferOwner(BuildContext context, GroupMember target) {
     final l10n = AppLocalizations.of(context);
 
+    // TODO: 后端有 transfer owner API 后，在这里调用 provider
+    final auth = ref.read(authControllerProvider);
+    final currentUserId = auth.user?.id ?? '';
+
     setState(() {
       _members = _members.map((m) {
-        if (m.id == target.id) {
-          return m.copyWith(role: 'owner');
-        }
-        if (m.id == _currentUserId) {
-          return m.copyWith(role: 'member');
-        }
+        if (m.id == target.id) return m.copyWith(role: 'owner');
+        if (m.id == currentUserId) return m.copyWith(role: 'member');
         return m;
       }).toList();
     });
@@ -429,7 +539,7 @@ class _GroupSettingsPageState extends ConsumerState<GroupSettingsPage> {
     required String initialValue,
   }) async {
     final c = TextEditingController(text: initialValue);
-    final l10n = AppLocalizations.of(context);  
+    final l10n = AppLocalizations.of(context);
 
     return showDialog<String>(
       context: context,
@@ -437,17 +547,18 @@ class _GroupSettingsPageState extends ConsumerState<GroupSettingsPage> {
         title: Text(title),
         content: TextField(
           controller: c,
-          style: const TextStyle(
-            color: Colors.black87,
-          ),
+          style: const TextStyle(color: Colors.black87),
           decoration: const InputDecoration(border: OutlineInputBorder()),
         ),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(ctx), child: Text(l10n.cancel)),
+            onPressed: () => Navigator.pop(ctx),
+            child: Text(l10n.cancel),
+          ),
           FilledButton(
-              onPressed: () => Navigator.pop(ctx, c.text),
-              child: Text(l10n.save)),
+            onPressed: () => Navigator.pop(ctx, c.text),
+            child: Text(l10n.save),
+          ),
         ],
       ),
     );

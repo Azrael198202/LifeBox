@@ -302,7 +302,6 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
       await db.upsert(record);
 
       // ✅ 若开启云保存，则调用云保存 API
-      await ref.read(cloudEnabledProvider.notifier).setEnabled(true);
       final cloudEnabled = ref.read(cloudEnabledProvider);
 
       if (cloudEnabled) {

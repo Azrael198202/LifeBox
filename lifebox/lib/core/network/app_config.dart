@@ -21,6 +21,7 @@ class AppConfig {
   static String get aiAnalyze => '$baseUrl/api/ai/analyze';
   static String get cloudRecord => '$baseUrl/api/cloud/records';
   static String get cloudSaveRecord => '$baseUrl/api/cloud/records';
+  static String cloudRecordDetail(String id) => '$baseUrl/api/cloud/records/$id';
 
   static String get authGoogle => '$baseUrl/api/auth/google';
   static String get authRegister => '$baseUrl/api/auth/register';
@@ -31,4 +32,16 @@ class AppConfig {
   static String get billingSubscription => '$baseUrl/api/billing/subscription';
   static String get billingEntitlements => '$baseUrl/api/billing/entitlements';
   static String get billingVerify => '$baseUrl/api/billing/verify';
+
+  // ===== Group endpoints =====
+static String get groups => '$baseUrl/api/groups';
+static String groupDetail(String groupId) => '$baseUrl/api/groups/$groupId';
+static String groupInvites(String groupId) => '$baseUrl/api/groups/$groupId/invites';
+static String get inviteAccept => '$baseUrl/api/invites/accept';
+
+static String groupPatch(String groupId) => '$baseUrl/api/groups/$groupId';
+static String groupDelete(String groupId) => '$baseUrl/api/groups/$groupId';
+static String groupRemoveMember(String groupId, String userId) => '$baseUrl/api/groups/$groupId/members/$userId';
+static String groupTransferOwner(String groupId) => '$baseUrl/api/groups/$groupId/transfer-owner';
+
 }

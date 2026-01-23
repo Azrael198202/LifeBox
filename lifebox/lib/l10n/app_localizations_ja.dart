@@ -832,6 +832,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get groupCreateTitle => 'グループ作成';
 
   @override
+  String get groupName => 'グループ名';
+
+  @override
   String get groupSettingsTitle => 'グループ設定';
 
   @override

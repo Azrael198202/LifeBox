@@ -827,6 +827,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get groupCreateTitle => '创建群组';
 
   @override
+  String get groupName => '群组名';
+
+  @override
   String get groupSettingsTitle => '群组设置';
 
   @override

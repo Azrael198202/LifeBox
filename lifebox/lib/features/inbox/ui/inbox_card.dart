@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:lifebox/features/auth/state/auth_providers.dart';
+import 'package:lifebox/features/inbox/state/cloud_inbox_service_provider.dart';
 import 'package:lifebox/l10n/app_localizations.dart';
 
 import '../../../app/theme/colors.dart';
@@ -42,6 +44,16 @@ class InboxCard extends ConsumerWidget {
 
     Future<void> _delete() async {
       await db.deleteById(item.id);
+
+      // Delete Cloud Record if exists
+      final cloudId = item.id;
+      if (cloudId != null) {
+        final cloud = ref.read(cloudInboxServiceProvider);
+        final auth = ref.read(authControllerProvider);
+        final accessToken = auth.accessToken;
+        await cloud.deleteRecordCloud(cloudId, accessToken: accessToken!);
+      }
+
       ref.invalidate(localInboxListProvider);
     }
 
@@ -67,7 +79,6 @@ class InboxCard extends ConsumerWidget {
     }
 
     Future<bool> _onDismiss(DismissDirection dir) async {
-      // 👉 右滑：完成 / 恢复
       if (dir == DismissDirection.startToEnd) {
         if (_isDone) {
           await _markTodo();
@@ -77,7 +88,6 @@ class InboxCard extends ConsumerWidget {
         return false; // 不让 Dismissible 真正移除
       }
 
-      // 👉 左滑：删除
       if (dir == DismissDirection.endToStart) {
         final ok = await _confirmDelete();
         if (ok) await _delete();

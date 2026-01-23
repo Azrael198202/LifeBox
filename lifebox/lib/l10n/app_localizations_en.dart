@@ -75,6 +75,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deleteConfirmTitle => 'Delete Confirm';
 
   @override
+  String get continueText => 'Continue';
+
+  @override
   String get language_subtitle => 'Change display language';
 
   @override

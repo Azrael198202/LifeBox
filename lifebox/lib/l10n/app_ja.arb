@@ -22,6 +22,7 @@
   "colorTitle": "色（カレンダー）",
   "deleteConfirm": "本当に削除しますか？",
   "deleteConfirmTitle": "削除確認",
+  "continueText": "次へ",
   "language_subtitle": "表示言語を切り替えます",
   "upload_policy_title": "OCRテキストのみアップロード（既定：ON）",
   "upload_policy_subtitle": "プライバシー優先：画像はアップロードしません（後で設定可）",
@@ -403,7 +404,7 @@
   
   "groupManage": "グループ管理",
   "nogroup": "まだグループがありません",
-  "joinGroup": "まグループに入る",
+  "joinGroup": "グループに入る",
 
   "inviteChooseMethodTitle": "誘う方法を選択",
   "inviteMethodAccount": "アプリアカウント",

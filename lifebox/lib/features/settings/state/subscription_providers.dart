@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 
-import '../../auth/state/auth_providers.dart'; // ✅ authControllerProvider
-import '../../../core/services/billing_service.dart'; // ✅ BillingService
-import '../data/subscription_store.dart'; // ✅ SubscriptionStore
+import '../../auth/state/auth_providers.dart';
+import '../../../core/services/billing_service.dart';
+import '../data/subscription_store.dart';
 
 /// ✅ BillingService：从 AuthState 取 accessToken（没有 authProvider 就用这个）
 final billingServiceProvider = Provider<BillingService>((ref) {
@@ -160,6 +160,7 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
   Future<void> devBusyRun(Future<void> Function() fn) async {
     if (state.busy) return;
     state = state.copyWith(busy: true, error: null);
+
     try {
       await fn();
     } catch (e) {
@@ -173,5 +174,33 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
     final store = ref.read(subscriptionStoreProvider);
     await store.debugSetSubscribed(v);
     state = state.copyWith(subscribed: v);
+  }
+
+  Future<bool> devActivate(String productId) async {
+
+    await devBusyRun(() async {
+      final store = ref.read(subscriptionStoreProvider);
+      await store.billing.verify(
+        platform: 'android',
+        productId: productId,
+        purchaseToken: 'test_ok',
+        clientPayload: {'dev': true},
+      );
+      await refresh(); // ✅ 确保 subscribed 立刻变 true
+    });
+    return state.subscribed;
+  }
+
+  Future<void> devExpire() async {
+    await devBusyRun(() async {
+      final store = ref.read(subscriptionStoreProvider);
+      await store.billing.verify(
+        platform: 'android',
+        productId: monthlyId,
+        purchaseToken: 'test_expired',
+        clientPayload: {'dev': true},
+      );
+      await refresh();
+    });
   }
 }

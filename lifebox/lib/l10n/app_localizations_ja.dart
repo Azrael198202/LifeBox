@@ -75,6 +75,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get deleteConfirmTitle => '削除確認';
 
   @override
+  String get continueText => '次へ';
+
+  @override
   String get language_subtitle => '表示言語を切り替えます';
 
   @override
@@ -904,7 +907,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get nogroup => 'まだグループがありません';
 
   @override
-  String get joinGroup => 'まグループに入る';
+  String get joinGroup => 'グループに入る';
 
   @override
   String get inviteChooseMethodTitle => '誘う方法を選択';

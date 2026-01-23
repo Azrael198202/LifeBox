@@ -22,6 +22,7 @@
   "colorTitle": "颜色（日历）",
   "deleteConfirm": "确定要删除吗？",
   "deleteConfirmTitle": "确定删除",
+  "continueText": "继续",
   "language_subtitle": "切换显示语言",
   "upload_policy_title": "仅上传 OCR 文本（默认开）",
   "upload_policy_subtitle": "隐私友好：默认不上传原图（后续可配置）",

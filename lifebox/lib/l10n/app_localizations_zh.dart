@@ -75,6 +75,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get deleteConfirmTitle => '确定删除';
 
   @override
+  String get continueText => '继续';
+
+  @override
   String get language_subtitle => '切换显示语言';
 
   @override

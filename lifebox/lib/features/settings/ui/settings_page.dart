@@ -17,6 +17,8 @@ class SettingsPage extends ConsumerWidget {
   const SettingsPage({super.key});
 
   Future<bool> requireSubscribed(BuildContext context, WidgetRef ref) async {
+    await ref.read(subscriptionProvider.notifier).refresh();
+
     final sub = ref.read(subscriptionProvider);
     if (sub.subscribed) return true;
 

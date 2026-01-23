@@ -124,7 +124,8 @@ class SubscriptionStore {
       }
 
       // purchased / restored
-      if (p.status == PurchaseStatus.purchased || p.status == PurchaseStatus.restored) {
+      if (p.status == PurchaseStatus.purchased ||
+          p.status == PurchaseStatus.restored) {
         final isTarget = _isTargetProduct(p.productID);
 
         // 先 completePurchase（避免重复回调）
@@ -175,6 +176,12 @@ class SubscriptionStore {
 
       // canceled / other：不同平台支持不同状态，这里不额外处理
     }
+  }
+
+  Future<bool> hasEntitlement(String key) async {
+    final list = await billing.getEntitlements();
+    // 每个元素形如 { entitlement, status, ... }
+    return list.any((e) => e['entitlement'] == key && e['status'] == 'active');
   }
 
   bool _isTargetProduct(String id) => id == monthlyId || id == yearlyId;

@@ -22,6 +22,7 @@
   "colorTitle": "Color(Calendar)",
   "deleteConfirm": "Are you sure you want to delete it?",
   "deleteConfirmTitle": "Delete Confirm",
+  "continueText": "Continue",
   "language_subtitle": "Change display language",
   "upload_policy_title": "Upload OCR text only (default ON)",
   "upload_policy_subtitle": "Privacy-first: images are not uploaded (configurable later)",

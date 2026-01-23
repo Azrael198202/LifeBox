@@ -232,6 +232,12 @@ abstract class AppLocalizations {
   /// **'削除確認'**
   String get deleteConfirmTitle;
 
+  /// No description provided for @continueText.
+  ///
+  /// In ja, this message translates to:
+  /// **'次へ'**
+  String get continueText;
+
   /// No description provided for @language_subtitle.
   ///
   /// In ja, this message translates to:
@@ -1783,7 +1789,7 @@ abstract class AppLocalizations {
   /// No description provided for @joinGroup.
   ///
   /// In ja, this message translates to:
-  /// **'まグループに入る'**
+  /// **'グループに入る'**
   String get joinGroup;
 
   /// No description provided for @inviteChooseMethodTitle.

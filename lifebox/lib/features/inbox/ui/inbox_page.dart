@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lifebox/core/widgets/risk_badge.dart';
 import 'package:lifebox/features/inbox/state/merged_inbox_provider.dart';
 import 'package:lifebox/l10n/app_localizations.dart';
 
@@ -43,12 +44,12 @@ class _InboxPageState extends ConsumerState<InboxPage>
   InboxItem _toInboxItem(InboxItem r) {
     final l10n = AppLocalizations.of(context);
 
-    final isDone = r.status == 'done';
-    final isHighRisk = r.risk == 'high';
+    final isDone = r.status == InboxStatus.done;
+    final isHighRisk = r.risk == RiskLevel.high;
 
     final status = isDone
         ? InboxStatus.done
-        : (isHighRisk ? InboxStatus.highRisk : InboxStatus.pending);
+        : (isHighRisk ? InboxStatus.high : InboxStatus.pending);
 
     return InboxItem(
       id: r.id,               // UI key
@@ -150,16 +151,16 @@ class _InboxPageState extends ConsumerState<InboxPage>
 
               // Tab 1：高风险（high & not done）
               final highRisk = list
-                  .where((e) => e.risk == 'high' && e.status != 'done')
+                  .where((e) => e.risk == RiskLevel.high && e.status != InboxStatus.done)
                   .toList();
 
               // Tab 2：待办
               final todo =
-                  list.where((e) => e.status == 'pending').toList();
+                  list.where((e) => e.status == InboxStatus.pending).toList();
 
               // Tab 3：已完成
               final done =
-                  list.where((e) => e.status == 'done').toList();
+                  list.where((e) => e.status == InboxStatus.done).toList();
 
               return Column(
                 children: [

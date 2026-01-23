@@ -12,7 +12,7 @@ enum InboxSourceType {
 
 /// Tab 用：高风险 / 待办 / 已完成
 enum InboxStatus {
-  highRisk,
+  high,
   pending,
   done,
 }
@@ -103,7 +103,7 @@ class InboxItem {
     required String dbRisk,
   }) {
     if (dbStatus == 'done') return InboxStatus.done;
-    if (dbRisk == 'high') return InboxStatus.highRisk;
+    if (dbRisk == 'high') return InboxStatus.high;
     return InboxStatus.pending;
   }
 

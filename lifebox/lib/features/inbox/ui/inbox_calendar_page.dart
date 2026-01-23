@@ -63,7 +63,7 @@ class _InboxCalendarPageState extends ConsumerState<InboxCalendarPage> {
 
     final status = isDone
         ? InboxStatus.done
-        : (isHighRisk ? InboxStatus.highRisk : InboxStatus.pending);
+        : (isHighRisk ? InboxStatus.high : InboxStatus.pending);
 
     return InboxItem(
       id: r.id,               // UI key
@@ -86,7 +86,7 @@ class _InboxCalendarPageState extends ConsumerState<InboxCalendarPage> {
 
   bool _isActionable(InboxItem item) {
     // ✅ Calendar 只显示：高风险 + 待办
-    return item.status == InboxStatus.highRisk ||
+    return item.status == InboxStatus.high ||
         item.status == InboxStatus.pending;
   }
 

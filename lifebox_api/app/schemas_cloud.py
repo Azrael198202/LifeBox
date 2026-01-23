@@ -42,6 +42,7 @@ class CloudSaveResponse(BaseModel):
 class CloudListItem(BaseModel):
     id: str
     created_at: str
+    locale:str
     title: str
     risk: Risk
     status: Status

@@ -171,7 +171,7 @@ async def save_record(
     return CloudSaveResponse(id=str(record_id), existed=False)
 
 
-@router.get("/records", response_model=List[CloudListItem])
+@router.get("/records/getall", response_model=List[CloudListItem])
 async def list_records(
     user: CurrentUser = Depends(get_current_user),
     group_id: Optional[UUID] = Query(default=None),
@@ -182,6 +182,7 @@ async def list_records(
         q = """
         select id::text as id,
                created_at::text as created_at,
+               locale,
                title,
                risk,
                status,
@@ -198,6 +199,7 @@ async def list_records(
         q = """
         select id::text as id,
                created_at::text as created_at,
+               locale,
                title,
                risk,
                status,

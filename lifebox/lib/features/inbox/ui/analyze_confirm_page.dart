@@ -6,6 +6,7 @@ import 'package:lifebox/core/utils/date_tools.dart';
 import 'package:lifebox/features/auth/state/auth_providers.dart';
 import 'package:lifebox/features/inbox/data/mock_speech_texts.dart';
 import 'package:lifebox/features/inbox/state/cloud_inbox_service_provider.dart';
+import 'package:lifebox/features/inbox/state/inbox_refresh.dart';
 import 'package:lifebox/features/settings/state/subscription_providers.dart';
 import 'package:uuid/uuid.dart';
 import 'package:lifebox/l10n/app_localizations.dart';
@@ -290,7 +291,7 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
       }
 
       // ✅ 刷新 inbox 列表
-      ref.invalidate(localInboxListProvider);
+      refreshInboxProviders(ref); 
 
       if (!mounted) return;
       Navigator.of(context).popUntil((route) => route.isFirst);

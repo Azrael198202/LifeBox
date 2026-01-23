@@ -16,7 +16,7 @@ class LocalInboxDb {
 
     _db = await openDatabase(
       path,
-      version: 2, // ✅ bump version
+      version: 4, // ✅ bump version
       onCreate: (db, _) async {
         await db.execute('''
 CREATE TABLE $_table (
@@ -35,22 +35,30 @@ CREATE TABLE $_table (
 
   -- ✅ new columns
   group_id TEXT NULL,
-  color_value INTEGER NULL
+  color_value INTEGER NULL,
+  cloud_id TEXT NULL
 );
 ''');
         await db.execute('CREATE INDEX idx_inbox_status ON $_table(status);');
         await db.execute('CREATE INDEX idx_inbox_risk ON $_table(risk);');
-        await db.execute('CREATE INDEX idx_inbox_group_id ON $_table(group_id);');
+        await db
+            .execute('CREATE INDEX idx_inbox_group_id ON $_table(group_id);');
       },
       onUpgrade: (db, oldVersion, newVersion) async {
         if (oldVersion < 2) {
-          // ✅ for existing installed users
-          await db.execute('ALTER TABLE $_table ADD COLUMN group_id TEXT NULL;');
+          await db
+              .execute('ALTER TABLE $_table ADD COLUMN group_id TEXT NULL;');
           await db.execute(
               'ALTER TABLE $_table ADD COLUMN color_value INTEGER NULL;');
+          await db.execute(
+            'CREATE INDEX IF NOT EXISTS idx_inbox_group_id ON $_table(group_id);',
+          );
+        }
 
-
-          await db.execute('CREATE INDEX IF NOT EXISTS idx_inbox_group_id ON $_table(group_id);');
+        // v3: cloud_id
+        if (oldVersion < 5) {
+          await db
+              .execute('ALTER TABLE $_table ADD COLUMN cloud_id TEXT NULL;');
         }
       },
     );
@@ -59,6 +67,8 @@ CREATE TABLE $_table (
 
   Future<void> upsert(LocalInboxRecord r) async {
     final db = await _open();
+    final v = await db.getVersion();
+
     await db.insert(
       _table,
       r.toMap(),
@@ -178,7 +188,8 @@ CREATE TABLE $_table (
   }
 
   // ✅ 更新 group_id / color_value
-  Future<int> updateGroupAndColor(String id, {String? groupId, int? colorValue}) async {
+  Future<int> updateGroupAndColor(String id,
+      {String? groupId, int? colorValue}) async {
     final db = await _open();
     return db.update(
       _table,

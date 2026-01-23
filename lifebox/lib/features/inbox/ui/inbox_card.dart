@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lifebox/features/auth/state/auth_providers.dart';
 import 'package:lifebox/features/inbox/state/cloud_inbox_service_provider.dart';
+import 'package:lifebox/features/inbox/state/inbox_refresh.dart';
 import 'package:lifebox/features/settings/state/settings_providers.dart';
 import 'package:lifebox/l10n/app_localizations.dart';
 
@@ -44,21 +45,19 @@ class InboxCard extends ConsumerWidget {
     }
 
     Future<void> _delete() async {
-      await db.deleteById(item.id);
-
+      
+      if (item.localId != null){
+        await db.deleteById(item.id);
+      }
+      
       // Delete Cloud Record if exists
-
-      final cloudEnabled = ref.read(cloudEnabledProvider);
-
-      if (cloudEnabled) {
-        final cloudId = item.id;
-        if (cloudId != null) {
+      if (item.cloudId != null && item.cloudId!.isNotEmpty) {
           final cloud = ref.read(cloudInboxServiceProvider);
           final auth = ref.read(authControllerProvider);
           final accessToken = auth.accessToken;
-          await cloud.deleteRecordCloud(cloudId, accessToken: accessToken!);
-        }
+          await cloud.deleteRecordCloud(item.id, accessToken: accessToken!);
       }
+      refreshInboxProviders(ref); 
       ref.invalidate(localInboxListProvider);
     }
 

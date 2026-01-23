@@ -74,6 +74,7 @@ class LocalInboxRecord {
       'risk': risk,
       'status': status,
       'color_value': colorValue,
+      'cloud_id': cloudId, // ✅ 可选：如果有云端 id 就传
     };
   }
 

@@ -114,6 +114,7 @@ class _InboxPageState extends ConsumerState<InboxPage>
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    
     final asyncList = ref.watch(mergedInboxProvider);
 
     return AppScaffold(
@@ -151,16 +152,16 @@ class _InboxPageState extends ConsumerState<InboxPage>
 
               // Tab 1：高风险（high & not done）
               final highRisk = list
-                  .where((e) => e.risk == RiskLevel.high && e.status != InboxStatus.done)
+                  .where((e) => e.risk.name == 'high' && e.status.name != 'done')
                   .toList();
 
               // Tab 2：待办
               final todo =
-                  list.where((e) => e.status == InboxStatus.pending).toList();
+                  list.where((e) => e.status.name == 'pending').toList();
 
               // Tab 3：已完成
               final done =
-                  list.where((e) => e.status == InboxStatus.done).toList();
+                  list.where((e) => e.status.name == 'done').toList();
 
               return Column(
                 children: [

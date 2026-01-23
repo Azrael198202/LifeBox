@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lifebox/features/inbox/state/inbox_refresh.dart';
 import 'package:lifebox/l10n/app_localizations.dart';
 import 'avatar_picker.dart';
 import 'package:go_router/go_router.dart';
@@ -97,7 +98,7 @@ class SettingsPage extends ConsumerWidget {
           // ====== 云保存======
           Card(
             child: SwitchListTile(
-              value: cloudEnabled,
+              value: cloudEnabled? ref.watch(subscriptionProvider).subscribed ? cloudEnabled : false :false,
               onChanged: (v) async {
                 // 关闭：直接关
                 if (!v) {
@@ -117,6 +118,7 @@ class SettingsPage extends ConsumerWidget {
                   await ref
                       .read(cloudEnabledProvider.notifier)
                       .setEnabled(true);
+                  refreshInboxProviders(ref); 
                   if (!context.mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text(l10n.setting_cloud_on)),
@@ -140,20 +142,6 @@ class SettingsPage extends ConsumerWidget {
                   SnackBar(content: Text(l10n.setting_cloud_sub_success)),
                 );
               },
-              // title: Text(l10n.setting_cloud_title),
-              // subtitle: Consumer(
-              //   builder: (context, ref, _) {
-              //     final sub = ref.watch(subscriptionProvider);
-              //     final status = sub.subscribed
-              //         ? l10n.setting_cloud_status_subscribed
-              //         : l10n.setting_cloud_status_unsubscribed;
-              //     return Text(
-              //       cloudEnabled
-              //           ? l10n.setting_cloud_desc_on(status)
-              //           : l10n.setting_cloud_desc_off(status),
-              //     );
-              //   },
-              // ),
               title: Row(
                 children: [
                   Text(l10n.setting_cloud_title),

@@ -63,15 +63,16 @@ final cloudAllGroupsInboxProvider =
   final svc = ref.read(cloudInboxServiceProvider);
 
   // 逐个 group 拉取并合并
-  final List<CloudListItem> all = [];
-  for (final g in groups) {
-    final list = await svc.listGroupRecords(
+  final futures = groups.map((g) {
+    return svc.listGroupRecords(
       accessToken: token,
       groupId: g.id,
       limit: 200,
     );
-    all.addAll(list);
-  }
+  }).toList();
+
+  final results = await Future.wait(futures);
+  final all = results.expand((e) => e).toList();
 
   // 去重：按 cloud record id
   final map = <String, CloudListItem>{};

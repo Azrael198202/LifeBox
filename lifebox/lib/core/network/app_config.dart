@@ -21,6 +21,8 @@ class AppConfig {
   static String get aiAnalyze => '$baseUrl/api/ai/analyze';
   static String get cloudRecord => '$baseUrl/api/cloud/records';
   static String get cloudSaveRecord => '$baseUrl/api/cloud/records';
+  static String cloudRecordDelete(String id) => '$baseUrl/api/cloud/records/$id';
+  static String get cloudRecords => '$baseUrl/api/records/all';
   static String cloudRecordDetail(String id) => '$baseUrl/api/cloud/records/$id';
 
   static String get authGoogle => '$baseUrl/api/auth/google';

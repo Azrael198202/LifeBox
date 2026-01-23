@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lifebox/features/auth/state/auth_providers.dart';
 import 'package:lifebox/features/inbox/state/cloud_inbox_service_provider.dart';
+import 'package:lifebox/features/settings/state/settings_providers.dart';
 import 'package:lifebox/l10n/app_localizations.dart';
 
 import '../../../app/theme/colors.dart';
@@ -46,14 +47,18 @@ class InboxCard extends ConsumerWidget {
       await db.deleteById(item.id);
 
       // Delete Cloud Record if exists
-      final cloudId = item.id;
-      if (cloudId != null) {
-        final cloud = ref.read(cloudInboxServiceProvider);
-        final auth = ref.read(authControllerProvider);
-        final accessToken = auth.accessToken;
-        await cloud.deleteRecordCloud(cloudId, accessToken: accessToken!);
-      }
 
+      final cloudEnabled = ref.read(cloudEnabledProvider);
+
+      if (cloudEnabled) {
+        final cloudId = item.id;
+        if (cloudId != null) {
+          final cloud = ref.read(cloudInboxServiceProvider);
+          final auth = ref.read(authControllerProvider);
+          final accessToken = auth.accessToken;
+          await cloud.deleteRecordCloud(cloudId, accessToken: accessToken!);
+        }
+      }
       ref.invalidate(localInboxListProvider);
     }
 
@@ -151,7 +156,7 @@ class InboxCard extends ConsumerWidget {
                         borderRadius: BorderRadius.circular(999),
                       ),
                       child: Text(
-                        item.source,
+                        item.sourceHint,
                         style: const TextStyle(
                             fontSize: 12, color: AppColors.subtext),
                       ),

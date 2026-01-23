@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lifebox/features/inbox/state/merged_inbox_provider.dart';
 import 'package:lifebox/l10n/app_localizations.dart';
 
 import '../../../core/widgets/app_scaffold.dart';
 import '../../../core/widgets/empty_state.dart';
-import '../../../core/widgets/risk_badge.dart'; // RiskLevel
 import 'inbox_speech_bar.dart';
-
-import '../state/local_inbox_providers.dart';
-import '../domain/local_inbox_record.dart';
 import 'inbox_calendar_page.dart';
 
-// ✅ 你已有的卡片 & Item 模型
 import '../domain/inbox_item.dart';
 import 'inbox_card.dart';
 
@@ -40,69 +36,52 @@ class _InboxPageState extends ConsumerState<InboxPage>
     _tab.dispose();
     super.dispose();
   }
+  // =============================
+  // InboxItem
+  // （只负责“展示层”，不做业务判断）
+  // =============================
+  InboxItem _toInboxItem(InboxItem r) {
+    final l10n = AppLocalizations.of(context);
 
-  RiskLevel _mapRisk(String v) {
-    switch (v) {
-      case 'high':
-        return RiskLevel.high;
-      case 'mid':
-        return RiskLevel.mid;
-      case 'low':
-      default:
-        return RiskLevel.low;
-    }
-  }
-
-  DateTime? _parseDueAt(String? v) {
-    if (v == null) return null;
-    final s = v.trim();
-    if (s.isEmpty) return null;
-
-    // LocalInboxRecord.dueAt = "yyyy-mm-dd"（或为空）
-    try {
-      return DateTime.parse(s);
-    } catch (_) {
-      return null;
-    }
-  }
-
-  // ✅ 关键：LocalInboxRecord -> InboxItem（补上你缺的函数）
-  InboxItem _toInboxItem(LocalInboxRecord r) {
-    // 你现在 InboxItem 定义里有 InboxStatus { high, pending, done }
-    // 这里把 record 的 status/risk 映射进去
     final isDone = r.status == 'done';
     final isHighRisk = r.risk == 'high';
-    final l10n = AppLocalizations.of(context);
 
     final status = isDone
         ? InboxStatus.done
         : (isHighRisk ? InboxStatus.highRisk : InboxStatus.pending);
 
     return InboxItem(
-      id: r.id,
-      title: r.title.isEmpty ? l10n.no_title: r.title,
-      dueAt: _parseDueAt(r.dueAt),
-      risk: _mapRisk(r.risk),
+      id: r.id,               // UI key
+      localId: r.id,          // ✅ 本地一定有
+      cloudId: r.cloudId,     // ✅ 可能为 null
+      title: r.title.isEmpty ? l10n.no_title : r.title,
+      dueAt: r.dueAt,
+      risk: r.risk,
       summary: r.summary,
       amount: r.amount,
       currency: r.currency,
       rawText: r.rawText,
-      source: r.sourceHint.isEmpty ? l10n.another : r.sourceHint,
+      sourceHint: r.sourceHint.isEmpty ? l10n.another : r.sourceHint,
       status: status,
       locale: r.locale,
+      sourceType: InboxSourceType.local,
+      createdAt: r.createdAt, // ✅
     );
   }
 
-  List<LocalInboxRecord> _sortNewestFirst(List<LocalInboxRecord> list) {
+  List<InboxItem> _sortNewestFirst(List<InboxItem> list) {
     final copied = [...list];
     copied.sort((a, b) => b.createdAt.compareTo(a.createdAt));
     return copied;
   }
 
+  // =============================
+  // List Builder
+  // =============================
   Widget _buildList(
     BuildContext context,
     AppLocalizations l10n,
-    List<LocalInboxRecord> records,
+    List<InboxItem> records,
   ) {
     if (records.isEmpty) {
       return EmptyState(
@@ -128,10 +107,13 @@ class _InboxPageState extends ConsumerState<InboxPage>
     );
   }
 
+  // =============================
+  // Build
+  // =============================
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final asyncList = ref.watch(localInboxListProvider);
+    final asyncList = ref.watch(mergedInboxProvider);
 
     return AppScaffold(
       title: l10n.inboxTitle,
@@ -159,21 +141,25 @@ class _InboxPageState extends ConsumerState<InboxPage>
       body: Stack(
         children: [
           asyncList.when(
-            loading: () => const Center(child: CircularProgressIndicator()),
-            error: (e, _) => Center(child: Text(l10n.error_loading(e.toString()))),
+            loading: () =>
+                const Center(child: CircularProgressIndicator()),
+            error: (e, _) =>
+                Center(child: Text(l10n.error_loading(e.toString()))),
             data: (raw) {
               final list = _sortNewestFirst(raw);
 
-              // ✅ Tab 1：高风险（risk=high 且未 done）
+              // Tab 1：高风险（high & not done）
               final highRisk = list
                   .where((e) => e.risk == 'high' && e.status != 'done')
                   .toList();
 
-              // ✅ Tab 2：待办（pending）
-              final todo = list.where((e) => e.status == 'pending').toList();
+              // Tab 2：待办
+              final todo =
+                  list.where((e) => e.status == 'pending').toList();
 
-              // ✅ Tab 3：已完成（done）
-              final done = list.where((e) => e.status == 'done').toList();
+              // Tab 3：已完成
+              final done =
+                  list.where((e) => e.status == 'done').toList();
 
               return Column(
                 children: [
@@ -191,7 +177,8 @@ class _InboxPageState extends ConsumerState<InboxPage>
                   Expanded(
                     child: TabBarView(
                       controller: _tab,
-                      physics: const NeverScrollableScrollPhysics(),
+                      physics:
+                          const NeverScrollableScrollPhysics(),
                       children: [
                         _buildList(context, l10n, highRisk),
                         _buildList(context, l10n, todo),
@@ -204,7 +191,9 @@ class _InboxPageState extends ConsumerState<InboxPage>
             },
           ),
 
-          // ✅ 底部语音条：保留你现在的行为（仅显示最后文字）
+          // =============================
+          // Bottom Speech Bar
+          // =============================
           Positioned(
             left: 16,
             right: 16,
@@ -214,7 +203,8 @@ class _InboxPageState extends ConsumerState<InboxPage>
               child: SpeechFloatingBar(
                 localeId: 'zh_CN',
                 lastText: _lastSpeechText,
-                onFinalText: (text) => setState(() => _lastSpeechText = text),
+                onFinalText: (text) =>
+                    setState(() => _lastSpeechText = text),
               ),
             ),
           ),

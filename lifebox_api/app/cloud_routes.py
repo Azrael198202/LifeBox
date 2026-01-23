@@ -308,4 +308,43 @@ async def delete_record(
 
     # asyncpg 返回 "DELETE n"
     return {"ok": True, "result": r}
+    
+@router.get("/records/all", response_model=List[CloudListItem])
+async def list_records_all(
+    user: CurrentUser = Depends(get_current_user),
+    limit: int = Query(default=50, ge=1, le=200),
+):
+    """
+    聚合拉取：
+    - 个人记录（owner_user_id = me and group_id is null）
+    - 我所属所有 group 的记录（group_id in my memberships）
+    """
+    q = """
+    select id::text as id,
+           created_at::text as created_at,
+           title,
+           risk,
+           status,
+           due_at,
+           source_hint,
+           group_id::text as group_id
+    from inbox_records
+    where
+      (owner_user_id = $1 and group_id is null)
+      or
+      (group_id in (
+        select group_id
+        from group_memberships
+        where user_id = $1
+      ))
+    order by created_at desc
+    limit $2
+    """
+
+    pool = get_pool()
+    async with pool.acquire() as conn:
+        rows = await conn.fetch(q, user.user_id, limit)
+
+    return [CloudListItem(**dict(r)) for r in rows]
+
 

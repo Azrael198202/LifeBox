@@ -1,5 +1,7 @@
 class LocalInboxRecord {
   final String id;
+  final String? cloudId; // ✅ 新增：云端记录 id（uuid）
+
   final String rawText;
   final String locale;
   final String sourceHint;
@@ -12,9 +14,9 @@ class LocalInboxRecord {
   final String risk; // high/mid/low
 
   final String? groupId; // null = 個人
-  final int colorValue; // ARGB int, e.g. 0xFF2196F3
+  final int colorValue;  // ARGB int
 
-  final String status; // pending/done etc
+  final String status;   // pending/done etc
   final DateTime createdAt;
 
   LocalInboxRecord({
@@ -32,10 +34,12 @@ class LocalInboxRecord {
     required this.createdAt,
     required this.groupId,
     required this.colorValue,
+    this.cloudId,
   });
 
   Map<String, dynamic> toMap() => {
         "id": id,
+        "cloud_id": cloudId, // ✅
         "raw_text": rawText,
         "locale": locale,
         "source_hint": sourceHint,
@@ -51,12 +55,17 @@ class LocalInboxRecord {
         "color_value": colorValue,
       };
 
-    Map<String, dynamic> toJson() {
+  /// ✅ 发到云端的 JSON
+  /// - client_id 用本地 id，保证云端幂等
+  Map<String, dynamic> toJson() {
     return {
-      'id': id,
-      'raw_text': rawText,
+      'client_id': id,          // ✅ 关键：用于云端去重/绑定
+      'group_id': groupId,      // ✅ 群组/个人
       'locale': locale,
       'source_hint': sourceHint,
+      'raw_text': rawText,
+
+      // 兼容你后端 _build_normalized：这些字段会被组装进 normalized
       'title': title,
       'summary': summary,
       'due_at': dueAt,
@@ -64,14 +73,13 @@ class LocalInboxRecord {
       'currency': currency,
       'risk': risk,
       'status': status,
-      'created_at': createdAt.toIso8601String(),
-      'group_id': groupId,
       'color_value': colorValue,
     };
   }
 
   static LocalInboxRecord fromMap(Map<String, dynamic> m) => LocalInboxRecord(
         id: m["id"] as String,
+        cloudId: m["cloud_id"] as String?, // ✅
         rawText: (m["raw_text"] as String?) ?? "",
         locale: (m["locale"] as String?) ?? "ja",
         sourceHint: (m["source_hint"] as String?) ?? "",
@@ -82,9 +90,10 @@ class LocalInboxRecord {
         currency: m["currency"] as String?,
         risk: (m["risk"] as String?) ?? "low",
         status: (m["status"] as String?) ?? "pending",
-        createdAt: DateTime.tryParse((m["created_at"] as String?) ?? "") ??
-            DateTime.now(),
+        createdAt:
+            DateTime.tryParse((m["created_at"] as String?) ?? "") ??
+                DateTime.now(),
         groupId: m["group_id"] as String?,
-        colorValue: (m["color_value"] as int?) ?? 0xFF2196F3
+        colorValue: (m["color_value"] as int?) ?? 0xFF2196F3,
       );
 }

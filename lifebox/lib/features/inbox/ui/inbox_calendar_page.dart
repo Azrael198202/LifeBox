@@ -55,27 +55,32 @@ class _InboxCalendarPageState extends ConsumerState<InboxCalendarPage> {
     }
   }
 
-  /// ✅ LocalInboxRecord -> InboxItem
-  /// - done => InboxStatus.done
-  /// - risk=high 且未done => InboxStatus.highRisk
-  /// - 其他未done => InboxStatus.pending
   InboxItem _toInboxItem(LocalInboxRecord r) {
-    final status = (r.status == 'done')
+    final l10n = AppLocalizations.of(context);
+
+    final isDone = r.status == 'done';
+    final isHighRisk = r.risk == 'high';
+
+    final status = isDone
         ? InboxStatus.done
-        : (r.risk == 'high' ? InboxStatus.highRisk : InboxStatus.pending);
+        : (isHighRisk ? InboxStatus.highRisk : InboxStatus.pending);
 
     return InboxItem(
-      id: r.id,
-      title: r.title,
-      summary: r.summary,
-      rawText: r.rawText,
-      locale: r.locale,
-      amount: r.amount,
-      currency: r.currency,
+      id: r.id,               // UI key
+      localId: r.id,          // ✅ 本地一定有
+      cloudId: r.cloudId,     // ✅ 可能为 null
+      title: r.title.isEmpty ? l10n.no_title : r.title,
       dueAt: _parseDueAt(r.dueAt),
       risk: _mapRisk(r.risk),
-      source: r.sourceHint,
+      summary: r.summary,
+      amount: r.amount,
+      currency: r.currency,
+      rawText: r.rawText,
+      sourceHint: r.sourceHint.isEmpty ? l10n.another : r.sourceHint,
       status: status,
+      locale: r.locale,
+      sourceType: InboxSourceType.local,
+      createdAt: r.createdAt,
     );
   }
 

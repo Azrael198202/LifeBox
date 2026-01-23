@@ -129,34 +129,6 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
     } finally {
       if (mounted) setState(() => _analyzing = false);
     }
-    // final svc = ref.read(analyzeServiceProvider);
-
-    // 1) 组装请求（AnalyzeRequest）
-    // final req = AnalyzeRequest(
-    //   text: widget.request.text,
-    //   locale: widget.request.locale,
-    //   sourceHint: widget.request.sourceHint,
-    // );
-
-    // final req = AnalyzeRequest(
-    //     text: "銀行より：クレジットカードのお支払い期限は1/20です。金額3万円。",
-    //     locale: "ja",
-    //     sourceHint: "銀行");
-
-    // // 2) 调用接口，拿到返回（AnalyzeResponse）
-    // final resp = await svc.analyze(req);
-
-    // if (!mounted) return;
-
-    // setState(() {
-    //   _resp = resp; // ✅ _resp 应该是 AnalyzeResponse 类型
-    //   _risk = resp.risk;
-    //   _title.text = resp.title;
-    //   _summary.text = resp.notes ?? '';
-    //   _dueAt.text = DateTools.normalizeDateToYMD(resp.dueAt) ?? '';
-    //   _amount.text = resp.amount?.toString() ?? '';
-    //   _currency.text = resp.currency ?? '';
-    // });
   }
 
   Future<void> _openMockSamplesInConfirm() async {
@@ -305,8 +277,6 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
       final cloudEnabled = ref.read(cloudEnabledProvider);
 
       if (cloudEnabled) {
-        // final cloud = ref.read(cloudInboxServiceProvider);
-        // await cloud.saveToCloud(record);
 
         final cloud = ref.read(cloudInboxServiceProvider);
         final accessToken = auth.accessToken;

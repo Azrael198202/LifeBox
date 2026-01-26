@@ -1,4 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lifebox/core/services/user_profile_cloud_service.dart';
+import 'package:lifebox/features/auth/state/auth_providers.dart';
 import '../../inbox/data/cloud_settings_store.dart';
 import '../data/user_profile_store.dart';
 
@@ -27,12 +29,24 @@ class CloudEnabledNotifier extends StateNotifier<bool> {
   }
 }
 
-// =============================
-// Personal info (local)
-// =============================
+// Personal user profile
+String avatarUrlFromId(String avatarId) => 'default:$avatarId';
+String? avatarIdFromAvatarUrl(String? avatarUrl) {
+  if (avatarUrl == null || avatarUrl.isEmpty) return null;
+  if (avatarUrl.startsWith('default:')){
+    return avatarUrl.substring('default:'.length);
+  }
+  return null;
+}
 
-final userProfileStoreProvider = Provider((ref) => UserProfileStore());
+final userProfileCloudServiceProvider =
+    Provider<UserProfileCloudService>((ref) {
+  return UserProfileCloudService(
+    getAccessToken: () async => ref.read(authControllerProvider).accessToken,
+  );
+});
 
+/// ✅ UI 只 watch 这个
 final userProfileProvider =
     StateNotifierProvider<UserProfileNotifier, UserProfile>((ref) {
   return UserProfileNotifier(ref);
@@ -40,23 +54,65 @@ final userProfileProvider =
 
 class UserProfileNotifier extends StateNotifier<UserProfile> {
   UserProfileNotifier(this.ref) : super(const UserProfile()) {
-    _load();
+    _syncFromAuth();
   }
 
   final Ref ref;
 
-  Future<void> _load() async {
-    final store = ref.read(userProfileStoreProvider);
-    state = await store.getProfile();
+  /// 从 auth.user 同步（云端权威）
+  void _syncFromAuth() {
+    // 监听 auth 变化（登录/refreshMe 后会变）
+    ref.listen(authControllerProvider, (prev, next) {
+      final u = next.user;
+      final nick = (u?.displayName ?? '').trim();
+      final avatarId = avatarIdFromAvatarUrl(u?.avatarUrl) ?? state.avatarId;
+
+      state = state.copyWith(
+        nickname: nick, // 让 UI 的初始值来自云端
+        avatarId: avatarId, // picker 选中态
+      );
+    });
   }
 
   Future<void> setNickname(String v) async {
-    state = state.copyWith(nickname: v);
-    await ref.read(userProfileStoreProvider).setNickname(v);
+    final name = v.trim();
+    if (name.isEmpty) return;
+
+    // 未登录：只改本地 state（或你也可以直接 return）
+    final auth = ref.read(authControllerProvider);
+    final token = auth.accessToken; // String?
+
+    if (token == null || token.isEmpty) {
+      state = state.copyWith(nickname: name);
+      return;
+    }
+
+    // 乐观更新
+    state = state.copyWith(nickname: name);
+
+    // 写云端
+    await ref.read(userProfileCloudServiceProvider).patchMe(displayName: name);
+
+    // ✅ refreshMe 后 auth.user 会更新 -> listen 会再同步一次
+    await ref.read(authControllerProvider.notifier).refreshMe();
   }
 
-  Future<void> setAvatarId(String v) async {
-    state = state.copyWith(avatarId: v);
-    await ref.read(userProfileStoreProvider).setAvatarId(v);
+  Future<void> setAvatarId(String avatarId) async {
+    state = state.copyWith(avatarId: avatarId);
+
+    final auth = ref.read(authControllerProvider);
+    final token = auth.accessToken; // String?
+
+    if (token == null || token.isEmpty) {
+      return;
+    }
+
+    final avatarUrl = avatarUrlFromId(avatarId);
+
+    await ref
+        .read(userProfileCloudServiceProvider)
+        .patchMe(avatarUrl: avatarUrl);
+
+    await ref.read(authControllerProvider.notifier).refreshMe();
   }
 }

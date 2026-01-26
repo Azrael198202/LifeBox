@@ -9,7 +9,6 @@ class DefaultAvatar {
   const DefaultAvatar(this.id, this.icon, this.bg);
 }
 
-/// 12 个默认头像（参照你第3张图：网格选择）
 const defaultAvatars = <DefaultAvatar>[
   DefaultAvatar('a1', Icons.person, Color(0xFFDCE775)),
   DefaultAvatar('a2', Icons.person_outline, Color(0xFFB3E5FC)),
@@ -48,15 +47,23 @@ class AvatarCircle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final a = avatarById(avatarId);
     
     if (imageUrl != null && imageUrl!.isNotEmpty) {
+      // return CircleAvatar(
+      //   radius: radius,
+      //   backgroundImage: NetworkImage(imageUrl!),
+      // );
+
       return CircleAvatar(
         radius: radius,
-        backgroundImage: NetworkImage(imageUrl!),
+        backgroundColor: a.bg,
+        child: Icon(a.icon, color: Colors.black87),
       );
     }
 
-    final a = avatarById(avatarId);
+    
     return CircleAvatar(
       radius: radius,
       backgroundColor: a.bg,

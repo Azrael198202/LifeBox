@@ -181,6 +181,7 @@ async def list_records(
         await _assert_group_member(group_id=group_id, user_id=user.user_id)
         q = """
         select id::text as id,
+               client_id,
                created_at::text as created_at,
                locale,
                title,
@@ -198,6 +199,7 @@ async def list_records(
     else:
         q = """
         select id::text as id,
+               client_id,
                created_at::text as created_at,
                locale,
                title,
@@ -230,6 +232,7 @@ async def get_record(
         row = await conn.fetchrow(
             """
             select id::text as id,
+                   client_id,
                    created_at::text as created_at,
                    raw_text,
                    locale,

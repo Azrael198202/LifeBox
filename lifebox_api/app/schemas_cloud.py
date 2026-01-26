@@ -41,6 +41,7 @@ class CloudSaveResponse(BaseModel):
 
 class CloudListItem(BaseModel):
     id: str
+    client_id: Optional[str] = None
     created_at: str
     locale:str
     title: str

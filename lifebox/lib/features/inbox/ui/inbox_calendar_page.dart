@@ -14,8 +14,6 @@ import '../../../core/widgets/month_grid.dart';
 import '../../../core/widgets/month_header.dart';
 import '../../../core/widgets/week_header.dart';
 import '../../../core/widgets/selected_day_list.dart';
-
-import 'inbox_card.dart';
 import 'inbox_speech_bar.dart';
 
 class InboxCalendarPage extends ConsumerStatefulWidget {

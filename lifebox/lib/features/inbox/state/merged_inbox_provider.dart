@@ -5,11 +5,17 @@ import '../domain/inbox_item.dart';
 import 'local_inbox_providers.dart';
 import 'cloud_inbox_providers.dart';
 
+final inboxRefreshTokenProvider = StateProvider<int>((_) => 0);
+
 /// =============================
 /// 本地 + 云端（个人+群组）整合后的最终列表
 /// UI 层只 watch 这个
 /// =============================
 final mergedInboxProvider = FutureProvider<List<InboxItem>>((ref) async {
+
+  // 监听刷新 Token
+  ref.watch(inboxRefreshTokenProvider);
+
   final local = await ref.watch(localInboxListProvider.future);
   final cloudMine = await ref.watch(cloudMyInboxProvider.future);
   final cloudGroups = await ref.watch(cloudAllGroupsInboxProvider.future);
@@ -17,14 +23,20 @@ final mergedInboxProvider = FutureProvider<List<InboxItem>>((ref) async {
   final byKey = <String, InboxItem>{};
 
   String keyFor(InboxItem item) {
-    // ✅ client_id = localId 是第一优先级
-    if (item.localId != null && item.localId!.isNotEmpty) {
-      return 'local:${item.localId}';
+    // ✅ 云端：clientId (= 本地 id) 优先用于合并
+    if (item.clientId != null && item.clientId!.isNotEmpty) {
+      return item.clientId!;
     }
+
+    // ✅ 本地：id 永不为空
+    if (item.id.isNotEmpty) return item.id;
+
+    // ✅ 兜底：cloudId
     if (item.cloudId != null && item.cloudId!.isNotEmpty) {
-      return 'cloud:${item.cloudId}';
+      return item.cloudId!;
     }
-    return 'id:${item.id}';
+
+    return item.id;
   }
 
   // 1) 本地优先
@@ -43,7 +55,7 @@ final mergedInboxProvider = FutureProvider<List<InboxItem>>((ref) async {
       byKey[k] = cloudItem;
       return;
     }
-    
+
     byKey[k] = existed.copyWith(
       cloudId: existed.cloudId ?? cloudItem.cloudId,
       groupId: existed.groupId ?? cloudItem.groupId,
@@ -53,9 +65,13 @@ final mergedInboxProvider = FutureProvider<List<InboxItem>>((ref) async {
     );
   }
 
-  for (final c in cloudMine) mergeCloud(c);
-  for (final c in cloudGroups) mergeCloud(c);
+  for (final c in cloudMine) {
+    mergeCloud(c);
+  }
 
+  for (final c in cloudGroups) {
+    mergeCloud(c);
+  }
   final merged = byKey.values.toList()
     ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
 

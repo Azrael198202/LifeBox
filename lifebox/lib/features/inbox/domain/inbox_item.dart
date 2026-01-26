@@ -28,6 +28,8 @@ class InboxItem {
   /// 云端记录 id（云端存在才有）
   final String? cloudId;
 
+  final String? clientId;
+
   /// 群组记录的 groupId（个人记录为 null）
   final String? groupId;
 
@@ -69,6 +71,7 @@ class InboxItem {
     this.localId,
     this.cloudId,
     this.groupId,
+    this.clientId,
   });
 
   // =============================
@@ -117,6 +120,7 @@ class InboxItem {
       id: r.cloudId?.isNotEmpty == true ? r.cloudId! : r.id,
       localId: r.id,
       cloudId: (r.cloudId?.isNotEmpty == true) ? r.cloudId : null,
+      clientId: r.id,
       groupId: r.groupId,
       sourceType: InboxSourceType.local,
       createdAt: r.createdAt, // ✅
@@ -143,6 +147,7 @@ class InboxItem {
       id: c.id,
       localId: null,
       cloudId: c.id,
+      clientId: c.clientId,
       groupId: c.groupId,
       sourceType: InboxSourceType.cloud,
       createdAt: c.createdAt, // ✅

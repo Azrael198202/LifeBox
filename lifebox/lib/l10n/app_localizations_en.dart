@@ -1011,4 +1011,20 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get holidaysLoading => 'Loading holidays…';
+
+  @override
+  String get copied => 'Copied';
+
+  @override
+  String get groupInviteMessage =>
+      'You are invited to join a LifeBox group. Use the invite code below to join.';
+
+  @override
+  String get inviteCodeLabel => 'Invite Code';
+
+  @override
+  String get groupInviteEmailSubject => 'You\'re invited to a LifeBox group';
+
+  @override
+  String get joinGroupFailed => 'The invite code is invalid or has expired.';
 }

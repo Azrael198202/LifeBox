@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:lifebox/core/network/app_config.dart';
+import 'package:http/http.dart' as http;
 
 /// =============================
 /// API DTOs (match backend)
@@ -141,13 +142,6 @@ class GroupService {
     return CreateInviteRespDto.fromJson(Map<String, dynamic>.from(decoded));
   }
 
-  Future<AcceptInviteRespDto> acceptInvite({required String token}) async {
-    final decoded = await _postJsonAny(AppConfig.inviteAccept, {
-      'token': token,
-    });
-    return AcceptInviteRespDto.fromJson(Map<String, dynamic>.from(decoded));
-  }
-
   // =============================
   // Low-level HTTP helpers
   // =============================
@@ -197,5 +191,35 @@ class GroupService {
     } finally {
       client.close(force: true);
     }
+  }
+
+  Future<AcceptInviteRespDto> acceptInvite({required String token}) async {
+    // FastAPI 常见错误格式：{"detail":"Invalid or expired invite"}
+    String msg = 'Failed to accept invite';
+
+    try {
+      final resp = await http.post(
+        Uri.parse(AppConfig.inviteAccept),
+        headers: await _headers(),
+        body: jsonEncode({'token': token}),
+      );
+
+      if (resp.statusCode >= 200 && resp.statusCode < 300) {
+        final data = jsonDecode(resp.body) as Map<String, dynamic>;
+        return AcceptInviteRespDto.fromJson(data);
+      }
+
+      final err = jsonDecode(resp.body);
+      if (err is Map && err['detail'] != null) msg = err['detail'].toString();
+    } catch (_) {}
+    throw Exception(msg);
+  }
+
+  Future<Map<String, String>> _headers() async {
+    final token = await getAccessToken();
+    return {
+      'Content-Type': 'application/json',
+      if (token != null && token.isNotEmpty) 'Authorization': 'Bearer $token',
+    };
   }
 }

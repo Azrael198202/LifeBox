@@ -431,6 +431,12 @@
   "personal":"Personal",
   "holidayShort":"H",
   "holidayLabel":"Holiday",
-  "holidaysLoading": "Loading holidays…"
+  "holidaysLoading": "Loading holidays…",
+
+  "copied": "Copied",
+  "groupInviteMessage": "You are invited to join a LifeBox group. Use the invite code below to join.",
+  "inviteCodeLabel": "Invite Code",
+  "groupInviteEmailSubject": "You're invited to a LifeBox group",
+  "joinGroupFailed":"The invite code is invalid or has expired."
 
 }

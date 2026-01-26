@@ -430,5 +430,11 @@
   "personal":"个人",
   "holidayShort":"休",
   "holidayLabel":"假期",
-  "holidaysLoading": "正在加载假期…"
+  "holidaysLoading": "正在加载假期…",
+
+  "copied": "已复制",
+  "groupInviteMessage": "邀请你加入 LifeBox 群组。使用下面的邀请码即可加入。",
+  "inviteCodeLabel": "邀请码",
+  "groupInviteEmailSubject": "邀请你加入 LifeBox 群组",
+  "joinGroupFailed":"邀请码无效或已过期。"
 }

@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lifebox/core/utils/invite_share_utils.dart';
 import 'package:lifebox/features/auth/domain/app_user.dart';
 import 'package:lifebox/features/settings/data/group_store.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lifebox/l10n/app_localizations.dart';
 
+import 'package:flutter/services.dart'; // Clipboard
+import 'package:url_launcher/url_launcher.dart'; // mailto/sms
+import 'package:share_plus/share_plus.dart'; // fallback share sheet
+
 import '../../../core/widgets/app_scaffold.dart';
 import '../../auth/state/auth_providers.dart';
 import '../state/settings_providers.dart';
-import '../state/group_provider.dart'; // ✅ NEW
+import '../state/group_provider.dart';
 import 'add_member_sheet.dart';
 import 'avatar_picker.dart';
 
@@ -253,8 +258,9 @@ class _GroupSettingsPageState extends ConsumerState<GroupSettingsPage> {
                           child: Icon(Icons.person_outline),
                         ),
                   title: Text(_members[i].name),
-                  subtitle:
-                      _members[i].email.isNotEmpty ? Text(_members[i].email) : null,
+                  subtitle: _members[i].email.isNotEmpty
+                      ? Text(_members[i].email)
+                      : null,
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -262,7 +268,8 @@ class _GroupSettingsPageState extends ConsumerState<GroupSettingsPage> {
                         _members[i].role == 'owner'
                             ? 'グループの所有者'
                             : (_members[i].role == 'admin' ? '管理者' : '普通メンバー'),
-                        style: const TextStyle(fontSize: 12, color: Colors.black54),
+                        style: const TextStyle(
+                            fontSize: 12, color: Colors.black54),
                       ),
                       const SizedBox(width: 8),
                       const Icon(Icons.chevron_right),
@@ -324,15 +331,38 @@ class _GroupSettingsPageState extends ConsumerState<GroupSettingsPage> {
               return;
 
             case 'copy':
+              await copyInviteCode(context, inviteCode);
               return;
 
             case 'sms':
-              _toast(context, l10n.inviteSmsNotImplemented);
-              return;
+              {
+                final text = buildInviteText(l10n, inviteCode);
+                final ok = await launchInviteSms(text);
+
+                if (!ok) {
+                  await shareInviteFallback(text: text);
+                }
+                return;
+              }
 
             case 'email':
-              _toast(context, l10n.inviteEmailNotImplemented);
-              return;
+              {
+                final text = buildInviteText(l10n, inviteCode);
+                final subject = l10n.groupInviteEmailSubject;
+
+                final ok = await launchInviteEmail(
+                  subject: subject,
+                  body: text,
+                );
+
+                if (!ok) {
+                  await shareInviteFallback(
+                    text: text,
+                    subject: subject,
+                  );
+                }
+                return;
+              }
 
             default:
               return;
@@ -359,10 +389,11 @@ class _GroupSettingsPageState extends ConsumerState<GroupSettingsPage> {
             return;
           }
 
-          final g = await ref.read(groupControllerProvider.notifier).createGroup(
-                name: _familyName!.trim(),
-                groupType: 'family',
-              );
+          final g =
+              await ref.read(groupControllerProvider.notifier).createGroup(
+                    name: _familyName!.trim(),
+                    groupType: 'family',
+                  );
 
           if (g == null) {
             _toast(context, 'create group failed');
@@ -452,7 +483,10 @@ class _GroupSettingsPageState extends ConsumerState<GroupSettingsPage> {
     // ✅ owner 判断：优先用 auth.groups 的 role
     final auth = ref.read(authControllerProvider);
     final group = (!_isCreateMode && widget.groupId != null)
-        ? auth.groups.where((g) => g.id == widget.groupId).cast<GroupBrief?>().firstOrNull
+        ? auth.groups
+            .where((g) => g.id == widget.groupId)
+            .cast<GroupBrief?>()
+            .firstOrNull
         : null;
 
     final isOwner = _isCreateMode ? true : (group?.role == 'owner');

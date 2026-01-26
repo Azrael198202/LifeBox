@@ -982,4 +982,19 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get holidaysLoading => '祝日を読み込み中…';
+
+  @override
+  String get copied => 'コピーした';
+
+  @override
+  String get groupInviteMessage => 'LifeBoxのグループに招待されています。以下の招待コードを使って参加できます。';
+
+  @override
+  String get inviteCodeLabel => '招待コード';
+
+  @override
+  String get groupInviteEmailSubject => 'LifeBox グループへの招待';
+
+  @override
+  String get joinGroupFailed => '招待コードが無効、または期限切れです。';
 }

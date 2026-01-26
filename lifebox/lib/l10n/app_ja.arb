@@ -432,5 +432,11 @@
   "personal":"個人",
   "holidayShort":"祝",
   "holidayLabel":"祝日",
-  "holidaysLoading": "祝日を読み込み中…"
+  "holidaysLoading": "祝日を読み込み中…",
+
+  "copied": "コピーした",
+  "groupInviteMessage": "LifeBoxのグループに招待されています。以下の招待コードを使って参加できます。",
+  "inviteCodeLabel": "招待コード",
+  "groupInviteEmailSubject": "LifeBox グループへの招待",
+  "joinGroupFailed":"招待コードが無効、または期限切れです。"
 }

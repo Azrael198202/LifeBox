@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lifebox/features/settings/state/group_provider.dart';
 import 'package:lifebox/l10n/app_localizations.dart';
 import '../../../core/widgets/app_scaffold.dart';
 
@@ -39,7 +40,6 @@ class _JoinGroupPageState extends ConsumerState<JoinGroupPage> {
               style: TextStyle(color: Colors.black54, height: 1.4),
             ),
             const SizedBox(height: 26),
-
             TextField(
               controller: _code,
               textInputAction: TextInputAction.done,
@@ -67,7 +67,7 @@ class _JoinGroupPageState extends ConsumerState<JoinGroupPage> {
   Future<void> _join() async {
     final code = _code.text.trim();
     final l10n = AppLocalizations.of(context);
-    
+
     if (code.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(l10n.joinGroupCodeEmpty)),
@@ -75,17 +75,42 @@ class _JoinGroupPageState extends ConsumerState<JoinGroupPage> {
       return;
     }
 
+    final token = code;
     setState(() => _joining = true);
 
     try {
-      // TODO: 这里接入你的 API / GroupStore
-      // await ref.read(groupServiceProvider).joinByInviteCode(code);
+      final c = ref.read(groupControllerProvider.notifier);
+
+      // ✅ 1) 调后端 accept invite
+      final resp = await c.acceptInvite(token: token);
 
       if (!mounted) return;
+
+      if (resp == null) {
+      // controller 内部会把 error 写到 state.error，这里给用户一个友好提示
+        final groupState = ref.read(groupControllerProvider);
+        final msg = (groupState.error ?? '').isNotEmpty
+            ? groupState.error!
+            : l10n.joinGroupFailed;
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(msg)));
+        return;
+      }
+
+      // ✅ 2) acceptInvite 内部已经 refreshGroups() 了，但我们要确保 activeGroup 切换到新加入的组
+      // AcceptInviteRespDto 通常会带 groupId（如果你的 DTO 字段不同，改这里即可）
+            final joinedGroupId = resp.groupId; // <-- 若编译报错，告诉我你 DTO 字段名
+      if ((joinedGroupId ?? '').isNotEmpty) {
+        await c.setActiveGroup(joinedGroupId!);
+      }
+
+      if (!mounted) return;
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(l10n.joinGroupJoined)),
       );
-      Navigator.pop(context);
+
+      Navigator.pop(context, true);
     } finally {
       if (mounted) setState(() => _joining = false);
     }

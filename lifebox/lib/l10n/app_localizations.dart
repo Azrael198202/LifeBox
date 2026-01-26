@@ -1935,6 +1935,36 @@ abstract class AppLocalizations {
   /// In ja, this message translates to:
   /// **'祝日を読み込み中…'**
   String get holidaysLoading;
+
+  /// No description provided for @copied.
+  ///
+  /// In ja, this message translates to:
+  /// **'コピーした'**
+  String get copied;
+
+  /// No description provided for @groupInviteMessage.
+  ///
+  /// In ja, this message translates to:
+  /// **'LifeBoxのグループに招待されています。以下の招待コードを使って参加できます。'**
+  String get groupInviteMessage;
+
+  /// No description provided for @inviteCodeLabel.
+  ///
+  /// In ja, this message translates to:
+  /// **'招待コード'**
+  String get inviteCodeLabel;
+
+  /// No description provided for @groupInviteEmailSubject.
+  ///
+  /// In ja, this message translates to:
+  /// **'LifeBox グループへの招待'**
+  String get groupInviteEmailSubject;
+
+  /// No description provided for @joinGroupFailed.
+  ///
+  /// In ja, this message translates to:
+  /// **'招待コードが無効、または期限切れです。'**
+  String get joinGroupFailed;
 }
 
 class _AppLocalizationsDelegate

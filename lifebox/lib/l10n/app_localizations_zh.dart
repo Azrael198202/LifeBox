@@ -977,4 +977,19 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get holidaysLoading => '正在加载假期…';
+
+  @override
+  String get copied => '已复制';
+
+  @override
+  String get groupInviteMessage => '邀请你加入 LifeBox 群组。使用下面的邀请码即可加入。';
+
+  @override
+  String get inviteCodeLabel => '邀请码';
+
+  @override
+  String get groupInviteEmailSubject => '邀请你加入 LifeBox 群组';
+
+  @override
+  String get joinGroupFailed => '邀请码无效或已过期。';
 }

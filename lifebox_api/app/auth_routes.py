@@ -11,7 +11,7 @@ from google.auth.transport import requests as google_requests
 
 from .db import get_pool
 from .auth_utils import create_access_token, CurrentUser, get_current_user
-from .schemas_auth import GoogleAuthRequest, AuthResponse, MeResponse, UserOut, GroupBrief
+from .schemas_auth import GoogleAuthRequest, AuthResponse, MeResponse, UserOut, GroupBrief, UpdateMeRequest
 
 import bcrypt
 from .schemas_auth import EmailRegisterRequest, EmailLoginRequest
@@ -342,6 +342,37 @@ async def me(current: CurrentUser = Depends(get_current_user)):
         user=UserOut(**dict(user)),
         groups=groups,
     )
+
+@router.patch("/me", response_model=UserOut)
+async def update_me(
+    req: UpdateMeRequest,
+    current: CurrentUser = Depends(get_current_user),
+):
+    # 至少要有一个字段
+    if req.display_name is None and req.avatar_url is None:
+        raise HTTPException(status_code=400, detail="No fields to update")
+
+    pool = get_pool()
+    async with pool.acquire() as conn:
+        user = await conn.fetchrow(
+            """
+            update users
+            set
+                display_name = coalesce($1, display_name),
+                avatar_url   = coalesce($2, avatar_url),
+                updated_at   = now()
+            where id = $3
+            returning id::text as id, email, display_name, avatar_url
+            """,
+            req.display_name,
+            req.avatar_url,
+            current.user_id,
+        )
+
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")
+
+    return UserOut(**dict(user))
 
 
 @router.post("/logout")

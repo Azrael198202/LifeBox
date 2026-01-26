@@ -38,3 +38,7 @@ class AuthResponse(BaseModel):
 
 class MeResponse(AuthResponse):
     pass
+
+class UpdateMeRequest(BaseModel):
+    display_name: Optional[str] = None
+    avatar_url: Optional[str] = None

@@ -1,7 +1,8 @@
 class CloudListItem {
   final String id;
   final DateTime createdAt;
-  final String locale;          // ✅ 新增
+  final String locale;
+  final String? clientId;
   final String title;
   final String risk;
   final String status;
@@ -19,11 +20,13 @@ class CloudListItem {
     required this.dueAt,
     required this.sourceHint,
     required this.groupId,
+    this.clientId,
   });
 
   factory CloudListItem.fromJson(Map<String, dynamic> json) {
     return CloudListItem(
       id: json['id'] as String,
+      clientId: json['client_id'] as String?,
       createdAt: DateTime.parse(json['created_at'] as String),
       locale: (json['locale'] as String?) ?? 'ja', // ✅ 兜底
       title: (json['title'] as String?) ?? '',

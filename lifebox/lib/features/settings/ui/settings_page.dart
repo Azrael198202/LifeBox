@@ -14,6 +14,8 @@ import '../state/subscription_providers.dart';
 
 import '../state/settings_providers.dart';
 
+final sessionEpochProvider = StateProvider<int>((_) => 0);
+
 class SettingsPage extends ConsumerWidget {
   const SettingsPage({super.key});
 
@@ -98,7 +100,11 @@ class SettingsPage extends ConsumerWidget {
           // ====== 云保存======
           Card(
             child: SwitchListTile(
-              value: cloudEnabled? ref.watch(subscriptionProvider).subscribed ? cloudEnabled : false :false,
+              value: cloudEnabled
+                  ? ref.watch(subscriptionProvider).subscribed
+                      ? cloudEnabled
+                      : false
+                  : false,
               onChanged: (v) async {
                 // 关闭：直接关
                 if (!v) {
@@ -118,7 +124,7 @@ class SettingsPage extends ConsumerWidget {
                   await ref
                       .read(cloudEnabledProvider.notifier)
                       .setEnabled(true);
-                  refreshInboxProviders(ref); 
+                  refreshInboxProviders(ref);
                   if (!context.mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text(l10n.setting_cloud_on)),
@@ -155,7 +161,6 @@ class SettingsPage extends ConsumerWidget {
                   }),
                 ],
               ),
-
               secondary: const Icon(Icons.cloud_outlined),
             ),
           ),
@@ -192,8 +197,10 @@ class SettingsPage extends ConsumerWidget {
                   SnackBar(content: Text(l10n.setting_privacy_saved_demo)),
                 );
               },
-              title: Text(l10n.upload_policy_title, style: const TextStyle(fontSize: 14)),
-              subtitle: Text(l10n.upload_policy_subtitle, style: const TextStyle(fontSize: 12)),
+              title: Text(l10n.upload_policy_title,
+                  style: const TextStyle(fontSize: 14)),
+              subtitle: Text(l10n.upload_policy_subtitle,
+                  style: const TextStyle(fontSize: 12)),
               secondary: const Icon(Icons.privacy_tip_outlined),
             ),
           ),
@@ -206,8 +213,10 @@ class SettingsPage extends ConsumerWidget {
               value: lock.enabled,
               onChanged: (v) =>
                   ref.read(appLockProvider.notifier).setEnabled(v),
-              title: Text(l10n.app_lock_title, style: const TextStyle(fontSize: 14)),
-              subtitle: Text(l10n.app_lock_subtitle, style: const TextStyle(fontSize: 12)),
+              title: Text(l10n.app_lock_title,
+                  style: const TextStyle(fontSize: 14)),
+              subtitle: Text(l10n.app_lock_subtitle,
+                  style: const TextStyle(fontSize: 12)),
               secondary: const Icon(Icons.lock_outline),
             ),
           ),
@@ -279,8 +288,10 @@ class SettingsPage extends ConsumerWidget {
                 child: DropdownButton<Locale>(
                   value: locale,
                   items: [
-                    DropdownMenuItem(value: Locale('ja'), child: Text(l10n.language_jp)),
-                    DropdownMenuItem(value: Locale('zh'), child: Text(l10n.language_zh)),
+                    DropdownMenuItem(
+                        value: Locale('ja'), child: Text(l10n.language_jp)),
+                    DropdownMenuItem(
+                        value: Locale('zh'), child: Text(l10n.language_zh)),
                     DropdownMenuItem(
                         value: Locale('en'), child: Text(l10n.language_en)),
                   ],
@@ -321,6 +332,7 @@ class SettingsPage extends ConsumerWidget {
 
                 if (ok == true) {
                   await ref.read(authControllerProvider.notifier).logout();
+                  ref.read(sessionEpochProvider.notifier).state++;
                 }
               },
             ),

@@ -65,7 +65,7 @@ class UserProfileNotifier extends StateNotifier<UserProfile> {
     ref.listen(authControllerProvider, (prev, next) {
       final u = next.user;
       final nick = (u?.displayName ?? '').trim();
-      final avatarId = avatarIdFromAvatarUrl(u?.avatarUrl) ?? state.avatarId;
+      final avatarId = avatarIdFromAvatarUrl(u?.avatarUrl);
 
       state = state.copyWith(
         nickname: nick, // 让 UI 的初始值来自云端

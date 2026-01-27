@@ -1,6 +1,7 @@
 class LocalInboxRecord {
   final String id;
-  final String? cloudId; // ✅ 新增：云端记录 id（uuid）
+  final String? cloudId;
+  final String? ownerUserId;
 
   final String rawText;
   final String locale;
@@ -21,6 +22,7 @@ class LocalInboxRecord {
 
   LocalInboxRecord({
     required this.id,
+    required this.ownerUserId,
     required this.rawText,
     required this.locale,
     required this.sourceHint,
@@ -39,6 +41,7 @@ class LocalInboxRecord {
 
   Map<String, dynamic> toMap() => {
         "id": id,
+        "owner_user_id": ownerUserId,
         "cloud_id": cloudId, // ✅
         "raw_text": rawText,
         "locale": locale,
@@ -59,8 +62,9 @@ class LocalInboxRecord {
   /// - client_id 用本地 id，保证云端幂等
   Map<String, dynamic> toJson() {
     return {
-      'client_id': id,          // ✅ 关键：用于云端去重/绑定
-      'group_id': groupId,      // ✅ 群组/个人
+      'client_id': id,
+      "owner_user_id": ownerUserId,
+      'group_id': groupId,
       'locale': locale,
       'source_hint': sourceHint,
       'raw_text': rawText,
@@ -80,6 +84,7 @@ class LocalInboxRecord {
 
   static LocalInboxRecord fromMap(Map<String, dynamic> m) => LocalInboxRecord(
         id: m["id"] as String,
+        ownerUserId: m["owner_user_id"] as String,
         cloudId: m["cloud_id"] as String?, // ✅
         rawText: (m["raw_text"] as String?) ?? "",
         locale: (m["locale"] as String?) ?? "ja",

@@ -252,6 +252,7 @@ class _AnalyzeConfirmPageState extends ConsumerState<AnalyzeConfirmPage> {
       final id = const Uuid().v4();
       final record = LocalInboxRecord(
         id: id,
+        ownerUserId: auth.user!.id,
         rawText: _req.text,
         locale: _req.locale,
         sourceHint: _req.sourceHint,

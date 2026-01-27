@@ -11,6 +11,7 @@ void refreshInboxProviders(WidgetRef ref) {
   ref.invalidate(cloudMyInboxProvider);
   ref.invalidate(cloudAllGroupsInboxProvider);
 
+
   // 再让聚合结果失效
   ref.invalidate(mergedInboxProvider);
 }

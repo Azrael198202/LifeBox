@@ -16,11 +16,12 @@ class LocalInboxDb {
 
     _db = await openDatabase(
       path,
-      version: 4, // ✅ bump version
+      version: 5, // ✅ bump version
       onCreate: (db, _) async {
         await db.execute('''
 CREATE TABLE $_table (
   id TEXT PRIMARY KEY,
+  owner_user_id TEXT NOT NULL,
   raw_text TEXT NOT NULL,
   locale TEXT NOT NULL,
   source_hint TEXT NOT NULL,
@@ -56,9 +57,20 @@ CREATE TABLE $_table (
         }
 
         // v3: cloud_id
-        if (oldVersion < 5) {
+        if (oldVersion < 4) {
           await db
               .execute('ALTER TABLE $_table ADD COLUMN cloud_id TEXT NULL;');
+        }
+
+        if (oldVersion < 5) {
+          await db.execute(
+              'ALTER TABLE $_table ADD COLUMN owner_user_id TEXT NULL;');
+
+          await db.execute(
+              "UPDATE $_table SET owner_user_id = 'unknown' WHERE owner_user_id IS NULL;");
+
+          await db.execute(
+              'CREATE INDEX IF NOT EXISTS idx_inbox_owner ON $_table(owner_user_id);');
         }
       },
     );
@@ -235,5 +247,58 @@ GROUP BY status
     final db = _db;
     _db = null;
     await db?.close();
+  }
+
+  Future<List<LocalInboxRecord>> listAllByOwner(String ownerUserId) async {
+    final db = await _open();
+    final rows = await db.query(
+      _table,
+      where: 'owner_user_id = ?',
+      whereArgs: [ownerUserId],
+      orderBy: 'created_at DESC',
+    );
+    return rows.map(LocalInboxRecord.fromMap).toList();
+  }
+
+  Future<List<LocalInboxRecord>> listByOwner({
+    required String ownerUserId,
+    String? status,
+    String? risk,
+    int? limit,
+    int? offset,
+  }) async {
+    final db = await _open();
+
+    final where = <String>['owner_user_id = ?'];
+    final args = <Object?>[ownerUserId];
+
+    if (status != null) {
+      where.add('status = ?');
+      args.add(status);
+    }
+    if (risk != null) {
+      where.add('risk = ?');
+      args.add(risk);
+    }
+
+    final rows = await db.query(
+      _table,
+      where: where.join(' AND '),
+      whereArgs: args,
+      orderBy: 'created_at DESC',
+      limit: limit,
+      offset: offset,
+    );
+
+    return rows.map(LocalInboxRecord.fromMap).toList();
+  }
+
+  Future<void> upsertForOwner(String ownerUserId, LocalInboxRecord r) async {
+    final db = await _open();
+    await db.insert(
+      _table,
+      r.toMap()..['owner_user_id'] = ownerUserId,
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
   }
 }

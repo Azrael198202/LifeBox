@@ -44,7 +44,7 @@
   "no_title": "(无标题)' ",
   "another": "其他 ",
 
-  "app_name": "Life Inbox",
+  "app_name": "速轻",
   "terms_agree_prefix": "继续即表示同意",
   "open_terms_action": "TODO：打开服务条款",
   "terms_title": "服务条款",
@@ -58,7 +58,7 @@
   "common_or": "或",
   "common_password_hit": "请输入密码",
   "type_label": "类型",
-  "version_text": "Life Inbox • v0.1.0 (MVP)",
+  "version_text": "速轻 • v0.1.0 (MVP)",
   "login_title":"欢迎回来",
   "login_subtitle":"登录后开始导入截图，自动识别待办与风险，并用应用锁保护隐私。",
   "login_logining":"登录中...",
@@ -109,6 +109,9 @@
   "ocr_no_current": "当前无处理中任务",
   "ocr_queued_prefix": "排队：",
   "ocr_queue_empty": "排队为空",
+  "login_already_have_account":"已经有账号了吗？",
+  "login_to_login":"去登录",
+  "terms_must_agree":"请先同意服务条款和隐私政策。",
 
   "ocrResultsTitle": "OCR 结果（{count}）",
   "@ocrResultsTitle": {
@@ -227,7 +230,7 @@
   "inboxDetailEvidenceTitle": "解析依据（OCR 片段）",
   "inboxDetailOcrPlaceholder": "OCR: ...（后续接入本地 OCR 缓存并展示）",
 
-  "inboxTitle": "Life Inbox",
+  "inboxTitle": "速轻　让生活，轻一下",
 
   "inboxEmptyTitle": "这里还没有内容",
   "inboxEmptySubtitle": "去导入截图或按住语音开始吧",
@@ -433,8 +436,8 @@
   "holidaysLoading": "正在加载假期…",
 
   "copied": "已复制",
-  "groupInviteMessage": "邀请你加入 LifeBox 群组。使用下面的邀请码即可加入。",
+  "groupInviteMessage": "邀请你加入 速轻 群组。使用下面的邀请码即可加入。",
   "inviteCodeLabel": "邀请码",
-  "groupInviteEmailSubject": "邀请你加入 LifeBox 群组",
+  "groupInviteEmailSubject": "邀请你加入 速轻 群组",
   "joinGroupFailed":"邀请码无效或已过期。"
 }

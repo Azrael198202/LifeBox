@@ -79,11 +79,11 @@ flutter_icons:
   image_path: "assets/icon/white.png"
 
 flutter_native_splash:
-  color: "#FFFFFF"
+  color: "#16264D"
   image: assets/icon/splash_logo.png
 
   android_12:
-    color: "#FFFFFF"
+    color: "#16264D"
     image: assets/icon/splash_logo.png
 
   android: true

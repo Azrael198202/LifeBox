@@ -134,10 +134,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get another => '其他 ';
 
   @override
-  String get version_text => 'Life Inbox • v0.1.0 (MVP)';
+  String get version_text => '速轻 • v0.1.0 (MVP)';
 
   @override
-  String get app_name => 'Life Inbox';
+  String get app_name => '速轻';
 
   @override
   String get terms_agree_prefix => '继续即表示同意';
@@ -335,6 +335,15 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get ocr_queue_empty => '排队为空';
+
+  @override
+  String get login_already_have_account => '已经有账号了吗？';
+
+  @override
+  String get login_to_login => '去登录';
+
+  @override
+  String get terms_must_agree => '请先同意服务条款和隐私政策。';
 
   @override
   String ocrResultsTitle(int count) {
@@ -538,7 +547,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get inboxDetailOcrPlaceholder => 'OCR: ...（后续接入本地 OCR 缓存并展示）';
 
   @override
-  String get inboxTitle => 'Life Inbox';
+  String get inboxTitle => '速轻　让生活，轻一下';
 
   @override
   String get inboxEmptyTitle => '这里还没有内容';
@@ -982,13 +991,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get copied => '已复制';
 
   @override
-  String get groupInviteMessage => '邀请你加入 LifeBox 群组。使用下面的邀请码即可加入。';
+  String get groupInviteMessage => '邀请你加入 速轻 群组。使用下面的邀请码即可加入。';
 
   @override
   String get inviteCodeLabel => '邀请码';
 
   @override
-  String get groupInviteEmailSubject => '邀请你加入 LifeBox 群组';
+  String get groupInviteEmailSubject => '邀请你加入 速轻 群组';
 
   @override
   String get joinGroupFailed => '邀请码无效或已过期。';

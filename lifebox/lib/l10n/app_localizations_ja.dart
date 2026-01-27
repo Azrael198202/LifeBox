@@ -134,10 +134,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get another => 'その他 ';
 
   @override
-  String get version_text => 'Life Inbox • v0.1.0 (MVP)';
+  String get version_text => 'スッと • v0.1.0 (MVP)';
 
   @override
-  String get app_name => 'Life Inbox';
+  String get app_name => 'スッと';
 
   @override
   String get terms_agree_prefix => '続行すると、以下に同意したものとみなされます。';
@@ -339,6 +339,15 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get ocr_queue_empty => '待機中なし';
+
+  @override
+  String get login_already_have_account => 'すでにアカウントをお持ちですか？';
+
+  @override
+  String get login_to_login => 'ログインへ';
+
+  @override
+  String get terms_must_agree => '利用規約とプライバシーポリシーに同意してください。';
 
   @override
   String ocrResultsTitle(int count) {
@@ -543,7 +552,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get inboxDetailOcrPlaceholder => 'OCR: ...（後ほどローカルOCRキャッシュと連携して表示）';
 
   @override
-  String get inboxTitle => 'Life Inbox';
+  String get inboxTitle => 'スッと　気持ちが軽くなる';
 
   @override
   String get inboxEmptyTitle => 'まだ内容がありません';
@@ -987,13 +996,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get copied => 'コピーした';
 
   @override
-  String get groupInviteMessage => 'LifeBoxのグループに招待されています。以下の招待コードを使って参加できます。';
+  String get groupInviteMessage => 'スッとのグループに招待されています。以下の招待コードを使って参加できます。';
 
   @override
   String get inviteCodeLabel => '招待コード';
 
   @override
-  String get groupInviteEmailSubject => 'LifeBox グループへの招待';
+  String get groupInviteEmailSubject => 'スッと グループへの招待';
 
   @override
   String get joinGroupFailed => '招待コードが無効、または期限切れです。';

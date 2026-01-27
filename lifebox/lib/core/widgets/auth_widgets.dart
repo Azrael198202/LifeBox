@@ -74,7 +74,7 @@ class AuthLayout extends StatelessWidget {
                 ],
                 if (showTerms) ...[
                   const SizedBox(height: 18),
-                  const _TermsText(),
+                  const TermsText(),
                 ],
               ],
             ),
@@ -393,15 +393,23 @@ class AuthHintText extends StatelessWidget {
 }
 
 /// —— Terms / Privacy 文案 ——
-class _TermsText extends StatelessWidget {
-  const _TermsText();
+class TermsText extends StatelessWidget {
+  const TermsText({super.key, this.onDark = true});
+
+  final bool onDark;
 
   @override
   Widget build(BuildContext context) {
-    final style =
-        const TextStyle(color: Color(0xFF6B7280), fontSize: 11, height: 1.35);
-    final linkStyle = style.copyWith(
-        color: const Color(0xFF111827), fontWeight: FontWeight.w700);
+    final baseColor = onDark
+        ? const Color.fromARGB(255, 252, 253, 255)
+        : const Color(0xFF6B7280);
+
+    final linkColor = onDark ? Colors.white : const Color(0xFF111827);
+
+    final style = TextStyle(color: baseColor, fontSize: 11, height: 1.35);
+    final linkStyle =
+        style.copyWith(color: linkColor, fontWeight: FontWeight.w700);
+
     final l10n = AppLocalizations.of(context);
 
     return Center(
@@ -410,28 +418,16 @@ class _TermsText extends StatelessWidget {
         children: [
           Text(l10n.terms_agree_prefix, style: style),
           GestureDetector(
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => LegalPage(
-                    type: LegalType.terms,
-                  ),
-                ),
-              );
-            },
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const LegalPage(type: LegalType.terms)),
+            ),
             child: Text(l10n.terms_title, style: linkStyle),
           ),
           Text(l10n.terms_and, style: style),
           GestureDetector(
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => LegalPage(
-                    type: LegalType.privacy,
-                  ),
-                ),
-              );
-            },
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const LegalPage(type: LegalType.privacy)),
+            ),
             child: Text(l10n.privacy_title, style: linkStyle),
           ),
           Text('。', style: style),

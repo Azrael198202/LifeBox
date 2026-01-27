@@ -137,10 +137,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get another => 'Other';
 
   @override
-  String get version_text => 'Life Inbox • v0.1.0 (MVP)';
+  String get version_text => 'Suto • v0.1.0 (MVP)';
 
   @override
-  String get app_name => 'Life Inbox';
+  String get app_name => 'Suto';
 
   @override
   String get terms_agree_prefix => 'By continuing, you agree to';
@@ -347,6 +347,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get ocr_queue_empty => 'Queue is empty';
+
+  @override
+  String get login_already_have_account => 'Already have an account?';
+
+  @override
+  String get login_to_login => 'Log in';
+
+  @override
+  String get terms_must_agree =>
+      'Please agree to the Terms and Privacy Policy first.';
 
   @override
   String ocrResultsTitle(int count) {
@@ -556,7 +566,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'OCR: ... (Later, this will show local OCR cache content)';
 
   @override
-  String get inboxTitle => 'Life Inbox';
+  String get inboxTitle => 'Suto ～ Lighten your life.';
 
   @override
   String get inboxEmptyTitle => 'Nothing here yet';
@@ -1017,13 +1027,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get groupInviteMessage =>
-      'You are invited to join a LifeBox group. Use the invite code below to join.';
+      'You are invited to join a Suto group. Use the invite code below to join.';
 
   @override
   String get inviteCodeLabel => 'Invite Code';
 
   @override
-  String get groupInviteEmailSubject => 'You\'re invited to a LifeBox group';
+  String get groupInviteEmailSubject => 'You\'re invited to a Suto group';
 
   @override
   String get joinGroupFailed => 'The invite code is invalid or has expired.';

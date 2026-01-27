@@ -349,13 +349,13 @@ abstract class AppLocalizations {
   /// No description provided for @version_text.
   ///
   /// In ja, this message translates to:
-  /// **'Life Inbox • v0.1.0 (MVP)'**
+  /// **'スッと • v0.1.0 (MVP)'**
   String get version_text;
 
   /// No description provided for @app_name.
   ///
   /// In ja, this message translates to:
-  /// **'Life Inbox'**
+  /// **'スッと'**
   String get app_name;
 
   /// No description provided for @terms_agree_prefix.
@@ -723,6 +723,24 @@ abstract class AppLocalizations {
   /// In ja, this message translates to:
   /// **'待機中なし'**
   String get ocr_queue_empty;
+
+  /// No description provided for @login_already_have_account.
+  ///
+  /// In ja, this message translates to:
+  /// **'すでにアカウントをお持ちですか？'**
+  String get login_already_have_account;
+
+  /// No description provided for @login_to_login.
+  ///
+  /// In ja, this message translates to:
+  /// **'ログインへ'**
+  String get login_to_login;
+
+  /// No description provided for @terms_must_agree.
+  ///
+  /// In ja, this message translates to:
+  /// **'利用規約とプライバシーポリシーに同意してください。'**
+  String get terms_must_agree;
 
   /// Title of OCR results page with count
   ///
@@ -1105,7 +1123,7 @@ abstract class AppLocalizations {
   /// No description provided for @inboxTitle.
   ///
   /// In ja, this message translates to:
-  /// **'Life Inbox'**
+  /// **'スッと　気持ちが軽くなる'**
   String get inboxTitle;
 
   /// No description provided for @inboxEmptyTitle.
@@ -1945,7 +1963,7 @@ abstract class AppLocalizations {
   /// No description provided for @groupInviteMessage.
   ///
   /// In ja, this message translates to:
-  /// **'LifeBoxのグループに招待されています。以下の招待コードを使って参加できます。'**
+  /// **'スッとのグループに招待されています。以下の招待コードを使って参加できます。'**
   String get groupInviteMessage;
 
   /// No description provided for @inviteCodeLabel.
@@ -1957,7 +1975,7 @@ abstract class AppLocalizations {
   /// No description provided for @groupInviteEmailSubject.
   ///
   /// In ja, this message translates to:
-  /// **'LifeBox グループへの招待'**
+  /// **'スッと グループへの招待'**
   String get groupInviteEmailSubject;
 
   /// No description provided for @joinGroupFailed.

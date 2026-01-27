@@ -44,8 +44,8 @@
   "another": "Other",
 
 
-  "version_text": "Life Inbox • v0.1.0 (MVP)",
-  "app_name": "Life Inbox",
+  "version_text": "Suto • v0.1.0 (MVP)",
+  "app_name": "Suto",
   "terms_agree_prefix": "By continuing, you agree to",
   "open_terms_action": "TODO: Open Terms of Service",
   "terms_title": "Terms of Service",
@@ -58,7 +58,7 @@
   "common_password_hit": "Please enter your password",
   "common_or": "or",
   "type_label": "Type",
-  "version_text": "Life Inbox • v0.1.0 (MVP)",
+  "version_text": "Suto • v0.1.0 (MVP)",
   "login_title":"Welcome back",
   "login_subtitle":"Sign in to import screenshots, automatically detect tasks and risks, and protect your privacy with an app lock.",
   "login_logining":"Signing in...",
@@ -108,6 +108,9 @@
   "ocr_no_current": "No task is currently running",
   "ocr_queued_prefix": "Queued: {count}",
   "ocr_queue_empty": "Queue is empty",
+  "login_already_have_account":"Already have an account?",
+  "login_to_login":"Log in",
+  "terms_must_agree":"Please agree to the Terms and Privacy Policy first.",
 
   "ocrResultsTitle": "OCR Results ({count})",
   "@ocrResultsTitle": {
@@ -226,7 +229,7 @@
   "inboxDetailEvidenceTitle": "Evidence (OCR snippets)",
   "inboxDetailOcrPlaceholder": "OCR: ... (Later, this will show local OCR cache content)",
 
-  "inboxTitle": "Life Inbox",
+  "inboxTitle": "Suto ～ Lighten your life.",
 
   "inboxEmptyTitle": "Nothing here yet",
   "inboxEmptySubtitle": "Import screenshots or hold the mic button to start",
@@ -434,9 +437,9 @@
   "holidaysLoading": "Loading holidays…",
 
   "copied": "Copied",
-  "groupInviteMessage": "You are invited to join a LifeBox group. Use the invite code below to join.",
+  "groupInviteMessage": "You are invited to join a Suto group. Use the invite code below to join.",
   "inviteCodeLabel": "Invite Code",
-  "groupInviteEmailSubject": "You're invited to a LifeBox group",
+  "groupInviteEmailSubject": "You're invited to a Suto group",
   "joinGroupFailed":"The invite code is invalid or has expired."
 
 }

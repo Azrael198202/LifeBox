@@ -62,7 +62,7 @@ class HolidayService {
   final http.Client _client;
   final Future<SharedPreferences> _prefsFuture;
 
-  /// ✅ 缓存时长：默认 30 天（可调）
+  /// Duration for cache validity defaults to 30 days
   final Duration cacheTtl;
 
   static const _base = 'https://date.nager.at/api/v3/PublicHolidays';
@@ -70,7 +70,7 @@ class HolidayService {
   String _cacheKey(int year, String countryCode) => 'holidays_v1_${countryCode}_$year';
   String _cacheTimeKey(int year, String countryCode) => 'holidays_v1_${countryCode}_${year}_ts';
 
-  /// 获取某国某年的假日（带缓存）
+  /// get public holidays for a specific year and country code
   Future<List<Holiday>> getPublicHolidays({
     required int year,
     required String countryCode, // e.g. "JP", "CN"
@@ -89,17 +89,17 @@ class HolidayService {
             final arr = (jsonDecode(cached) as List).cast<Map<String, dynamic>>();
             return arr.map(Holiday.fromJson).toList();
           } catch (_) {
-            // 缓存坏了就继续走网络
+            // exception ignored
           }
         }
       }
     }
 
-    // 2) 网络请求
+    // 2) request
     final url = Uri.parse('$_base/$year/$countryCode');
     final resp = await _client.get(url);
     if (resp.statusCode < 200 || resp.statusCode >= 300) {
-      // 3) 网络失败：如果有旧缓存就回退
+      // 3) requst failture, and read cache as fallback
       final cached = prefs.getString(_cacheKey(year, countryCode));
       if (cached != null) {
         try {
@@ -123,7 +123,7 @@ class HolidayService {
       );
     }).toList();
 
-    // 4) 写缓存
+    // 4) write cache
     await prefs.setString(
       _cacheKey(year, countryCode),
       jsonEncode(list.map((e) => e.toJson()).toList()),
@@ -136,7 +136,7 @@ class HolidayService {
     return list;
   }
 
-  /// 组合：同一年同时拉 CN + JP，然后按日期聚合
+  /// combine：get CN and JP holidays for a specific year, grouped by day
   Future<Map<DateTime, List<Holiday>>> getCnJpHolidaysByDay({
     required int year,
     bool forceRefresh = false,
@@ -153,10 +153,10 @@ class HolidayService {
       final key = DateTime(h.date.year, h.date.month, h.date.day);
       map.putIfAbsent(key, () => []).add(h);
     }
-    // 让同一天多个国家显示时顺序稳定：JP 在前
+    // get sorted list: JP first, then by country code
     for (final e in map.entries) {
       e.value.sort((a, b) => a.countryCode.compareTo(b.countryCode)); // "CN" < "JP"
-      // 你想 JP 优先：改成下面
+      // jp is the first
       e.value.sort((a, b) => (a.countryCode == 'JP' ? -1 : 1));
     }
     return map;

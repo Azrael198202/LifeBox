@@ -38,7 +38,6 @@ class OcrQueueManager extends ChangeNotifier {
     return List.unmodifiable(list);
   }
 
-  /// ✅ 已完成（success/failed）的任务（最新在前）
   List<OcrJob> get completedJobs => List.unmodifiable(_completed);
 
   int get queuedCount => _queue.length;
@@ -51,7 +50,7 @@ class OcrQueueManager extends ChangeNotifier {
       final existsInQueue = _queue.any((j) => j.assetId == id);
       final isCurrent = _current?.assetId == id;
       final existsInCompleted =
-          _completed.any((j) => j.assetId == id); // ✅ 可选：避免重复跑
+          _completed.any((j) => j.assetId == id);
       if (existsInQueue || isCurrent || existsInCompleted) continue;
 
       _queue.add(OcrJob(assetId: id, createdAt: now));
@@ -66,7 +65,7 @@ class OcrQueueManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// ✅ 清空历史结果
+  /// clears all completed jobs
   void clearCompleted() {
     _completed.clear();
     notifyListeners();
@@ -102,10 +101,10 @@ class OcrQueueManager extends ChangeNotifier {
         _current!.error = e.toString();
       }
 
-      // ✅ 放入历史列表（最新在前）
+      // finally, move to completed
       _completed.insert(0, _current!);
 
-      // ✅ 可选：限制历史数量，避免无限增长
+      // limit completed list size
       if (_completed.length > 300) {
         _completed.removeRange(300, _completed.length);
       }

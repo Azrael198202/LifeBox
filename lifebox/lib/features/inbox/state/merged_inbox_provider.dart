@@ -8,12 +8,12 @@ import 'cloud_inbox_providers.dart';
 final inboxRefreshTokenProvider = StateProvider<int>((_) => 0);
 
 /// =============================
-/// 本地 + 云端（个人+群组）整合后的最终列表
-/// UI 层只 watch 这个
+/// local + Cloud（personal + groups）to get merged list
+/// UI use this provider
 /// =============================
 final mergedInboxProvider = FutureProvider<List<InboxItem>>((ref) async {
 
-  // 监听刷新 Token
+  // refresh Token
   ref.watch(inboxRefreshTokenProvider);
 
   final local = await ref.watch(localInboxListProvider.future);
@@ -23,15 +23,15 @@ final mergedInboxProvider = FutureProvider<List<InboxItem>>((ref) async {
   final byKey = <String, InboxItem>{};
 
   String keyFor(InboxItem item) {
-    // ✅ 云端：clientId (= 本地 id) 优先用于合并
+    // Cloud：clientId (= local id) optimized
     if (item.clientId != null && item.clientId!.isNotEmpty) {
       return item.clientId!;
     }
 
-    // ✅ 本地：id 永不为空
+    // local
     if (item.id.isNotEmpty) return item.id;
 
-    // ✅ 兜底：cloudId
+    // last ：cloudId
     if (item.cloudId != null && item.cloudId!.isNotEmpty) {
       return item.cloudId!;
     }
@@ -39,13 +39,13 @@ final mergedInboxProvider = FutureProvider<List<InboxItem>>((ref) async {
     return item.id;
   }
 
-  // 1) 本地优先
+  // 1) local first
   for (final r in local) {
     final item = InboxItem.fromLocal(r);
     byKey[keyFor(item)] = item;
   }
 
-  // 2) 云端补齐（命中本地则 merge）
+  // 2) Cloud next  
   void mergeCloud(CloudListItem c) {
     final cloudItem = InboxItem.fromCloudList(c);
     final k = keyFor(cloudItem);

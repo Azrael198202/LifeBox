@@ -1,5 +1,3 @@
-/// lib/core/utils/date_tools.dart
-///
 /// Date tools:
 /// - normalizeDateToYMD: normalize many date formats to `yyyy-MM-dd`
 /// - tryParseYMD: parse `yyyy-MM-dd` safely
@@ -17,7 +15,6 @@
 /// Rules:
 /// - If year is missing, use current year.
 /// - Invalid date -> returns null.
-
 class DateTools {
   DateTools._();
 

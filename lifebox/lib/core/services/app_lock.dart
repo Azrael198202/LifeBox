@@ -13,7 +13,7 @@ class AppLockState {
 class AppLockController extends StateNotifier<AppLockState> {
   AppLockController() : super(const AppLockState(enabled: true, isLocked: false));
 
-  // App 回到前台时触发
+  // App lifecycle event handlers
   void onResume() {
     if (state.enabled) {
       state = state.copyWith(isLocked: true);

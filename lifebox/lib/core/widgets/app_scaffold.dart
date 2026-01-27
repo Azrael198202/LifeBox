@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class AppScaffold extends StatelessWidget {
   final String title;
-  final String? subtitle; // 你可以用它当 slogan，或不用
+  final String? subtitle; // slogan
   final Widget body;
   final List<Widget>? actions;
   final Widget? floatingActionButton;

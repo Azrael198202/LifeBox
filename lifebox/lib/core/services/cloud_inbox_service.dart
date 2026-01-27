@@ -36,7 +36,7 @@ class CloudInboxService {
   }
 
   // =============================
-  // 1) 保存一条 inbox 记录到云端
+  // 1) save one record to cloud
   // POST /api/cloud/records
   // =============================
   Future<void> saveToCloud(
@@ -55,7 +55,7 @@ class CloudInboxService {
   }
 
   // =============================
-  // 2) 删除云端记录
+  // 2) delete one cloud record
   // DELETE /api/cloud/records/{id}
   // =============================
   Future<void> deleteRecordCloud(
@@ -71,9 +71,9 @@ class CloudInboxService {
   }
 
   // =============================
-  // 3) 获取本人云端记录（个人）
+  // 3) get local user's cloud records
   // GET /api/cloud/records?limit=xx
-  // （后端逻辑：owner_user_id = me AND group_id is null）
+  // （owner_user_id = me AND group_id is null）
   // =============================
   Future<List<CloudListItem>> listMyRecords({
     required String accessToken,
@@ -97,7 +97,7 @@ class CloudInboxService {
   }
 
   // =============================
-  // 4) 获取群组云端记录（含非本人创建）
+  // 4) get group's cloud records(not including personal)
   // GET /api/cloud/records?group_id=xxx&limit=xx
   // =============================
   Future<List<CloudListItem>> listGroupRecords({
@@ -124,7 +124,7 @@ class CloudInboxService {
   }
 
   // =============================
-  // 5) 获取记录详情
+  // 5) get cloud record detail
   // GET /api/cloud/records/{id}
   // =============================
   Future<CloudDetail> getRecordDetail({
@@ -143,11 +143,8 @@ class CloudInboxService {
   }
 
   // =============================
-  // 6) 聚合列表（个人 + 所有群组）
+  // 6) merged list（personal and all groups）
   // GET /api/cloud/records/all?limit=xx
-  //
-  // ⚠️ 需要后端你新增 /api/cloud/records/all
-  // 我前面给了 py 代码
   // =============================
   Future<List<CloudListItem>> listAllVisibleRecords({
     required String accessToken,

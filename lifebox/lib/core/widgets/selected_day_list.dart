@@ -83,7 +83,6 @@ class SelectedDayList extends StatelessWidget {
       );
     }
 
-    // ✅ 这里已经用 InboxCard（inbox_card.dart）
     return ListView.separated(
       padding: const EdgeInsets.all(12),
       itemCount: items.length,

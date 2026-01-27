@@ -30,7 +30,7 @@ Future<void> copyInviteCode(
   );
 }
 
-/// 打开邮件 App（失败返回 false）
+/// open email app (failure returns false)
 Future<bool> launchInviteEmail({
   required String subject,
   required String body,
@@ -49,7 +49,7 @@ Future<bool> launchInviteEmail({
   );
 }
 
-/// 打开短信 App（失败返回 false）
+/// open SMS app (failure returns false)
 Future<bool> launchInviteSms(String body) async {
   final uri = Uri(
     scheme: 'sms',
@@ -64,7 +64,7 @@ Future<bool> launchInviteSms(String body) async {
   );
 }
 
-/// 通用兜底分享（系统 Share Sheet）
+/// fallback share method
 Future<void> shareInviteFallback({
   required String text,
   String? subject,

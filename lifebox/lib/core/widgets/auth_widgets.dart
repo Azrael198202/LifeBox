@@ -7,16 +7,18 @@ class AuthLayout extends StatelessWidget {
   final String title;
   final String subtitle;
 
-  /// 表单内容（输入框 + 按钮）
+  /// Form content (input fields + action buttons)
   final Widget child;
 
-  /// 底部额外区域（例如：去注册 / 返回登录）
+  /// Extra bottom section (e.g. navigate to register / back to login)
   final List<Widget> footer;
 
-  /// 是否显示 Terms
+  /// Whether to show the Terms section
   final bool showTerms;
 
-  /// Logo：默认是文字 Logo，也可以传入 Image.asset(...)
+  /// Logo:
+  /// - Uses a text logo by default
+  /// - Can be replaced with `Image.asset(...)`
   final Widget? logo;
 
   const AuthLayout({
@@ -36,7 +38,6 @@ class AuthLayout extends StatelessWidget {
       body: SafeArea(
         child: Stack(
           children: [
-            // 背景渐变“光晕”
             Positioned(
               top: -120,
               left: -80,
@@ -47,7 +48,6 @@ class AuthLayout extends StatelessWidget {
               right: -90,
               child: _GlowBlob(size: 220),
             ),
-
             ListView(
               padding: const EdgeInsets.fromLTRB(16, 18, 16, 16),
               children: [
@@ -220,7 +220,7 @@ class _GlowBlob extends StatelessWidget {
   }
 }
 
-/// —— 输入框（统一样式：黑字 + 圆角 + 柔和边框）——
+/// —— Input field (unified style: black text, rounded corners, soft border) ——
 class AuthTextField extends StatelessWidget {
   final TextEditingController controller;
   final String label;
@@ -289,8 +289,7 @@ class AuthTextField extends StatelessWidget {
   }
 }
 
-/// —— 主按钮 ——
-/// 如果你想用品牌色，可在 ThemeData 里设置 colorScheme.primary
+/// —— Primary Button ——
 class AuthPrimaryButton extends StatelessWidget {
   final String label;
   final VoidCallback? onPressed;
@@ -314,7 +313,7 @@ class AuthPrimaryButton extends StatelessWidget {
   }
 }
 
-/// —— 次按钮（例如 Google / 返回登录）——
+/// —— Secondary Button（e.x. Google / return login）——
 class AuthSecondaryButton extends StatelessWidget {
   final String label;
   final VoidCallback? onPressed;
@@ -346,7 +345,7 @@ class AuthSecondaryButton extends StatelessWidget {
   }
 }
 
-/// —— 分割线（“或”）——
+/// —— divide (or) ——
 class AuthDivider extends StatelessWidget {
   final String text;
   const AuthDivider({
@@ -392,7 +391,7 @@ class AuthHintText extends StatelessWidget {
   }
 }
 
-/// —— Terms / Privacy 文案 ——
+/// —— Terms / Privacy ——
 class TermsText extends StatelessWidget {
   const TermsText({super.key, this.onDark = true});
 
@@ -419,14 +418,16 @@ class TermsText extends StatelessWidget {
           Text(l10n.terms_agree_prefix, style: style),
           GestureDetector(
             onTap: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const LegalPage(type: LegalType.terms)),
+              MaterialPageRoute(
+                  builder: (_) => const LegalPage(type: LegalType.terms)),
             ),
             child: Text(l10n.terms_title, style: linkStyle),
           ),
           Text(l10n.terms_and, style: style),
           GestureDetector(
             onTap: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const LegalPage(type: LegalType.privacy)),
+              MaterialPageRoute(
+                  builder: (_) => const LegalPage(type: LegalType.privacy)),
             ),
             child: Text(l10n.privacy_title, style: linkStyle),
           ),

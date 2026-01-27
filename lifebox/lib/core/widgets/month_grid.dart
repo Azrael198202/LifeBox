@@ -27,7 +27,7 @@ class MonthGrid extends StatelessWidget {
     final first = DateTime(month.year, month.month, 1);
     final l10n = AppLocalizations.of(context);
 
-    // ✅ 周日开头：Sunday = 0
+    // Sunday as 0, Saturday as 6
     final firstWeekday = first.weekday % 7;
 
     final daysInMonth = DateTime(month.year, month.month + 1, 0).day;

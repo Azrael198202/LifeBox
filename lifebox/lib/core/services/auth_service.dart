@@ -26,7 +26,9 @@ class AuthService {
 
   /// ---------- Public APIs ----------
 
-  /// ✅ Google 登录（后端会自动“注册/创建用户+family group”，所以前台不区分登录/注册）
+  /// Google sign-in
+  /// (The backend automatically handles registration / user creation + family group creation,
+  /// so the client does not distinguish between login and registration.)
   Future<AuthSession> signInWithGoogle() async {
     final account = await _googleSignIn.signIn();
     if (account == null) {
@@ -97,7 +99,8 @@ class AuthService {
     return session;
   }
 
-  /// ✅ 用已有 token 拉取当前用户（App 冷启动时可调用）
+  /// Fetch the current user using an existing token
+  /// (Can be called on app cold start; the backend may refresh the token.)
   Future<AuthSession> me() async {
     final token = _accessToken;
     if (token == null) {
@@ -111,11 +114,13 @@ class AuthService {
     final resp = await _getJsonUri(Uri.parse(AppConfig.authMe), bearer: token);
     final session = AuthSession.fromJson(resp);
     _session = session;
-    _accessToken = session.accessToken; // 后端可能会刷新 token
+    _accessToken = session.accessToken;
     return session;
   }
 
-  /// ✅ 登出（JWT 模式后端是 no-op，但我们要清掉本地 token）
+  /// Sign out
+  /// (For JWT-based backends this is a no-op on the server side,
+  /// but the client must clear the local token.)
   Future<void> logout() async {
     final token = _accessToken;
     try {

@@ -7,7 +7,7 @@ class BillingService {
     required this.getAccessToken,
   });
 
-  /// 从 auth 层拿 access token
+  /// access token retriever
   final Future<String?> Function() getAccessToken;
 
   // ======================

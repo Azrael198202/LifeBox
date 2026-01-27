@@ -2,21 +2,20 @@ import 'package:flutter/material.dart';
 import '../../app/theme/colors.dart';
 import 'package:lifebox/l10n/app_localizations.dart';
 
-/// 原来的风险等级（三档）——保留
+/// Original risk level (three-tier) — preserved
 enum RiskLevel { high, mid, low }
 
-/// 通用信息徽章类型（用于提示/成功/警告/错误/信息）
+/// Generic badge type for info / success / warning / error / informational states
 enum BadgeTone { info, success, warning, danger }
 
 class RiskBadge extends StatelessWidget {
-  /// RiskBadge(risk: RiskLevel.high)
   final RiskLevel? risk;
 
   /// RiskBadge.text(...)
   final String? label;
   final BadgeTone? tone;
 
-  /// 是否显示前缀（旧版是 “风险 高”）
+  /// Whether to display a prefix (legacy behavior was "Risk: High")
   final bool showPrefix;
 
   const RiskBadge({
@@ -27,7 +26,9 @@ class RiskBadge extends StatelessWidget {
     this.showPrefix = true,
   });
 
-  /// ✅ 新增工厂：用于通用提示徽章
+  /// New factory added:
+  /// Used for generic message badges
+  /// - Generic badges do NOT include the "Risk" prefix
   factory RiskBadge.text(
     String label, {
     Key? key,
@@ -38,7 +39,7 @@ class RiskBadge extends StatelessWidget {
       risk: null,
       label: label,
       tone: tone,
-      showPrefix: false, // 通用徽章不加“风险”
+      showPrefix: false,
     );
   }
 
@@ -56,13 +57,16 @@ class RiskBadge extends StatelessWidget {
       ),
       child: Text(
         text,
-        style: TextStyle(color: color, fontSize: 12, fontWeight: FontWeight.w600),
+        style:
+            TextStyle(color: color, fontSize: 12, fontWeight: FontWeight.w600),
       ),
     );
   }
 
   (String, Color) _resolveTextAndColor(AppLocalizations l10n) {
-    // 1) 旧模式：风险等级
+    /// Modes:
+    /// 1) Legacy mode: risk level badge
+    /// 2) New mode: generic text badge
     if (risk != null) {
       final (t, c) = switch (risk!) {
         RiskLevel.high => (l10n.riskHigh, AppColors.riskHigh),
@@ -73,9 +77,8 @@ class RiskBadge extends StatelessWidget {
       return ('$prefix$t', c);
     }
 
-    // 2) 新模式：通用文本徽章
     final toneColor = switch (tone ?? BadgeTone.info) {
-      BadgeTone.info => AppColors.riskMid,     // 没有 info 色就先用 mid
+      BadgeTone.info => AppColors.riskMid,
       BadgeTone.success => Colors.green,
       BadgeTone.warning => Colors.orange,
       BadgeTone.danger => Colors.red,

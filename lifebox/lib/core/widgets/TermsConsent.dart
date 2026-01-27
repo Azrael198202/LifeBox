@@ -11,22 +11,25 @@ class TermsConsent extends StatelessWidget {
     this.compact = false,
   });
 
-  /// ✅ 外部传入（Login/Register 页面各自持有一个 ValueNotifier）
+  /// Passed in from the outside
+  /// (Each Login / Register page owns its own ValueNotifier)
   final ValueNotifier<bool> checked;
 
   final bool onDark;
 
-  /// 可选：更紧凑的布局
+  /// More compact layout
   final bool compact;
 
   @override
   Widget build(BuildContext context) {
-    final baseColor =
-        onDark ? const Color.fromARGB(255, 252, 253, 255) : const Color(0xFF6B7280);
+    final baseColor = onDark
+        ? const Color.fromARGB(255, 252, 253, 255)
+        : const Color(0xFF6B7280);
     final linkColor = onDark ? Colors.white : const Color(0xFF111827);
 
     final style = TextStyle(color: baseColor, fontSize: 11, height: 1.35);
-    final linkStyle = style.copyWith(color: linkColor, fontWeight: FontWeight.w700);
+    final linkStyle =
+        style.copyWith(color: linkColor, fontWeight: FontWeight.w700);
 
     final l10n = AppLocalizations.of(context);
 
@@ -68,7 +71,8 @@ class TermsConsent extends StatelessWidget {
                   GestureDetector(
                     onTap: () => Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (_) => const LegalPage(type: LegalType.privacy),
+                        builder: (_) =>
+                            const LegalPage(type: LegalType.privacy),
                       ),
                     ),
                     child: Text(l10n.privacy_title, style: linkStyle),

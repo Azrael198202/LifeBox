@@ -194,7 +194,6 @@ class GroupService {
   }
 
   Future<AcceptInviteRespDto> acceptInvite({required String token}) async {
-    // FastAPI 常见错误格式：{"detail":"Invalid or expired invite"}
     String msg = 'Failed to accept invite';
 
     try {

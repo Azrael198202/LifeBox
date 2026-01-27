@@ -25,17 +25,17 @@ import '../features/settings/ui/group_management_page.dart';
 import '../features/settings/ui/group_settings_page.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
-  // ✅ 状态
+  // auth and lock state
   final authState = ref.watch(authControllerProvider);
   final lockState = ref.watch(appLockProvider);
 
-  // ✅ notifier（用于 router refresh）
+  // router refresh
   final authController = ref.read(authControllerProvider.notifier);
 
   return GoRouter(
     initialLocation: '/inbox',
 
-    /// ✅ auth stream 有变化就刷新 router（保持你原来的）
+    // automatic refresh when authState / lockState changes
     refreshListenable: GoRouterRefreshStream(authController.stream),
 
     redirect: (context, state) {
@@ -44,24 +44,24 @@ final routerProvider = Provider<GoRouter>((ref) {
       final isAuthed = authState.isAuthenticated;
       final isOnAuthPage = loc == '/login' || loc == '/register';
 
-      // 1) 未登录：只能去 login/register
+      // 1) unauthed：must go to login
       if (!isAuthed && !isOnAuthPage) return '/login';
       if (!isAuthed && isOnAuthPage) return null;
 
-      // 2) 已登录：不允许回到 login/register
+      // 2) authed & on auth page => go to inbox
       if (isAuthed && isOnAuthPage) return '/inbox';
 
-      // 3) App 锁：已登录但锁住 => 去 /lock（带 from）
+      // 3) App locked => go to /lock
       if (isAuthed && lockState.enabled && lockState.isLocked) {
         if (loc != '/lock') {
-          // 把当前目标路径完整保存下来（包含 query / pathParams）
+          // save current location to "from" query param
           final from = Uri.encodeComponent(state.uri.toString());
           return '/lock?from=$from';
         }
         return null;
       }
 
-      // 4) 已解锁但还停在 /lock => 回到 from 或默认页
+      // 4) unlock but still at /lock : return form or /inbox
       if (isAuthed &&
           (!lockState.enabled || !lockState.isLocked) &&
           loc == '/lock') {
@@ -76,7 +76,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(path: '/login', builder: (_, __) => const LoginPage()),
       GoRoute(path: '/register', builder: (_, __) => const RegisterPage()),
 
-      // ✅ Lock route：接收 from
+      // Lock route with optional "from" query parameter
       GoRoute(
         path: '/lock',
         builder: (context, state) {
@@ -159,7 +159,8 @@ final routerProvider = Provider<GoRouter>((ref) {
   );
 });
 
-/// ✅ GoRouter 的 refreshListenable 需要 Listenable
+/// GoRouter refresh helper class used to notify GoRouter of changes
+/// when the provided stream emits new events.
 class GoRouterRefreshStream extends ChangeNotifier {
   GoRouterRefreshStream(Stream<dynamic> stream) {
     _sub = stream.listen((_) => notifyListeners());

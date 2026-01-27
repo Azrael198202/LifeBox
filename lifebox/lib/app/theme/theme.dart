@@ -13,7 +13,7 @@ ThemeData buildLightTheme() {
   );
 
   return base.copyWith(
-    scaffoldBackgroundColor: AppColors.bg, // 你原来的背景色
+    scaffoldBackgroundColor: AppColors.bg,
     colorScheme: base.colorScheme.copyWith(primary: AppColors.brand),
     textTheme: AppTypography.textTheme().apply(
       bodyColor: AppColors.text,
@@ -31,7 +31,7 @@ ThemeData buildLightTheme() {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
     ),
 
-    // ✅ 输入框（白天：黑字）
+    // input box（day：black font）
     inputDecorationTheme: const InputDecorationTheme(
       filled: true,
       fillColor: Colors.white,
@@ -54,7 +54,7 @@ ThemeData buildDarkTheme() {
   );
 
   return base.copyWith(
-    // ✅ 关键：明确暗色背景
+    // balck background
     scaffoldBackgroundColor: const Color(0xFF121212),
 
     colorScheme: base.colorScheme.copyWith(primary: AppColors.brand),

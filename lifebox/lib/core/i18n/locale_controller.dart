@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class LocaleController extends StateNotifier<Locale> {
-  LocaleController() : super(const Locale('ja')); // ✅ 默认日语
+  LocaleController() : super(const Locale('ja'));  // default to Japanese
 
   void setJa() => state = const Locale('ja');
   void setZh() => state = const Locale('zh');

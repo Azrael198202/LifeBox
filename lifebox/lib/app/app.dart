@@ -29,7 +29,7 @@ class _LifeInboxAppState extends ConsumerState<LifeInboxApp>
     super.dispose();
   }
 
-  /// ✅ App 从后台回到前台时，触发应用锁
+  /// app background -> foreground trigger the app lock check
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
@@ -41,6 +41,7 @@ class _LifeInboxAppState extends ConsumerState<LifeInboxApp>
   Widget build(BuildContext context) {
     final router = ref.watch(routerProvider);
     final locale = ref.watch(localeProvider);
+    // final l10n = AppLocalizations.of(context);
 
     return MaterialApp.router(
       locale: locale,
@@ -55,7 +56,7 @@ class _LifeInboxAppState extends ConsumerState<LifeInboxApp>
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      title: 'Life Inbox',
+      title: "スッと",
       theme: buildLightTheme(),
       darkTheme: buildDarkTheme(),
       themeMode: ThemeMode.system,

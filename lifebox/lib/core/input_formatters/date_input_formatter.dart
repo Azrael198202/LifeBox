@@ -8,7 +8,7 @@ class DateInputFormatter extends TextInputFormatter {
   ) {
     final digits = newValue.text.replaceAll(RegExp(r'\D'), '');
 
-    // 最多 8 位：yyyyMMdd
+    // Limit to 8 digits (YYYYMMDD)
     if (digits.length > 8) {
       return oldValue;
     }

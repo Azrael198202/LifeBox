@@ -1,7 +1,7 @@
 enum AppEnv { dev, prod }
 
 class AppConfig {
-  // 👉 当前环境（以后只改这一行）
+  // Change this to switch environments
   static const AppEnv env = AppEnv.dev;
 
   static const String _devBaseUrl = 'http://192.168.1.199:8000';
@@ -12,8 +12,7 @@ class AppConfig {
       case AppEnv.prod:
         return _prodBaseUrl;
       case AppEnv.dev:
-      default:
-        return _devBaseUrl;
+      return _devBaseUrl;
     }
   }
 

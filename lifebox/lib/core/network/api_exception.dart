@@ -22,7 +22,6 @@ class ApiException implements Exception {
     this.raw,
   });
 
-  /// ❗注意：这里不再返回最终文案
   @override
   String toString() => errorKey.name;
 

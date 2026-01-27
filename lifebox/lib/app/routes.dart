@@ -1,4 +1,6 @@
 import 'package:go_router/go_router.dart';
+import 'package:lifebox/core/services/legal_api.dart';
+import 'package:lifebox/features/settings/ui/legal_page.dart';
 import '../features/capture/ui/import_page.dart';
 import '../features/inbox/ui/inbox_page.dart';
 import '../features/inbox/ui/inbox_detail_page.dart';
@@ -37,6 +39,14 @@ GoRouter buildRouter() {
       GoRoute(
         path: '/settings',
         builder: (context, state) => const SettingsPage(),
+      ),
+      GoRoute(
+        path: '/legal/terms',
+        builder: (_, __) => const LegalPage(type: LegalType.terms),
+      ),
+      GoRoute(
+        path: '/legal/privacy',
+        builder: (_, __) => const LegalPage(type: LegalType.privacy),
       ),
     ],
   );

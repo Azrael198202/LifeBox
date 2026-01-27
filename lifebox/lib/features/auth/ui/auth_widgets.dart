@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:lifebox/core/services/legal_api.dart';
+import 'package:lifebox/features/settings/ui/legal_page.dart';
 import 'package:lifebox/l10n/app_localizations.dart';
 
 class AuthLayout extends StatelessWidget {
@@ -271,7 +273,8 @@ class AuthTextField extends StatelessWidget {
         suffixIcon: suffix,
         filled: true,
         fillColor: const Color(0xFFF9FAFB),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.black.withOpacity(0.10)),
           borderRadius: BorderRadius.circular(14),
@@ -280,8 +283,6 @@ class AuthTextField extends StatelessWidget {
           borderSide: BorderSide(color: Colors.black.withOpacity(0.28)),
           borderRadius: BorderRadius.circular(14),
         ),
-
-
         errorMaxLines: 2,
       ),
     );
@@ -410,8 +411,12 @@ class _TermsText extends StatelessWidget {
           Text(l10n.terms_agree_prefix, style: style),
           GestureDetector(
             onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(l10n.open_terms_action)),
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => LegalPage(
+                    type: LegalType.terms,
+                  ),
+                ),
               );
             },
             child: Text(l10n.terms_title, style: linkStyle),
@@ -419,8 +424,12 @@ class _TermsText extends StatelessWidget {
           Text(l10n.terms_and, style: style),
           GestureDetector(
             onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(l10n.open_privacy_action)),
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => LegalPage(
+                    type: LegalType.privacy,
+                  ),
+                ),
               );
             },
             child: Text(l10n.privacy_title, style: linkStyle),

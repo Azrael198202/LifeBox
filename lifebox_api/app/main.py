@@ -23,6 +23,7 @@ from .auth_routes import router as auth_router
 from .group_routes import router as group_router
 from .cloud_routes import router as cloud_router
 from .billing_routes import router as billing_router
+from .legal_routes import router as legal_router
 
 app = FastAPI()
 
@@ -45,6 +46,8 @@ app.include_router(auth_router)
 app.include_router(group_router)
 app.include_router(cloud_router)
 app.include_router(billing_router)
+app.include_router(cloud_router)
+app.include_router(legal_router)
 
 class AnalyzeRequest(BaseModel):
     text: str

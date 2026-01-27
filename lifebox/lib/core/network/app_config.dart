@@ -17,6 +17,8 @@ class AppConfig {
     }
   }
 
+static String get legal => '$baseUrl/api/legal';
+
   // ===== API endpoints =====
   static String get aiAnalyze => '$baseUrl/api/ai/analyze';
   static String get cloudRecord => '$baseUrl/api/cloud/records/getall';

@@ -19,3 +19,4 @@ lifebox_api/app/__pycache__/group_routes.cpython-312.pyc
 lifebox_api/app/__pycache__/schemas_auth.cpython-312.pyc
 lifebox_api/app/__pycache__/schemas_groups.cpython-312.pyc
 lifebox_api/app/__pycache__/task_extractor.cpython-312.pyc
+lifebox_api/app/__pycache__/legal_routes.cpython-312.pyc

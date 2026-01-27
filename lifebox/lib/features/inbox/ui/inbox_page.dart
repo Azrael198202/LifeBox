@@ -119,6 +119,7 @@ class _InboxPageState extends ConsumerState<InboxPage>
 
     return AppScaffold(
       title: l10n.inboxTitle,
+      subtitle: l10n.inboxSubtitle,
       actions: [
         IconButton(
           tooltip: l10n.tooltipCalendarView,

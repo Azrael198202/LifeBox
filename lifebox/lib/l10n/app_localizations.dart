@@ -1123,8 +1123,14 @@ abstract class AppLocalizations {
   /// No description provided for @inboxTitle.
   ///
   /// In ja, this message translates to:
-  /// **'スッと　気持ちが軽くなる'**
+  /// **'スッと'**
   String get inboxTitle;
+
+  /// No description provided for @inboxSubtitle.
+  ///
+  /// In ja, this message translates to:
+  /// **'　気持ちが軽くなる'**
+  String get inboxSubtitle;
 
   /// No description provided for @inboxEmptyTitle.
   ///

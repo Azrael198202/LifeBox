@@ -229,7 +229,8 @@
   "inboxDetailEvidenceTitle": "Evidence (OCR snippets)",
   "inboxDetailOcrPlaceholder": "OCR: ... (Later, this will show local OCR cache content)",
 
-  "inboxTitle": "Suto ～ Lighten your life.",
+  "inboxTitle": "Suto",
+  "inboxSubtitle": "　Lighten your life",
 
   "inboxEmptyTitle": "Nothing here yet",
   "inboxEmptySubtitle": "Import screenshots or hold the mic button to start",

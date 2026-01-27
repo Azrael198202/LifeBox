@@ -552,7 +552,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get inboxDetailOcrPlaceholder => 'OCR: ...（後ほどローカルOCRキャッシュと連携して表示）';
 
   @override
-  String get inboxTitle => 'スッと　気持ちが軽くなる';
+  String get inboxTitle => 'スッと';
+
+  @override
+  String get inboxSubtitle => '　気持ちが軽くなる';
 
   @override
   String get inboxEmptyTitle => 'まだ内容がありません';

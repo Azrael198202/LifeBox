@@ -230,7 +230,8 @@
   "inboxDetailEvidenceTitle": "解析依据（OCR 片段）",
   "inboxDetailOcrPlaceholder": "OCR: ...（后续接入本地 OCR 缓存并展示）",
 
-  "inboxTitle": "速轻　让生活，轻一下",
+  "inboxTitle": "速轻",
+  "inboxSubtitle": "　让生活，轻一下",
 
   "inboxEmptyTitle": "这里还没有内容",
   "inboxEmptySubtitle": "去导入截图或按住语音开始吧",

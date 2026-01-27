@@ -3,8 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../domain/app_user.dart';
 import '../../../core/services/auth_service.dart';
-
-// ✅ 统一 API 异常 & 错误 Key
 import '../../../core/network/api_exception.dart';
 
 class AuthState {
@@ -14,7 +12,7 @@ class AuthState {
 
   final bool loading;
 
-  // ✅ 改为 errorKey（不再存 message）
+  // errorKey : display error message in UI
   final ApiErrorKey? errorKey;
 
   const AuthState({
@@ -33,7 +31,7 @@ class AuthState {
     String? accessToken,
     bool? loading,
     ApiErrorKey? errorKey,
-    bool clearError = false, // ✅ 方便清空 error
+    bool clearError = false, // whether to clear the errorKey
   }) {
     return AuthState(
       user: user ?? this.user,
@@ -45,7 +43,7 @@ class AuthState {
   }
 }
 
-/// 你可以之后从 Settings 里读取 baseUrl
+/// AuthService Provider
 final authServiceProvider = Provider<AuthService>((ref) {
   return AuthService();
 });
@@ -55,7 +53,7 @@ class AuthController extends StateNotifier<AuthState> {
 
   final AuthService _svc;
 
-  /// 给 GoRouter 用的刷新流
+  /// GoRouter listener to react to auth state changes
   final _stream = StreamController<AuthState>.broadcast();
   @override
   Stream<AuthState> get stream => _stream.stream;
@@ -65,7 +63,7 @@ class AuthController extends StateNotifier<AuthState> {
     _stream.add(s);
   }
 
-  /// ✅ UI 输入时调用，清掉错误提示
+  /// UI can call to clear error state
   void clearError() => _emit(state.copyWith(clearError: true));
 
   ApiErrorKey _mapError(Object e) {
@@ -73,7 +71,7 @@ class AuthController extends StateNotifier<AuthState> {
     return ApiErrorKey.unknown;
   }
 
-  /// App 启动时可调用：尝试用 token 拉 /me
+  /// Try to restore session from storage
   Future<void> bootstrap() async {
     // TODO: 从 secure storage / shared prefs 恢复 token，然后 _svc.me()
   }

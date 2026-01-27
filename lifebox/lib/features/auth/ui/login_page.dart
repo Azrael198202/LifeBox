@@ -65,15 +65,15 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     final auth = ref.watch(authControllerProvider);
     final l10n = AppLocalizations.of(context);
 
-    // ✅ Splash 主色系：跟你现在的启动背景一致
+    // Special background colors
     const bgTop = Color(0xFF16264D);
     const bgBottom = Color(0xFF1B2E5A);
 
     return Scaffold(
-      backgroundColor: bgTop, // 防止滚动露底时变白
+      backgroundColor: bgTop,
       body: Stack(
         children: [
-          // ===== 顶部渐变背景（头部舞台）=====
+          // Gradient background
           Container(
             height: 320,
             decoration: const BoxDecoration(
@@ -85,7 +85,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             ),
           ),
 
-          // 可选：轻微高光（更“银河”一点，想要就保留）
+          // Decorative circles
           Positioned(
             right: -80,
             top: -60,
@@ -105,23 +105,22 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // ===== 头部内容（你要重点改的区域）=====
+                  // ===== Header Content =====
                   Padding(
                     padding: const EdgeInsets.fromLTRB(24, 22, 24, 18),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // 顶部品牌行：logo + LifeInbox
                         Row(
                           children: [
-                            // 你原本的 logo
+                            // logo + title
                             Image.asset(
                               'assets/images/logo-b.png',
                               height: 60,
                             ),
                             const SizedBox(width: 10),
                             Text(
-                              l10n.login_title, // 你要固定可换成 'おかえりなさい'
+                              l10n.login_title,
                               style: const TextStyle(
                                 fontSize: 28,
                                 height: 1.15,
@@ -145,7 +144,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     ),
                   ),
 
-                  // ===== 白色表单卡片（承接）=====
+                  // ===== white form =====
                   Container(
                     margin: const EdgeInsets.fromLTRB(16, 10, 16, 0),
                     padding: const EdgeInsets.fromLTRB(16, 18, 16, 16),
@@ -225,12 +224,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                 : l10n.login_with_mail,
                             onPressed: auth.loading
                                 ? null
-                                : () {
-                                    if (!_ensureTermsChecked(l10n)) return;
-                                    ref
-                                        .read(authControllerProvider.notifier)
-                                        .loginWithGoogle();
-                                  },
+                                : () => _submitLogin(l10n),
                           ),
                           const SizedBox(height: 12),
                           Row(

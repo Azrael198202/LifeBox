@@ -566,7 +566,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'OCR: ... (Later, this will show local OCR cache content)';
 
   @override
-  String get inboxTitle => 'Suto ～ Lighten your life.';
+  String get inboxTitle => 'Suto';
+
+  @override
+  String get inboxSubtitle => '　Lighten your life';
 
   @override
   String get inboxEmptyTitle => 'Nothing here yet';

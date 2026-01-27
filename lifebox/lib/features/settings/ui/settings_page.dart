@@ -331,8 +331,8 @@ class SettingsPage extends ConsumerWidget {
                 );
 
                 if (ok == true) {
-                  await ref.read(authControllerProvider.notifier).logout();
                   ref.read(sessionEpochProvider.notifier).state++;
+                  await ref.read(authControllerProvider.notifier).logout();                  
                 }
               },
             ),

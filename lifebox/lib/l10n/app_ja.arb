@@ -229,7 +229,8 @@
   "inboxDetailEvidenceTitle": "解析根拠（OCR 断片）",
   "inboxDetailOcrPlaceholder": "OCR: ...（後ほどローカルOCRキャッシュと連携して表示）",
 
-  "inboxTitle": "スッと　気持ちが軽くなる",
+  "inboxTitle": "スッと",
+  "inboxSubtitle": "　気持ちが軽くなる",
 
   "inboxEmptyTitle": "まだ内容がありません",
   "inboxEmptySubtitle": "スクリーンショットをインポートするか、音声ボタンを長押しして始めましょう",

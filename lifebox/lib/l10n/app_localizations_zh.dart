@@ -547,7 +547,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get inboxDetailOcrPlaceholder => 'OCR: ...（后续接入本地 OCR 缓存并展示）';
 
   @override
-  String get inboxTitle => '速轻　让生活，轻一下';
+  String get inboxTitle => '速轻';
+
+  @override
+  String get inboxSubtitle => '　让生活，轻一下';
 
   @override
   String get inboxEmptyTitle => '这里还没有内容';
